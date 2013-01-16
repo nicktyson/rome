@@ -1,4 +1,4 @@
-figure out assets folders
-improve scene creation
-integrate GLSL shaders
-handle texture coordinates
+* figure out assets folders
+* improve scene creation
+* integrate GLSL shader
+* handle texture coordinates
