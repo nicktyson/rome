@@ -19,10 +19,10 @@ MeshNode * cubeNode;
 
 //contains init functions and the main loop
 int main (int argc, char **argv) {
-	glutInit(&argc, argv); // Initialize GLUT  
+	glutInit(&argc, argv);
 	glutInitDisplayMode (GLUT_DOUBLE); // Set up a double display buffer  
-	glutInitWindowSize (500, 500); 
-	glutInitWindowPosition (100, 150);  
+	glutInitWindowSize (800, 600); 
+	glutInitWindowPosition (100, 50);  
 	glutCreateWindow ("Rome graphics"); // Set the title for the window
 
 	glEnable(GL_DEPTH_TEST);
@@ -73,7 +73,7 @@ int main (int argc, char **argv) {
 
 //traverse the scene graph and draw everything
 void display() {
-	glClearColor(1.0f, 0.0f, 0.0f, 1.0f);
+	glClearColor(0.4f, 0.0f, 0.0f, 1.0f);
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 	glLoadIdentity();
 
@@ -105,10 +105,11 @@ void simThreadFunc (void *) {
 
 //reshape the window
 void reshape (int width, int height) {  
-	glViewport(0, 0, (GLsizei)width, (GLsizei)height); // Set our viewport to the size of our window  
-	glMatrixMode(GL_PROJECTION);  // need to adjust the project matrix
+	glViewport(0, 0, (GLsizei)width, (GLsizei)height);  
+	glMatrixMode(GL_PROJECTION);
 	glLoadIdentity();  
-	gluPerspective(60, (GLfloat)width / (GLfloat)height, 1.0, 100.0); // Set the Field of view angle (in degrees), the aspect ratio of our window, and the new and far planes  
+	//field of view, aspect ratio of window, and the new and far planes
+	gluPerspective(75, (GLfloat)width / (GLfloat)height, 1.0, 100.0);
 	glMatrixMode(GL_MODELVIEW);  
 }
 
@@ -129,7 +130,6 @@ void keySpecialUp (int key, int x, int y) {
 }
 
 void initScene() {
-	//C:/Users/Nick/Desktop/meshtest.msh
 	rootNode = new scene_node();
 
 	cubeNode = new MeshNode();
