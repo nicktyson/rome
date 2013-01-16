@@ -11,8 +11,7 @@
 [Dd]ebug*/
 [Rr]elease/
 
-build/
-
+intermediate/
 
 [Tt]est[Rr]esult
 [Bb]uild[Ll]og.*

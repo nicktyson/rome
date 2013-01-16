@@ -15,30 +15,30 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="main.cpp">
+    <ClCompile Include="..\Source\main.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="mesh.cpp">
+    <ClCompile Include="..\Source\mesh.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="scene_node.cpp">
+    <ClCompile Include="..\Source\MeshNode.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="MeshNode.cpp">
+    <ClCompile Include="..\Source\scene_node.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="main.h">
+    <ClInclude Include="..\Source\main.h">
       <Filter>Source Files</Filter>
     </ClInclude>
-    <ClInclude Include="mesh.h">
+    <ClInclude Include="..\Source\mesh.h">
       <Filter>Source Files</Filter>
     </ClInclude>
-    <ClInclude Include="scene_node.h">
+    <ClInclude Include="..\Source\MeshNode.h">
       <Filter>Source Files</Filter>
     </ClInclude>
-    <ClInclude Include="MeshNode.h">
+    <ClInclude Include="..\Source\scene_node.h">
       <Filter>Source Files</Filter>
     </ClInclude>
   </ItemGroup>

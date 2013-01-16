@@ -1,6 +1,6 @@
-#include <GL/glew.h> // GLEW
-#include <GL/glut.h> // GLUT
-#include <gl/freeglut.h> //FreeGLUT
+#include <GL/glew.h>
+#include <GL/glut.h>
+#include <gl/freeglut.h>
 //#include <Windows.h>
 #include <process.h>
 #include <string>
