@@ -1,4 +1,4 @@
-* figure out assets folders
 * improve scene creation
-* integrate GLSL shader
+* handle keypresses and mouse movement
+* integrate GLSL shaders
 * handle texture coordinates

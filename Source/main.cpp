@@ -1,8 +1,8 @@
 #include <GL/glew.h>
 #include <GL/glut.h>
 #include <gl/freeglut.h>
-//#include <Windows.h>
-#include <process.h>
+#include <Windows.h> //get exe path, eventually mutexes iirc
+#include <process.h> //threads
 #include <string>
 #include <iostream>
 #include "main.h"
@@ -14,11 +14,14 @@ int DISPLAY_FRAME_TIME = 1000 / DISPLAY_FRAME_RATE;
 int SIM_RATE = 60;
 int SIM_TIME = 1000 / SIM_RATE;
 
+std::string ROME_PATH;
+
 scene_node * rootNode;
 MeshNode * cubeNode;
 
 //contains init functions and the main loop
 int main (int argc, char **argv) {
+	//init glut and window
 	glutInit(&argc, argv);
 	glutInitDisplayMode (GLUT_DOUBLE); // Set up a double display buffer  
 	glutInitWindowSize (800, 600); 
@@ -29,13 +32,16 @@ int main (int argc, char **argv) {
     glEnable(GL_LIGHTING);
     glEnable(GL_LIGHT0);
 
-	//setup glut functions
+	//set glut functions
 	glutDisplayFunc(display);
 	glutReshapeFunc(reshape);
 	glutKeyboardFunc(keyPressed);
 	glutKeyboardUpFunc(keyUp);
 	glutSpecialFunc(keySpecial);  
 	glutSpecialUpFunc(keySpecialUp);
+
+	//set ROME_PATH to the main project directory
+	setupPath();
 
 	//create geometry
 	initScene();
@@ -134,9 +140,34 @@ void initScene() {
 
 	cubeNode = new MeshNode();
 	mesh * cubeMesh = new mesh();
-	std::string location = "C:/Users/Nick/Desktop/meshtest.msh";
+	//std::string location = "../Assets/Meshes/test_icosphere.msh";
+	std::string location = ROME_PATH + "/Assets/Meshes/test_icosphere.msh";
+	std::cout << location << std::endl;
 	cubeMesh->loadMesh(location);
 	cubeNode->setMesh(cubeMesh);
 
 	rootNode->addChild(cubeNode);
+}
+
+void setupPath() {
+	char pathBuffer[MAX_PATH];
+	GetModuleFileNameA(NULL, pathBuffer, MAX_PATH);
+	std::string exePath(pathBuffer);
+
+	//remove rome.exe and move up two folders
+	exePath = exePath.substr(0, exePath.find_last_of("\\/"));
+	exePath = exePath.substr(0, exePath.find_last_of("\\/"));
+	exePath = exePath.substr(0, exePath.find_last_of("\\/"));
+
+	//change backslashes to forward slash
+	size_t subIndex = 0;
+	while (true) {
+		subIndex = exePath.find("\\");
+		if (subIndex == std::string::npos) {
+			break;
+		}
+		exePath.replace(subIndex, 1, "/");
+	}
+
+	ROME_PATH = exePath;
 }
