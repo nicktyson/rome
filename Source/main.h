@@ -4,7 +4,7 @@
 void initScene();
 void display();
 void updateSim();
-void simThreadFunc(void *);
+void simThreadFunc(void * dummy);
 void reshape(int width, int height);
 void keyPressed(unsigned char key, int x, int y);
 void keyUp(unsigned char key, int x, int y);

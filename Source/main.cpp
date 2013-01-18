@@ -1,20 +1,26 @@
 #include <GL/glew.h>
 #include <GL/glut.h>
 #include <gl/freeglut.h>
-#include <Windows.h> //get exe path, eventually mutexes iirc
-#include <process.h> //threads
+#include <Windows.h> //get exe path; CRITICAL_SECTION
+#include <process.h> //_beginthread
 #include <string>
 #include <iostream>
 #include "main.h"
 #include "MeshNode.h"
 
 //desired fps (display and sim)
-int DISPLAY_FRAME_RATE = 30;
-int DISPLAY_FRAME_TIME = 1000 / DISPLAY_FRAME_RATE;
-int SIM_RATE = 60;
-int SIM_TIME = 1000 / SIM_RATE;
+//keypresses are detected at the display rate
+const int DISPLAY_FRAME_RATE = 30;
+const int DISPLAY_FRAME_TIME = 1000 / DISPLAY_FRAME_RATE;
+const int SIM_RATE = 60;
+const int SIM_TIME = 1000 / SIM_RATE;
 
 std::string ROME_PATH;
+
+CRITICAL_SECTION keyLock;
+
+std::vector<bool> keyState(256);
+std::vector<bool> keyStateSpecial(256);
 
 scene_node * rootNode;
 MeshNode * cubeNode;
@@ -46,8 +52,9 @@ int main (int argc, char **argv) {
 	//create geometry
 	initScene();
 
-	//start physics and movement thread
-	_beginthread(simThreadFunc, 0, (void *)0);
+	//start multithreading
+	InitializeCriticalSection(&keyLock);
+	_beginthread(simThreadFunc, 0, NULL);
 
 	int frameCount = 0;
 	int fpsTimeSum = 0;
@@ -92,10 +99,17 @@ void display() {
 
 //physics and movement
 void updateSim() {
+	EnterCriticalSection(&keyLock);
 
+	if (keyState['a']) {
+		std::cout << "a" << std::endl;
+		keyState['a'] = false;
+	}
+
+	LeaveCriticalSection(&keyLock);
 }
 
-void simThreadFunc (void *) {
+void simThreadFunc (void * dummy) {
 	while (true) {
 		int simStartTime = glutGet(GLUT_ELAPSED_TIME);
 
@@ -120,19 +134,27 @@ void reshape (int width, int height) {
 }
 
 void keyPressed (unsigned char key, int x, int y) {
-
+	EnterCriticalSection(&keyLock);
+	keyState[key] = true;
+	LeaveCriticalSection(&keyLock);
 }
 
 void keyUp (unsigned char key, int x, int y) {
-
+	EnterCriticalSection(&keyLock);
+	keyState[key] = false;
+	LeaveCriticalSection(&keyLock);
 }
 
 void keySpecial (int key, int x, int y) {
-
+	EnterCriticalSection(&keyLock);
+	keyStateSpecial[key] = true;
+	LeaveCriticalSection(&keyLock);
 }
 
 void keySpecialUp (int key, int x, int y) {
-
+	EnterCriticalSection(&keyLock);
+	keyStateSpecial[key] = false;
+	LeaveCriticalSection(&keyLock);
 }
 
 void initScene() {
