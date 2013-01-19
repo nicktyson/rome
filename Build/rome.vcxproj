@@ -15,12 +15,14 @@
     <ClCompile Include="..\Source\mesh.cpp" />
     <ClCompile Include="..\Source\MeshNode.cpp" />
     <ClCompile Include="..\Source\scene_node.cpp" />
+    <ClCompile Include="..\Source\VitalEntity.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\Source\main.h" />
     <ClInclude Include="..\Source\mesh.h" />
     <ClInclude Include="..\Source\MeshNode.h" />
     <ClInclude Include="..\Source\scene_node.h" />
+    <ClInclude Include="..\Source\VitalEntity.h" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectGuid>{61C16C09-1649-4659-AE11-F9CD8E2E1A01}</ProjectGuid>

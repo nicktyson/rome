@@ -8,6 +8,10 @@ mesh::mesh() {
 
 }
 
+mesh::mesh(std::string fileLocation) {
+	loadMesh(fileLocation);
+}
+
 std::vector<float>& mesh::getNormals() {
 	return normals;
 }

@@ -5,8 +5,11 @@
 #include <process.h> //_beginthread
 #include <string>
 #include <iostream>
+#include <math.h>
 #include "main.h"
+#include "scene_node.h"
 #include "MeshNode.h"
+#include "VitalEntity.h"
 
 //desired fps (display and sim)
 //keypresses are detected at the display rate
@@ -23,7 +26,7 @@ std::vector<bool> keyState(256);
 std::vector<bool> keyStateSpecial(256);
 
 scene_node * rootNode;
-MeshNode * cubeNode;
+//MeshNode * cubeNode;
 
 //contains init functions and the main loop
 int main (int argc, char **argv) {
@@ -35,6 +38,7 @@ int main (int argc, char **argv) {
 	glutCreateWindow ("Rome graphics"); // Set the title for the window
 
 	glEnable(GL_DEPTH_TEST);
+	glEnable(GL_CULL_FACE);
     glEnable(GL_LIGHTING);
     glEnable(GL_LIGHT0);
 
@@ -129,7 +133,7 @@ void reshape (int width, int height) {
 	glMatrixMode(GL_PROJECTION);
 	glLoadIdentity();  
 	//field of view, aspect ratio of window, and the new and far planes
-	gluPerspective(75, (GLfloat)width / (GLfloat)height, 1.0, 100.0);
+	gluPerspective(60, (GLfloat)width / (GLfloat)height, 1.0, 100.0);
 	glMatrixMode(GL_MODELVIEW);  
 }
 
@@ -159,16 +163,25 @@ void keySpecialUp (int key, int x, int y) {
 
 void initScene() {
 	rootNode = new scene_node();
-
-	cubeNode = new MeshNode();
-	mesh * cubeMesh = new mesh();
-	//std::string location = "../Assets/Meshes/test_icosphere.msh";
 	std::string location = ROME_PATH + "/Assets/Meshes/test_icosphere.msh";
-	std::cout << location << std::endl;
-	cubeMesh->loadMesh(location);
-	cubeNode->setMesh(cubeMesh);
 
-	rootNode->addChild(cubeNode);
+	//make two offset spheres
+/*	MeshNode * childNode = new MeshNode(location);
+	childNode->setTranslation(1, 1, 0);
+	rootNode->addChild(childNode);
+
+	VitalEntity * secondChild = new VitalEntity(location);
+	secondChild->setTranslation(-2, -2, 0);
+	childNode->addChild(secondChild);
+*/
+
+	//make a ring of spheres
+	for(double i = 0; i < 12; ++i) {
+		MeshNode * newNode = new MeshNode(location);
+		rootNode->addChild(newNode);
+		newNode->setTranslation(2*sin(i*6.28/12), 2*cos(i*6.28/12), 0);
+	}
+
 }
 
 void setupPath() {

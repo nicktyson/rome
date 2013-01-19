@@ -7,6 +7,7 @@
 class mesh {
 public:
 	mesh();
+	mesh(std::string meshLocation);
 	void loadMesh(std::string fileLocation);
 	std::vector<int>& getTriangles();
 	std::vector<float>& getNormals();

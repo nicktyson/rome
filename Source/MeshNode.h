@@ -7,11 +7,12 @@
 class MeshNode : public scene_node {
 public:
 	MeshNode();
+	MeshNode(std::string fileLocation);
 	mesh * getMesh();
 	void setMesh(mesh *);
-	void draw();
+	virtual void draw();
 	
-private:
+protected:
 	mesh * objectMesh;
 };
 
