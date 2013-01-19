@@ -164,23 +164,24 @@ void keySpecialUp (int key, int x, int y) {
 void initScene() {
 	rootNode = new scene_node();
 	std::string location = ROME_PATH + "/Assets/Meshes/test_icosphere.msh";
-
-	//make two offset spheres
-/*	MeshNode * childNode = new MeshNode(location);
+	std::string cubeLocation = ROME_PATH + "/Assets/Meshes/test_cube.msh";
+	//make two offset objects
+	MeshNode * childNode = new MeshNode(location);
 	childNode->setTranslation(1, 1, 0);
 	rootNode->addChild(childNode);
 
-	VitalEntity * secondChild = new VitalEntity(location);
+	VitalEntity * secondChild = new VitalEntity(cubeLocation);
 	secondChild->setTranslation(-2, -2, 0);
+	secondChild->setRotation(20, 45, 0);
 	childNode->addChild(secondChild);
-*/
+
 
 	//make a ring of spheres
-	for(double i = 0; i < 12; ++i) {
-		MeshNode * newNode = new MeshNode(location);
-		rootNode->addChild(newNode);
-		newNode->setTranslation(2*sin(i*6.28/12), 2*cos(i*6.28/12), 0);
-	}
+	//for(double i = 0; i < 6; ++i) {
+	//	MeshNode * newNode = new MeshNode(location);
+	//	rootNode->addChild(newNode);
+	//	newNode->setTranslation(2*sin(i*6.28/12), 2*cos(i*6.28/12), 0);
+	//}
 
 }
 
