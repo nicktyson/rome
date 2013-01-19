@@ -6,11 +6,15 @@ import os
 # (assuming you haven't moved this script)
 
 # sharp edges need to be split for them to look correct
-# quads must be converted to triangles
-
+# quads are automatically converted to triangles
 
 current_obj = bpy.context.active_object
-f = open('Assets/Meshes/test_cube.msh', 'w')
+f = open('Assets/Meshes/test_torus.msh', 'w')
+
+bpy.ops.object.mode_set(mode='EDIT')
+bpy.ops.mesh.select_all() 
+bpy.ops.mesh.quads_convert_to_tris()
+bpy.ops.object.mode_set(mode='OBJECT')
 
 poly_list = current_obj.data.polygons[:]
 vert_list = current_obj.data.vertices[:]
