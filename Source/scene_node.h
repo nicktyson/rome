@@ -19,6 +19,7 @@ public:
 	void setScaling(float sx, float sy, float sz);
 	virtual void draw();
 	void applyTransformation();
+	virtual void update();
 
 protected:
 	bool hasMesh;

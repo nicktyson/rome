@@ -11,6 +11,7 @@ public:
 	mesh * getMesh();
 	void setMesh(mesh *);
 	virtual void draw();
+	virtual void update();
 	
 protected:
 	mesh * objectMesh;

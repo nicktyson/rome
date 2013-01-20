@@ -48,3 +48,9 @@ void MeshNode::draw() {
 	//undo changes to matrix
 	glPopMatrix();
 }
+
+void MeshNode::update() {
+	for(std::vector<scene_node*>::iterator it = children.begin(); it != children.end(); ++it) {
+		(*it)->update();
+	}
+}

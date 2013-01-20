@@ -111,6 +111,8 @@ void updateSim() {
 	}
 
 	LeaveCriticalSection(&keyLock);
+
+	rootNode->update();
 }
 
 void simThreadFunc (void * dummy) {
@@ -134,7 +136,7 @@ void reshape (int width, int height) {
 	glLoadIdentity();  
 	//field of view, aspect ratio of window, and the new and far planes
 	gluPerspective(60, (GLfloat)width / (GLfloat)height, 1.0, 100.0);
-	glMatrixMode(GL_MODELVIEW);  
+	glMatrixMode(GL_MODELVIEW);
 }
 
 void keyPressed (unsigned char key, int x, int y) {
@@ -170,7 +172,7 @@ void initScene() {
 	childNode->setTranslation(1, 1, 0);
 	rootNode->addChild(childNode);
 
-	VitalEntity * secondChild = new VitalEntity(cubeLocation);
+	VitalEntity * secondChild = new VitalEntity(cubeLocation, 0.01, 0, 0);
 	secondChild->setTranslation(-2, -2, 0);
 	secondChild->setRotation(20, 45, 0);
 	childNode->addChild(secondChild);
@@ -182,7 +184,6 @@ void initScene() {
 	//	rootNode->addChild(newNode);
 	//	newNode->setTranslation(2*sin(i*6.28/12), 2*cos(i*6.28/12), 0);
 	//}
-
 }
 
 void setupPath() {

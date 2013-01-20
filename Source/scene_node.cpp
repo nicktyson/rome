@@ -79,3 +79,9 @@ void scene_node::applyTransformation() {
 	glRotated(rotation[0], 1, 0, 0);
 	glScaled(scaling[0], scaling[1], scaling[2]);
 }
+
+void scene_node::update() {
+	for(std::vector<scene_node*>::iterator it = children.begin(); it != children.end(); ++it) {
+		(*it)->update();
+	}
+}
