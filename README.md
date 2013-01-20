@@ -1,6 +1,6 @@
 rome
 ====
 
-A simple graphics project written in C++ with OpenGL 2.x, using freeGLUT and GLEW.  
+A simple graphics project written in C++ with OpenGL 2.x, using GLEW and GLFW.  
   
-Requires Windows (probably).
+Requires Windows.

@@ -1,8 +1,6 @@
-#include <GL/glew.h>
-#include <GL/glut.h>
-#include <gl/freeglut.h>
-#include <Windows.h> //get exe path; CRITICAL_SECTION
-#include <process.h> //_beginthread
+#include <GL/glew.h> //order glew -> windows -> glfw
+#include <Windows.h> //get exe path
+#include <GL/glfw.h>
 #include <string>
 #include <iostream>
 #include <math.h>
@@ -13,42 +11,40 @@
 
 //desired fps (display and sim)
 //keypresses are detected at the display rate
+//times are in seconds
 const int DISPLAY_FRAME_RATE = 30;
-const int DISPLAY_FRAME_TIME = 1000 / DISPLAY_FRAME_RATE;
+const double DISPLAY_FRAME_TIME = 1.0 / DISPLAY_FRAME_RATE;
 const int SIM_RATE = 60;
-const int SIM_TIME = 1000 / SIM_RATE;
+const double SIM_TIME = 1.0 / SIM_RATE;
 
 std::string ROME_PATH;
 
-CRITICAL_SECTION keyLock;
+GLFWmutex keyLock;
 
 std::vector<bool> keyState(256);
 std::vector<bool> keyStateSpecial(256);
 
 scene_node * rootNode;
-//MeshNode * cubeNode;
 
 //contains init functions and the main loop
 int main (int argc, char **argv) {
-	//init glut and window
-	glutInit(&argc, argv);
-	glutInitDisplayMode (GLUT_DOUBLE); // Set up a double display buffer  
-	glutInitWindowSize (800, 600); 
-	glutInitWindowPosition (100, 50);  
-	glutCreateWindow ("Rome graphics"); // Set the title for the window
+	//create window
+	glfwInit();
+	glfwOpenWindow(800, 600, 8, 8, 8, 8, 24, 8, GLFW_WINDOW);
+	glfwSetWindowTitle("Rome graphics");
+
+	//gets perspective correct
+	//reshape(800, 600);
 
 	glEnable(GL_DEPTH_TEST);
 	glEnable(GL_CULL_FACE);
     glEnable(GL_LIGHTING);
     glEnable(GL_LIGHT0);
 
-	//set glut functions
-	glutDisplayFunc(display);
-	glutReshapeFunc(reshape);
-	glutKeyboardFunc(keyPressed);
-	glutKeyboardUpFunc(keyUp);
-	glutSpecialFunc(keySpecial);  
-	glutSpecialUpFunc(keySpecialUp);
+	glfwEnable(GLFW_KEY_REPEAT);
+
+	glfwSetWindowSizeCallback(reshape);
+	glfwSetKeyCallback(keyCallback);
 
 	//set ROME_PATH to the main project directory
 	setupPath();
@@ -57,31 +53,35 @@ int main (int argc, char **argv) {
 	initScene();
 
 	//start multithreading
-	InitializeCriticalSection(&keyLock);
-	_beginthread(simThreadFunc, 0, NULL);
+	keyLock = glfwCreateMutex();
+	GLFWthread simThread;
+	simThread = glfwCreateThread(simThreadFunc, NULL);
 
 	int frameCount = 0;
-	int fpsTimeSum = 0;
+	double fpsTimeSum = 0;
 
 	//main loop
 	while (true) {
-		int loopStartTime = glutGet(GLUT_ELAPSED_TIME);
+		double loopStartTime = glfwGetTime();
 
-		glutPostRedisplay();
-		glutMainLoopEvent();
+		//glutPostRedisplay();
+		//glutMainLoopEvent();
+
+		display();
+		glfwSwapBuffers();
 
 		//clamp display frame rate
-		int loopCurrentTime = glutGet(GLUT_ELAPSED_TIME);
-		int timeDif = loopCurrentTime - loopStartTime;
+		double loopCurrentTime = glfwGetTime();
+		double timeDif = loopCurrentTime - loopStartTime;
 		if (DISPLAY_FRAME_TIME > timeDif) {
-			Sleep(DISPLAY_FRAME_TIME - timeDif);
+			glfwSleep(DISPLAY_FRAME_TIME - timeDif);
 		}
 
 		//calculate and display FPS once per second
 		frameCount++;
-		fpsTimeSum += glutGet(GLUT_ELAPSED_TIME) - loopStartTime;
-		if (fpsTimeSum >= 1000) {
-			std::cout << (frameCount * 1000 / (fpsTimeSum)) << "\n";
+		fpsTimeSum += glfwGetTime() - loopStartTime;
+		if (fpsTimeSum >= 1) {
+			std::cout << (frameCount / (fpsTimeSum)) << "\n";
 			frameCount = 0;
 			fpsTimeSum = 0;
 		}
@@ -94,85 +94,68 @@ void display() {
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 	glLoadIdentity();
 
-	glTranslatef(0.0f, 0.0f, -5.0f);
+	gluLookAt(0, 0, 5, 0, 0, 0, 0, 1, 0);
 
 	rootNode->draw();
-	
-	glutSwapBuffers();
 }
 
 //physics and movement
 void updateSim() {
-	EnterCriticalSection(&keyLock);
+	glfwLockMutex(keyLock);
 
-	if (keyState['a']) {
-		std::cout << "a" << std::endl;
-		keyState['a'] = false;
+	if (keyState['A']) {
+		std::cout << "A" << std::endl;
+		keyState['A'] = false;
 	}
 
-	LeaveCriticalSection(&keyLock);
+	glfwUnlockMutex(keyLock);
 
 	rootNode->update();
 }
 
-void simThreadFunc (void * dummy) {
+void GLFWCALL simThreadFunc (void * dummy) {
 	while (true) {
-		int simStartTime = glutGet(GLUT_ELAPSED_TIME);
+		double simStartTime = glfwGetTime();
 
 		updateSim();
 
-		int simCurrentTime = glutGet(GLUT_ELAPSED_TIME);
-		int timeDif = simCurrentTime - simStartTime;
+		double simCurrentTime = glfwGetTime();
+		double timeDif = simCurrentTime - simStartTime;
 		if (SIM_TIME > timeDif) {
-			Sleep(SIM_TIME - timeDif);
+			glfwSleep(SIM_TIME - timeDif);
 		}
 	}
 }
 
 //reshape the window
-void reshape (int width, int height) {  
-	glViewport(0, 0, (GLsizei)width, (GLsizei)height);  
+void GLFWCALL reshape (int width, int height) {  
+	glViewport(0, 0, (GLint)width, (GLint)height);
 	glMatrixMode(GL_PROJECTION);
 	glLoadIdentity();  
 	//field of view, aspect ratio of window, and the new and far planes
-	gluPerspective(60, (GLfloat)width / (GLfloat)height, 1.0, 100.0);
+	gluPerspective(60, (GLfloat)width / (GLfloat)height, 1.0, 50.0);
 	glMatrixMode(GL_MODELVIEW);
 }
 
-void keyPressed (unsigned char key, int x, int y) {
-	EnterCriticalSection(&keyLock);
-	keyState[key] = true;
-	LeaveCriticalSection(&keyLock);
-}
-
-void keyUp (unsigned char key, int x, int y) {
-	EnterCriticalSection(&keyLock);
-	keyState[key] = false;
-	LeaveCriticalSection(&keyLock);
-}
-
-void keySpecial (int key, int x, int y) {
-	EnterCriticalSection(&keyLock);
-	keyStateSpecial[key] = true;
-	LeaveCriticalSection(&keyLock);
-}
-
-void keySpecialUp (int key, int x, int y) {
-	EnterCriticalSection(&keyLock);
-	keyStateSpecial[key] = false;
-	LeaveCriticalSection(&keyLock);
+void GLFWCALL keyCallback(int key, int state) {
+	glfwLockMutex(keyLock);
+	if(key >= 0 && key < 256 && state == GLFW_PRESS) {
+		keyState[key] = true;
+	}
+	glfwUnlockMutex(keyLock);
 }
 
 void initScene() {
 	rootNode = new scene_node();
 	std::string location = ROME_PATH + "/Assets/Meshes/test_icosphere.msh";
 	std::string cubeLocation = ROME_PATH + "/Assets/Meshes/test_cube.msh";
+
 	//make two offset objects
 	MeshNode * childNode = new MeshNode(location);
 	childNode->setTranslation(1, 1, 0);
 	rootNode->addChild(childNode);
 
-	VitalEntity * secondChild = new VitalEntity(cubeLocation, 0.01, 0, 0);
+	VitalEntity * secondChild = new VitalEntity(cubeLocation, 0, 0, 0);
 	secondChild->setTranslation(-2, -2, 0);
 	secondChild->setRotation(20, 45, 0);
 	childNode->addChild(secondChild);
@@ -182,7 +165,7 @@ void initScene() {
 	//for(double i = 0; i < 6; ++i) {
 	//	MeshNode * newNode = new MeshNode(location);
 	//	rootNode->addChild(newNode);
-	//	newNode->setTranslation(2*sin(i*6.28/12), 2*cos(i*6.28/12), 0);
+	//	newNode->setTranslation(3*sin(i*6.28/6), 3*cos(i*6.28/6), 0);
 	//}
 }
 
