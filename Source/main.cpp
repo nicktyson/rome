@@ -19,8 +19,6 @@ const double SIM_TIME = 1.0 / SIM_RATE;
 
 std::string ROME_PATH;
 
-GLFWmutex keyLock;
-
 std::vector<bool> keyState(256);
 std::vector<bool> keyStateSpecial(256);
 
@@ -53,7 +51,6 @@ int main (int argc, char **argv) {
 	initScene();
 
 	//start multithreading
-	keyLock = glfwCreateMutex();
 	GLFWthread simThread;
 	simThread = glfwCreateThread(simThreadFunc, NULL);
 
@@ -64,11 +61,10 @@ int main (int argc, char **argv) {
 	while (true) {
 		double loopStartTime = glfwGetTime();
 
-		//glutPostRedisplay();
-		//glutMainLoopEvent();
-
+		keyOps();
 		display();
 		glfwSwapBuffers();
+
 
 		//clamp display frame rate
 		double loopCurrentTime = glfwGetTime();
@@ -101,15 +97,6 @@ void display() {
 
 //physics and movement
 void updateSim() {
-	glfwLockMutex(keyLock);
-
-	if (keyState['A']) {
-		std::cout << "A" << std::endl;
-		keyState['A'] = false;
-	}
-
-	glfwUnlockMutex(keyLock);
-
 	rootNode->update();
 }
 
@@ -138,11 +125,29 @@ void GLFWCALL reshape (int width, int height) {
 }
 
 void GLFWCALL keyCallback(int key, int state) {
-	glfwLockMutex(keyLock);
-	if(key >= 0 && key < 256 && state == GLFW_PRESS) {
-		keyState[key] = true;
+	if(key >= 0 && key < 256) {
+		if(state == GLFW_PRESS) {
+			keyState[key] = true;
+		} else {
+			keyState[key] = false;
+		}
 	}
-	glfwUnlockMutex(keyLock);
+}
+
+void keyOps() {
+	//keyState['X'] = false should be used for toggle keys, like camera modes
+	//it should also be used for keys that should pause briefly before repeating
+	//remove it to for keys that should repeat smoothly, every frame, like movement
+	//Modifier keys should NOT have the line
+	if (keyState['A'] && keyState['B']) {
+		std::cout << "A + B" << std::endl;
+		keyState['A'] = false;
+	} else if (keyState['A']) {
+		std::cout << "A" << std::endl;
+		keyState['A'] = false;
+	} else if (keyState['B']) {
+		//do nothing; modifier key
+	}
 }
 
 void initScene() {
