@@ -5,15 +5,46 @@
 #include "VitalEntity.h"
 
 SimState::SimState() {
-
+	DISPLAY_FRAME_RATE = 30;
+	DISPLAY_FRAME_TIME = 1.0 / DISPLAY_FRAME_RATE;
+	SIM_RATE = 60;
+	SIM_TIME = 1.0 / SIM_RATE;
 }
 
 void SimState::initialize() {
-
+	initScene();
+	GLFWthread simThread;
+	simThread = glfwCreateThread(startThread, this);
 }
 
 void SimState::run() {
 
+	int frameCount = 0;
+	double fpsTimeSum = 0;
+
+	while (true) {
+		double loopStartTime = glfwGetTime();
+
+		keyOps();
+		display();
+		glfwSwapBuffers();
+
+		//clamp display frame rate
+		double loopCurrentTime = glfwGetTime();
+		double timeDif = loopCurrentTime - loopStartTime;
+		if (DISPLAY_FRAME_TIME > timeDif) {
+			glfwSleep(DISPLAY_FRAME_TIME - timeDif);
+		}
+
+		//calculate and display FPS once per second
+		frameCount++;
+		fpsTimeSum += glfwGetTime() - loopStartTime;
+		if (fpsTimeSum >= 1) {
+			std::cout << (frameCount / (fpsTimeSum)) << "\n";
+			frameCount = 0;
+			fpsTimeSum = 0;
+		}
+	}
 }
 
 void SimState::resume() {
@@ -77,8 +108,20 @@ void SimState::updateSim() {
 	rootNode->update();
 }
 
-void SimState::simThreadFunc(void * dummy) {
+void SimState::simThreadFunc() {
 
+	while (true) {
+		double simStartTime = glfwGetTime();
+
+		updateSim();
+
+		//clamp rate
+		double simCurrentTime = glfwGetTime();
+		double timeDif = simCurrentTime - simStartTime;
+		if (SIM_TIME > timeDif) {
+			glfwSleep(SIM_TIME - timeDif);
+		}
+	}
 }
 
 void SimState::keyOps() {

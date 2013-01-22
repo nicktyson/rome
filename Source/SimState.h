@@ -14,13 +14,17 @@ public:
 	void end();
 	void keyCallback(int key, int state);
 	void initScene();
-	void simThreadFunc(void * dummy);
+	void simThreadFunc();
 	void keyOps();
 	
 protected:
 	void display();
 	void updateSim();
 	scene_node * rootNode;
+	int DISPLAY_FRAME_RATE;
+	double DISPLAY_FRAME_TIME;
+	int SIM_RATE;
+	double SIM_TIME;
 };
 
 #endif

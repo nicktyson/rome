@@ -3,21 +3,13 @@
 #include <GL/glfw.h>
 #include <string>
 #include <iostream>
-#include <math.h>
 #include "main.h"
-#include "scene_node.h"
-#include "MeshNode.h"
-#include "VitalEntity.h"
 #include "State.h"
 #include "SimState.h"
 
 //desired fps (display and sim)
 //keypresses are detected at the display rate
 //times are in seconds
-const int DISPLAY_FRAME_RATE = 30;
-const double DISPLAY_FRAME_TIME = 1.0 / DISPLAY_FRAME_RATE;
-const int SIM_RATE = 60;
-const double SIM_TIME = 1.0 / SIM_RATE;
 
 std::string ROME_PATH;
 
@@ -33,6 +25,7 @@ int main(int argc, char **argv) {
 	//gets perspective correct
 	//reshape(800, 600);
 
+	//move to SimState init?
 	glEnable(GL_DEPTH_TEST);
 	glEnable(GL_CULL_FACE);
     glEnable(GL_LIGHTING);
@@ -40,58 +33,18 @@ int main(int argc, char **argv) {
 
 	glfwEnable(GLFW_KEY_REPEAT);
 
+	//GLFW doesn't accept object member functions, so use local ones that redirect
 	glfwSetWindowSizeCallback(reshape);
 	glfwSetKeyCallback(keyCallback);
 
 	//set ROME_PATH to the main project directory
 	setupPath();
 
-	//start multithreading
-	//GLFWthread simThread;
-	//simThread = glfwCreateThread(simThreadFunc, NULL);
+	//this will become a state management loop
+	currentState = new SimState();
+	currentState->initialize();
+	currentState->run();
 
-	int frameCount = 0;
-	double fpsTimeSum = 0;
-
-	//main loop
-	while (true) {
-		double loopStartTime = glfwGetTime();
-
-		//keyOps();
-		//display();
-		glfwSwapBuffers();
-
-
-		//clamp display frame rate
-		double loopCurrentTime = glfwGetTime();
-		double timeDif = loopCurrentTime - loopStartTime;
-		if (DISPLAY_FRAME_TIME > timeDif) {
-			glfwSleep(DISPLAY_FRAME_TIME - timeDif);
-		}
-
-		//calculate and display FPS once per second
-		frameCount++;
-		fpsTimeSum += glfwGetTime() - loopStartTime;
-		if (fpsTimeSum >= 1) {
-			std::cout << (frameCount / (fpsTimeSum)) << "\n";
-			frameCount = 0;
-			fpsTimeSum = 0;
-		}
-	}
-}
-
-void GLFWCALL simThreadFunc (void * dummy) {
-	while (true) {
-		double simStartTime = glfwGetTime();
-
-		//updateSim();
-
-		double simCurrentTime = glfwGetTime();
-		double timeDif = simCurrentTime - simStartTime;
-		if (SIM_TIME > timeDif) {
-			glfwSleep(SIM_TIME - timeDif);
-		}
-	}
 }
 
 //reshape the window
@@ -105,7 +58,6 @@ void GLFWCALL reshape (int width, int height) {
 }
 
 void GLFWCALL keyCallback(int key, int state) {
-
 	currentState->keyCallback(key, state);
 }
 

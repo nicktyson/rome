@@ -13,8 +13,8 @@ public:
 	virtual void pause() = 0;
 	virtual void end() = 0;
 	virtual void keyCallback(int key, int state) = 0;
-	virtual void simThreadFunc(void * dummy);
-	static void GLFWCALL startThread(State * state);
+	virtual void simThreadFunc();
+	static void GLFWCALL startThread(void * state);
 
 protected:
 	virtual void display() = 0;
