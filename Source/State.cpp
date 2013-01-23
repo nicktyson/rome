@@ -13,3 +13,7 @@ void State::startThread(void * state) {
 void State::simThreadFunc() {
 
 }
+
+bool State::isInitialized() {
+	return initialized;
+}

@@ -9,20 +9,24 @@ SimState::SimState() {
 	DISPLAY_FRAME_TIME = 1.0 / DISPLAY_FRAME_RATE;
 	SIM_RATE = 60;
 	SIM_TIME = 1.0 / SIM_RATE;
+	initialized = false;
 }
 
 void SimState::initialize() {
 	initScene();
+	pauseMutex = glfwCreateMutex();
 	GLFWthread simThread;
 	simThread = glfwCreateThread(startThread, this);
+	initialized = true;
 }
 
-void SimState::run() {
+State* SimState::run() {
+	shouldPause = false;
 
 	int frameCount = 0;
 	double fpsTimeSum = 0;
 
-	while (true) {
+	while (!shouldPause) {
 		double loopStartTime = glfwGetTime();
 
 		keyOps();
@@ -45,10 +49,15 @@ void SimState::run() {
 			fpsTimeSum = 0;
 		}
 	}
+
+	pause();
+
+	return;
 }
 
 void SimState::resume() {
-
+	shouldPause = false;
+	glfwUnlockMutex(pauseMutex);
 }
 
 void SimState::pause() {
@@ -81,9 +90,10 @@ void SimState::initScene() {
 	childNode->setTranslation(1, 1, 0);
 	rootNode->addChild(childNode);
 
+	float randRot = rand() % 90;
 	VitalEntity * secondChild = new VitalEntity(cubeLocation, 0.01, 0, 0);
 	secondChild->setTranslation(-2, -2, 0);
-	secondChild->setRotation(20, 45, 0);
+	secondChild->setRotation(20, randRot, 0);
 	childNode->addChild(secondChild);
 
 	//make a ring of spheres
@@ -111,6 +121,11 @@ void SimState::updateSim() {
 void SimState::simThreadFunc() {
 
 	while (true) {
+		if(shouldPause) {
+			glfwLockMutex(pauseMutex);
+			glfwUnlockMutex(pauseMutex);
+		}
+
 		double simStartTime = glfwGetTime();
 
 		updateSim();
@@ -137,5 +152,11 @@ void SimState::keyOps() {
 		keyState['A'] = false;
 	} else if (keyState['B']) {
 		//do nothing; modifier key
+	}
+
+	if (keyState['P']) {
+		glfwLockMutex(pauseMutex);
+		shouldPause = true;
+		keyState['P'] = false;
 	}
 }

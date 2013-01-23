@@ -6,6 +6,7 @@
 #include "main.h"
 #include "State.h"
 #include "SimState.h"
+#include "StateManager.h"
 
 //desired fps (display and sim)
 //keypresses are detected at the display rate
@@ -14,6 +15,7 @@
 std::string ROME_PATH;
 
 State * currentState;
+State * nextState;
 
 //contains init functions and the main loop
 int main(int argc, char **argv) {
@@ -40,11 +42,17 @@ int main(int argc, char **argv) {
 	//set ROME_PATH to the main project directory
 	setupPath();
 
-	//this will become a state management loop
+	//state management loop
 	currentState = new SimState();
-	currentState->initialize();
-	currentState->run();
 
+	while(true) {
+		if (!currentState->isInitialized()) {
+			currentState->initialize();
+		}
+
+		nextState = currentState->run();
+		currentState = nextState;
+	}
 }
 
 //reshape the window

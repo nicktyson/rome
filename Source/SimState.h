@@ -1,6 +1,7 @@
 #ifndef SIMSTATE_H
 #define SIMSTATE_H
 
+#include <gl/glfw.h>
 #include "State.h"
 #include "scene_node.h"
 
@@ -25,6 +26,8 @@ protected:
 	double DISPLAY_FRAME_TIME;
 	int SIM_RATE;
 	double SIM_TIME;
+	bool shouldPause;
+	GLFWmutex pauseMutex;
 };
 
 #endif
