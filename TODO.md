@@ -1,5 +1,7 @@
 * improve scene creation
-	* make meshnode subclasses and construct those
+	* make more node/entity classes
+	* generate interesting default scene
+* improve node update() behavior
 * move dll's?
 * handle mouse movement
 	* implement camera(s) / player object
@@ -7,4 +9,5 @@
 * handle texture coordinates
 * update sim in a thread-safe way
 * finish state machine
-	* add additional states
+	* add additional states including pause
+	* fix simState pausing

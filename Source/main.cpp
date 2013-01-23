@@ -5,7 +5,6 @@
 #include <iostream>
 #include "main.h"
 #include "State.h"
-#include "SimState.h"
 #include "StateManager.h"
 
 //desired fps (display and sim)
@@ -13,9 +12,7 @@
 //times are in seconds
 
 std::string ROME_PATH;
-
-State * currentState;
-State * nextState;
+StateManager* manager;
 
 //contains init functions and the main loop
 int main(int argc, char **argv) {
@@ -43,16 +40,9 @@ int main(int argc, char **argv) {
 	setupPath();
 
 	//state management loop
-	currentState = new SimState();
+	manager = new StateManager();
+	manager->run();
 
-	while(true) {
-		if (!currentState->isInitialized()) {
-			currentState->initialize();
-		}
-
-		nextState = currentState->run();
-		currentState = nextState;
-	}
 }
 
 //reshape the window
@@ -66,6 +56,7 @@ void GLFWCALL reshape (int width, int height) {
 }
 
 void GLFWCALL keyCallback(int key, int state) {
+	State* currentState = manager->getCurrentState();
 	currentState->keyCallback(key, state);
 }
 

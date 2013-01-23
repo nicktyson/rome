@@ -4,10 +4,12 @@
 #include <gl/glfw.h>
 #include <vector>
 
+class StateManager;
+
 class State {
 public:
 	State();
-	virtual void initialize() = 0;
+	virtual void initialize(StateManager* mngr);
 	virtual void run() = 0;
 	virtual void resume() = 0;
 	virtual void pause() = 0;
@@ -22,6 +24,7 @@ protected:
 	virtual void updateSim() = 0;
 	std::vector<bool> keyState;
 	bool initialized;
+	StateManager* manager;
 };
 
 

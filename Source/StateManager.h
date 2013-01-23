@@ -2,7 +2,7 @@
 #define STATEMANAGER_H
 
 #include <vector>
-#include "State.h"
+class State;
 
 class StateManager {
 public:
@@ -10,14 +10,16 @@ public:
 	void run();
 	void pause();
 	void restoreLast();
+	State* getCurrentState();
 	void newSim();
-private:
-	State * currentState;
-	State * lastState;
-	State * nextState;
+
+protected:
+	State* currentState;
+	State* lastState;
+	State* nextState;
 	std::vector<State*> states;
-	State * sim;
-	State * ps;
+	State* sim;
+	State* ps;
 };
 
 #endif

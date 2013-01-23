@@ -1,6 +1,7 @@
 #include "SimState.h"
 #include <GL/glfw.h>
 #include <iostream>
+#include "StateManager.h"
 #include "MeshNode.h"
 #include "VitalEntity.h"
 
@@ -12,7 +13,8 @@ SimState::SimState() {
 	initialized = false;
 }
 
-void SimState::initialize() {
+void SimState::initialize(StateManager* mngr) {
+	manager = mngr;
 	initScene();
 	pauseMutex = glfwCreateMutex();
 	GLFWthread simThread;
@@ -20,7 +22,7 @@ void SimState::initialize() {
 	initialized = true;
 }
 
-State* SimState::run() {
+void SimState::run() {
 	shouldPause = false;
 
 	int frameCount = 0;
@@ -52,7 +54,6 @@ State* SimState::run() {
 
 	pause();
 
-	return;
 }
 
 void SimState::resume() {
@@ -61,7 +62,7 @@ void SimState::resume() {
 }
 
 void SimState::pause() {
-
+	manager->newSim();
 }
 
 void SimState::end() {

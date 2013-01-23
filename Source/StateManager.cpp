@@ -1,5 +1,6 @@
 #include "StateManager.h"
 #include "SimState.h"
+#include "State.h"
 
 StateManager::StateManager() {
 	sim = new SimState();
@@ -11,7 +12,7 @@ StateManager::StateManager() {
 void StateManager::run() {
 	while(true) {
 		if (!currentState->isInitialized()) {
-			currentState->initialize();
+			currentState->initialize(this);
 		}
 
 		currentState->run();
@@ -27,4 +28,12 @@ void StateManager::pause() {
 
 void StateManager::restoreLast() {
 	nextState = lastState;
+}
+
+void StateManager::newSim() {
+	nextState = new SimState();
+}
+
+State* StateManager::getCurrentState() {
+	return currentState;
 }

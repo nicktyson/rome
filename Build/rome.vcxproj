@@ -17,6 +17,7 @@
     <ClCompile Include="..\Source\scene_node.cpp" />
     <ClCompile Include="..\Source\SimState.cpp" />
     <ClCompile Include="..\Source\State.cpp" />
+    <ClCompile Include="..\Source\StateManager.cpp" />
     <ClCompile Include="..\Source\VitalEntity.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -26,6 +27,7 @@
     <ClInclude Include="..\Source\scene_node.h" />
     <ClInclude Include="..\Source\SimState.h" />
     <ClInclude Include="..\Source\State.h" />
+    <ClInclude Include="..\Source\StateManager.h" />
     <ClInclude Include="..\Source\VitalEntity.h" />
   </ItemGroup>
   <PropertyGroup Label="Globals">

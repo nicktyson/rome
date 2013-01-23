@@ -3,12 +3,14 @@
 
 #include <gl/glfw.h>
 #include "State.h"
-#include "scene_node.h"
+
+class State;
+class scene_node;
 
 class SimState : public State {
 public:
 	SimState();
-	void initialize();
+	void initialize(StateManager* mngr);
 	void run();
 	void resume();
 	void pause();
@@ -21,7 +23,7 @@ public:
 protected:
 	void display();
 	void updateSim();
-	scene_node * rootNode;
+	scene_node* rootNode;
 	int DISPLAY_FRAME_RATE;
 	double DISPLAY_FRAME_TIME;
 	int SIM_RATE;

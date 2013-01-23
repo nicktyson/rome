@@ -1,4 +1,5 @@
 #include "State.h"
+#include "StateManager.h"
 #include <gl/glfw.h>
 
 State::State() {
@@ -16,4 +17,8 @@ void State::simThreadFunc() {
 
 bool State::isInitialized() {
 	return initialized;
+}
+
+void State::initialize(StateManager* mngr) {
+
 }
