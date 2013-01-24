@@ -10,8 +10,8 @@ public:
 	void run();
 	void pause();
 	void restoreLast();
-	State* getCurrentState();
 	void newSim();
+	State* getCurrentState();
 
 protected:
 	State* currentState;
@@ -20,6 +20,7 @@ protected:
 	std::vector<State*> states;
 	State* sim;
 	State* ps;
+	State* intro;
 };
 
 #endif

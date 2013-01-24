@@ -24,6 +24,7 @@ void SimState::initialize(StateManager* mngr) {
 
 void SimState::run() {
 	shouldPause = false;
+	glfwUnlockMutex(pauseMutex);
 
 	int frameCount = 0;
 	double fpsTimeSum = 0;
@@ -53,7 +54,6 @@ void SimState::run() {
 	}
 
 	pause();
-
 }
 
 void SimState::resume() {
@@ -62,7 +62,7 @@ void SimState::resume() {
 }
 
 void SimState::pause() {
-	manager->newSim();
+	manager->pause();
 }
 
 void SimState::end() {

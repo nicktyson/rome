@@ -5,9 +5,10 @@
 * move dll's?
 * handle mouse movement
 	* implement camera(s) / player object
-* integrate GLSL shaders / convert to OpenGL 3?
+* integrate GLSL shaders
 * handle texture coordinates
 * update sim in a thread-safe way
-* finish state machine
-	* add additional states including pause
-	* fix simState pausing
+* make state machine more regular / sane / future-proof
+	* add additional states
+	* make simState pausing less hacky
+* convert to OpenGL 3?

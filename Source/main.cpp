@@ -24,7 +24,7 @@ int main(int argc, char **argv) {
 	//gets perspective correct
 	//reshape(800, 600);
 
-	//move to SimState init?
+	//move to SimState?
 	glEnable(GL_DEPTH_TEST);
 	glEnable(GL_CULL_FACE);
     glEnable(GL_LIGHTING);

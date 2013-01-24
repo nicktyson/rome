@@ -1,12 +1,14 @@
 #include "StateManager.h"
 #include "SimState.h"
 #include "State.h"
+#include "IntroState.h"
+#include "PauseState.h"
 
 StateManager::StateManager() {
-	sim = new SimState();
-	currentState = sim;
+	intro = new IntroState();
+	currentState = intro;
 	nextState = currentState;
-	lastState = currentState;
+	lastState = NULL;
 }
 
 void StateManager::run() {
@@ -17,17 +19,22 @@ void StateManager::run() {
 
 		currentState->run();
 
+		if(lastState) {
+			lastState->end();
+			delete lastState;
+		}
 		lastState = currentState;
 		currentState = nextState;
 	}
 }
 
 void StateManager::pause() {
-
+	nextState = new PauseState();
 }
 
 void StateManager::restoreLast() {
 	nextState = lastState;
+	lastState = NULL;
 }
 
 void StateManager::newSim() {
