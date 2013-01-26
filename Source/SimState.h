@@ -7,6 +7,7 @@
 class State;
 class StateManager;
 class scene_node;
+class Camera;
 
 class SimState : public State {
 public:
@@ -24,7 +25,7 @@ public:
 protected:
 	void display();
 	void updateSim();
-	scene_node* rootNode;
+	Camera* camera;
 	int DISPLAY_FRAME_RATE;
 	double DISPLAY_FRAME_TIME;
 	int SIM_RATE;

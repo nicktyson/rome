@@ -11,6 +11,7 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="..\Source\Camera.cpp" />
     <ClCompile Include="..\Source\IntroState.cpp" />
     <ClCompile Include="..\Source\main.cpp" />
     <ClCompile Include="..\Source\mesh.cpp" />
@@ -20,9 +21,11 @@
     <ClCompile Include="..\Source\SimState.cpp" />
     <ClCompile Include="..\Source\State.cpp" />
     <ClCompile Include="..\Source\StateManager.cpp" />
+    <ClCompile Include="..\Source\TPCamera.cpp" />
     <ClCompile Include="..\Source\VitalEntity.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="..\Source\Camera.h" />
     <ClInclude Include="..\Source\IntroState.h" />
     <ClInclude Include="..\Source\main.h" />
     <ClInclude Include="..\Source\mesh.h" />
@@ -32,6 +35,7 @@
     <ClInclude Include="..\Source\SimState.h" />
     <ClInclude Include="..\Source\State.h" />
     <ClInclude Include="..\Source\StateManager.h" />
+    <ClInclude Include="..\Source\TPCamera.h" />
     <ClInclude Include="..\Source\VitalEntity.h" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
