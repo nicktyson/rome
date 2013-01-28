@@ -2,6 +2,7 @@
 #define TPCAMERA_H
 
 #include "Camera.h"
+#include <vector>
 
 class TPCamera : public Camera {
 public:
@@ -12,6 +13,9 @@ public:
 	void back();
 	void left();
 	void right();
+
+private:
+	std::vector<float> velocity;
 };
 
 #endif
