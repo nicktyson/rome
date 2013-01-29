@@ -49,8 +49,8 @@ void MeshNode::draw() {
 	glPopMatrix();
 }
 
-void MeshNode::update() {
+void MeshNode::update(double deltaT) {
 	for(std::vector<scene_node*>::iterator it = children.begin(); it != children.end(); ++it) {
-		(*it)->update();
+		(*it)->update(deltaT);
 	}
 }

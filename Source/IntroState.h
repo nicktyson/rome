@@ -20,7 +20,7 @@ public:
 	
 protected:
 	void display();
-	void updateSim();
+	void updateSim(double deltaT);
 	int DISPLAY_FRAME_RATE;
 	double DISPLAY_FRAME_TIME;
 	bool shouldEnd;

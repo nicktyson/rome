@@ -21,7 +21,7 @@ public:
 
 protected:
 	virtual void display() = 0;
-	virtual void updateSim() = 0;
+	virtual void updateSim(double deltaT) = 0;
 	std::vector<bool> keyState;
 	bool initialized;
 	StateManager* manager;

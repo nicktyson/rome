@@ -8,7 +8,7 @@ class TPCamera : public Camera {
 public:
 	TPCamera();
 	void draw();
-	void update();
+	void update(double deltaT);
 	void forward();
 	void back();
 	void left();

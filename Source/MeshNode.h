@@ -11,7 +11,7 @@ public:
 	mesh * getMesh();
 	void setMesh(mesh *);
 	virtual void draw();
-	virtual void update();
+	virtual void update(double deltaT);
 	
 protected:
 	mesh * objectMesh;

@@ -12,7 +12,7 @@ public:
 	VitalEntity(std::string fileLocation);
 	//constructor w/ mesh location and velocity
 	VitalEntity(std::string fileLocation, float vx, float vy, float vz);
-	virtual void update();
+	virtual void update(double deltaT);
 
 protected:
 	std::vector<float> velocity;

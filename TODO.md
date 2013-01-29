@@ -1,8 +1,8 @@
 * improve scene creation
 	* make more node/entity classes
 	* generate interesting default scene
-* make physics time-based rather than step-based
-	* improve node update() behavior
+* centralize constants
+* improve node update() behavior
 * move dll's?
 * change file structure of source files
 * pause should clear keys

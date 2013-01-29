@@ -15,12 +15,12 @@ VitalEntity::VitalEntity(std::string fileLocation, float vx, float vy, float vz)
 	velocity[2] = vz;
 }
 
-void VitalEntity::update() {
-	translation[0] += velocity[0];
-	translation[1] += velocity[1];
-	translation[2] += velocity[2];
+void VitalEntity::update(double deltaT) {
+	translation[0] += deltaT * velocity[0];
+	translation[1] += deltaT * velocity[1];
+	translation[2] += deltaT * velocity[2];
 
 	for(std::vector<scene_node*>::iterator it = children.begin(); it != children.end(); ++it) {
-		(*it)->update();
+		(*it)->update(deltaT);
 	}
 }

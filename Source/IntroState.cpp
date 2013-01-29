@@ -68,6 +68,6 @@ void IntroState::display() {
 	glClear(GL_COLOR_BUFFER_BIT);
 }
 
-void IntroState::updateSim() {
+void IntroState::updateSim(double deltaT) {
 
 }

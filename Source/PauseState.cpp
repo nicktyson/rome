@@ -68,6 +68,6 @@ void PauseState::display() {
 	//glClear(GL_COLOR_BUFFER_BIT);
 }
 
-void PauseState::updateSim() {
+void PauseState::updateSim(double deltaT) {
 
 }

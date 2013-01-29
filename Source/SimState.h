@@ -24,7 +24,7 @@ public:
 	
 protected:
 	void display();
-	void updateSim();
+	void updateSim(double deltaT);
 	Camera* camera;
 	int DISPLAY_FRAME_RATE;
 	double DISPLAY_FRAME_TIME;

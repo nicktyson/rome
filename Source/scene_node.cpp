@@ -80,8 +80,8 @@ void scene_node::applyTransformation() {
 	glScaled(scaling[0], scaling[1], scaling[2]);
 }
 
-void scene_node::update() {
+void scene_node::update(double deltaT) {
 	for(std::vector<scene_node*>::iterator it = children.begin(); it != children.end(); ++it) {
-		(*it)->update();
+		(*it)->update(deltaT);
 	}
 }

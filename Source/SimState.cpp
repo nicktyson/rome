@@ -8,9 +8,9 @@
 #include "TPCamera.h"
 
 SimState::SimState() {
-	DISPLAY_FRAME_RATE = 30;
+	DISPLAY_FRAME_RATE = 60;
 	DISPLAY_FRAME_TIME = 1.0 / DISPLAY_FRAME_RATE;
-	SIM_RATE = 60;
+	SIM_RATE = 120;
 	SIM_TIME = 1.0 / SIM_RATE;
 	initialized = false;
 }
@@ -94,7 +94,7 @@ void SimState::initScene() {
 	camera->addChild(childNode);
 
 	//float randRot = rand() % 90;
-	VitalEntity * secondChild = new VitalEntity(cubeLocation, 0.01, 0, 0);
+	VitalEntity * secondChild = new VitalEntity(cubeLocation, 0.6, 0, 0);
 	secondChild->setTranslation(-2, -2, 0);
 	//secondChild->setRotation(20, randRot, 0);
 	childNode->addChild(secondChild);
@@ -115,11 +115,17 @@ void SimState::display() {
 	camera->draw();
 }
 
-void SimState::updateSim() {
-	camera->update();
+void SimState::updateSim(double deltaT) {
+	camera->update(deltaT);
 }
 
 void SimState::simThreadFunc() {
+
+	double simStartTime;
+	double simCurrentTime;
+	double timeDif;
+	double previousFrameStart = glfwGetTime();
+	double deltaT;
 
 	while (true) {
 		if(shouldPause) {
@@ -127,16 +133,19 @@ void SimState::simThreadFunc() {
 			glfwUnlockMutex(pauseMutex);
 		}
 
-		double simStartTime = glfwGetTime();
+		simStartTime = glfwGetTime();
+		deltaT = simStartTime - previousFrameStart;
 
-		updateSim();
+		updateSim(deltaT);
 
 		//clamp rate
-		double simCurrentTime = glfwGetTime();
-		double timeDif = simCurrentTime - simStartTime;
+		simCurrentTime = glfwGetTime();
+		timeDif = simCurrentTime - simStartTime;
 		if (SIM_TIME > timeDif) {
 			glfwSleep(SIM_TIME - timeDif);
 		}
+
+		previousFrameStart = simStartTime;
 	}
 }
 
