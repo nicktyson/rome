@@ -39,7 +39,7 @@ void IntroState::resume() {
 }
 
 void IntroState::pause() {
-	manager->newSim();
+	manager->changeState(StateManager::SIM);
 }
 
 void IntroState::end() {

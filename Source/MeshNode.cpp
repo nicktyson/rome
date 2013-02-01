@@ -33,7 +33,7 @@ void MeshNode::draw() {
 	//draw triangles
 	glBegin(GL_TRIANGLES);
 
-	for(int i = 0; i < cheatTris.size(); i++) {
+	for(unsigned int i = 0; i < cheatTris.size(); i++) {
 		glNormal3f(cheatNorms[3*cheatTris[i]], cheatNorms[3*cheatTris[i]+1], cheatNorms[3*cheatTris[i]+2]);
 		glVertex3f(meshVerts[3*cheatTris[i]], meshVerts[3*cheatTris[i]+1], meshVerts[3*cheatTris[i]+2]);
 	}

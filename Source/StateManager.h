@@ -7,17 +7,20 @@ class State;
 class StateManager {
 public:
 	StateManager();
-	void run();
-	void pause();
-	void restoreLast();
-	void newSim();
+	enum States {
+		SIM,
+		INTRO,
+		PAUSE,
+		LAST
+	};
 	State* getCurrentState();
+	void run();
+	void changeState(States newState);
 
 protected:
 	State* currentState;
 	State* lastState;
 	State* nextState;
-	std::vector<State*> states;
 	State* sim;
 	State* ps;
 	State* intro;

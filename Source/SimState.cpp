@@ -59,12 +59,11 @@ void SimState::run() {
 }
 
 void SimState::resume() {
-	shouldPause = false;
-	glfwUnlockMutex(pauseMutex);
+
 }
 
 void SimState::pause() {
-	manager->pause();
+	manager->changeState(StateManager::PAUSE);
 }
 
 void SimState::end() {
@@ -131,6 +130,7 @@ void SimState::simThreadFunc() {
 		if(shouldPause) {
 			glfwLockMutex(pauseMutex);
 			glfwUnlockMutex(pauseMutex);
+			previousFrameStart = glfwGetTime();
 		}
 
 		simStartTime = glfwGetTime();

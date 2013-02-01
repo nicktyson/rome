@@ -39,7 +39,7 @@ void PauseState::resume() {
 }
 
 void PauseState::pause() {
-	manager->restoreLast();
+	manager->changeState(StateManager::LAST);
 }
 
 void PauseState::end() {
