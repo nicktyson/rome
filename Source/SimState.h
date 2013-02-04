@@ -18,9 +18,10 @@ public:
 	void pause();
 	void end();
 	void keyCallback(int key, int state);
-	void initScene();
-	void simThreadFunc();
 	void keyOps();
+	void initScene();
+	static void GLFWCALL startThread(void * state);
+	void simThreadFunc();
 	
 protected:
 	void display();
@@ -30,8 +31,11 @@ protected:
 	double DISPLAY_FRAME_TIME;
 	int SIM_RATE;
 	double SIM_TIME;
-	bool shouldPause;
+	bool shouldStopStateLoop;
+	bool pauseSimThread;
+	bool endSimThread;
 	GLFWmutex pauseMutex;
+	GLFWthread simThread;
 };
 
 #endif

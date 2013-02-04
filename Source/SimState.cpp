@@ -7,31 +7,34 @@
 #include "Camera.h"
 #include "TPCamera.h"
 
+std::vector<bool> State::keyState;
+
 SimState::SimState() {
 	DISPLAY_FRAME_RATE = 60;
 	DISPLAY_FRAME_TIME = 1.0 / DISPLAY_FRAME_RATE;
 	SIM_RATE = 120;
 	SIM_TIME = 1.0 / SIM_RATE;
 	initialized = false;
+	shouldStopStateLoop = false;
+	pauseSimThread = false;
+	endSimThread = false;
 }
 
 void SimState::initialize(StateManager* mngr) {
 	manager = mngr;
 	initScene();
 	pauseMutex = glfwCreateMutex();
-	GLFWthread simThread;
 	simThread = glfwCreateThread(startThread, this);
 	initialized = true;
+
 }
 
 void SimState::run() {
-	shouldPause = false;
-	glfwUnlockMutex(pauseMutex);
 
 	int frameCount = 0;
 	double fpsTimeSum = 0;
 
-	while (!shouldPause) {
+	while (!shouldStopStateLoop) {
 		double loopStartTime = glfwGetTime();
 
 		keyOps();
@@ -54,24 +57,31 @@ void SimState::run() {
 			fpsTimeSum = 0;
 		}
 	}
-
-	pause();
 }
 
 void SimState::resume() {
-
+	shouldStopStateLoop = false;
+	pauseSimThread = false;
+	glfwUnlockMutex(pauseMutex);
 }
 
 void SimState::pause() {
-	manager->changeState(StateManager::PAUSE);
+	glfwLockMutex(pauseMutex);
+	pauseSimThread = true;
+	for(int i = 0; i < 300; i++) {
+		keyState[i] = 0;
+	}
 }
 
 void SimState::end() {
-
+	endSimThread = true;
+	pauseSimThread = false;
+	glfwUnlockMutex(pauseMutex);
+	glfwWaitThread(simThread, GLFW_WAIT);
 }
 
 void SimState::keyCallback(int key, int state) {
-	if(key >= 0 && key < 256) {
+	if(key >= 0 && key < 300) {
 		if(state == GLFW_PRESS) {
 			keyState[key] = true;
 		} else {
@@ -118,6 +128,11 @@ void SimState::updateSim(double deltaT) {
 	camera->update(deltaT);
 }
 
+void SimState::startThread(void * state) {
+	SimState * stptr = static_cast<SimState*>(state);
+	stptr->simThreadFunc();
+}
+
 void SimState::simThreadFunc() {
 
 	double simStartTime;
@@ -127,10 +142,14 @@ void SimState::simThreadFunc() {
 	double deltaT;
 
 	while (true) {
-		if(shouldPause) {
+		if(pauseSimThread) {
 			glfwLockMutex(pauseMutex);
 			glfwUnlockMutex(pauseMutex);
 			previousFrameStart = glfwGetTime();
+		}
+
+		if(endSimThread) {
+			return;
 		}
 
 		simStartTime = glfwGetTime();
@@ -165,8 +184,8 @@ void SimState::keyOps() {
 	}
 
 	if (keyState['P']) {
-		glfwLockMutex(pauseMutex);
-		shouldPause = true;
+		manager->changeState(StateManager::PAUSE);
+		shouldStopStateLoop = true;
 		keyState['P'] = false;
 	}
 
@@ -181,5 +200,11 @@ void SimState::keyOps() {
 	}
 	if (keyState['D']) {
 		camera->right();
+	}
+
+	if (keyState[GLFW_KEY_ESC]) {
+		manager->changeState(StateManager::END);
+		shouldStopStateLoop = true;
+		keyState[GLFW_KEY_ESC] = false;
 	}
 }

@@ -7,6 +7,7 @@ IntroState::IntroState() {
 	DISPLAY_FRAME_RATE = 30;
 	DISPLAY_FRAME_TIME = 1.0 / DISPLAY_FRAME_RATE;
 	initialized = false;
+	shouldStopStateLoop = false;
 }
 
 void IntroState::initialize(StateManager* mngr) {
@@ -15,8 +16,8 @@ void IntroState::initialize(StateManager* mngr) {
 }
 
 void IntroState::run() {
-	shouldEnd = false;
-	while(!shouldEnd) {
+	
+	while(!shouldStopStateLoop) {
 		double loopStartTime = glfwGetTime();
 
 		keyOps();
@@ -30,16 +31,16 @@ void IntroState::run() {
 			glfwSleep(DISPLAY_FRAME_TIME - timeDif);
 		}
 	}
-
-	pause();
 }
 
 void IntroState::resume() {
-
+	shouldStopStateLoop = false;
 }
 
 void IntroState::pause() {
-	manager->changeState(StateManager::SIM);
+	for(int i = 0; i < 300; i++) {
+		keyState[i] = 0;
+	}
 }
 
 void IntroState::end() {
@@ -47,7 +48,7 @@ void IntroState::end() {
 }
 
 void IntroState::keyCallback(int key, int state) {
-	if(key >= 0 && key < 256) {
+	if(key >= 0 && key < 300) {
 		if(state == GLFW_PRESS) {
 			keyState[key] = true;
 		} else {
@@ -58,7 +59,8 @@ void IntroState::keyCallback(int key, int state) {
 
 void IntroState::keyOps() {
 	if (keyState['S']) {
-		shouldEnd = true;
+		manager->changeState(StateManager::SIM);
+		shouldStopStateLoop = true;
 		keyState['S'] = false;
 	}
 }

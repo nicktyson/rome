@@ -7,6 +7,7 @@ PauseState::PauseState() {
 	DISPLAY_FRAME_RATE = 30;
 	DISPLAY_FRAME_TIME = 1.0 / DISPLAY_FRAME_RATE;
 	initialized = false;
+	shouldStopStateLoop = false;
 }
 
 void PauseState::initialize(StateManager* mngr) {
@@ -15,8 +16,8 @@ void PauseState::initialize(StateManager* mngr) {
 }
 
 void PauseState::run() {
-	shouldResume = false;
-	while(!shouldResume) {
+	
+	while(!shouldStopStateLoop) {
 		double loopStartTime = glfwGetTime();
 
 		keyOps();
@@ -31,15 +32,16 @@ void PauseState::run() {
 		}
 	}
 
-	pause();
 }
 
 void PauseState::resume() {
-
+	shouldStopStateLoop = false;
 }
 
 void PauseState::pause() {
-	manager->changeState(StateManager::LAST);
+	for(int i = 0; i < 300; i++) {
+		keyState[i] = 0;
+	}
 }
 
 void PauseState::end() {
@@ -47,7 +49,7 @@ void PauseState::end() {
 }
 
 void PauseState::keyCallback(int key, int state) {
-	if(key >= 0 && key < 256) {
+	if(key >= 0 && key < 300) {
 		if(state == GLFW_PRESS) {
 			keyState[key] = true;
 		} else {
@@ -58,7 +60,8 @@ void PauseState::keyCallback(int key, int state) {
 
 void PauseState::keyOps() {
 	if (keyState['P']) {
-		shouldResume = true;
+		manager->changeState(StateManager::LAST);
+		shouldStopStateLoop = true;
 		keyState['P'] = false;
 	}
 }

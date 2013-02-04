@@ -43,6 +43,9 @@ int main(int argc, char **argv) {
 	manager = new StateManager();
 	manager->run();
 
+	glfwCloseWindow();
+	glfwTerminate();
+
 }
 
 //reshape the window

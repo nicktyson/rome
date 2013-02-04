@@ -11,11 +11,13 @@ public:
 		SIM,
 		INTRO,
 		PAUSE,
-		LAST
+		LAST,
+		END
 	};
 	State* getCurrentState();
 	void run();
 	void changeState(States newState);
+	void end();
 
 protected:
 	State* currentState;
@@ -24,6 +26,7 @@ protected:
 	State* sim;
 	State* ps;
 	State* intro;
+	bool shouldEnd;
 };
 
 #endif

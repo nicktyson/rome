@@ -13,24 +13,38 @@ StateManager::StateManager() {
 	currentState = intro;
 	nextState = currentState;
 	lastState = NULL;
+
+	shouldEnd = false;
 }
 
 void StateManager::run() {
-	while(true) {
+	while(!shouldEnd) {
 		if (!currentState->isInitialized()) {
 			currentState->initialize(this);
+		} else {
+			currentState->resume();
 		}
 
 		currentState->run();
 
-		//if(lastState) {
-		//	lastState->end();
-		//	delete lastState;
-		//}
+		currentState->pause();
 
 		lastState = currentState;
 		currentState = nextState;
 	}
+
+	end();
+}
+
+void StateManager::end() {
+	currentState = intro;
+	ps->end();
+	intro->end();
+	sim->end();
+
+	delete ps;
+	//delete intro;
+	delete sim;
 }
 
 
@@ -52,6 +66,9 @@ void StateManager::changeState(StateManager::States newState) {
 	case LAST:
 		nextState = lastState;
 		lastState = NULL;
+		break;
+	case END:
+		shouldEnd = true;
 		break;
 	}
 }

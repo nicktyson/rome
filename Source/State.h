@@ -15,15 +15,14 @@ public:
 	virtual void pause() = 0;
 	virtual void end() = 0;
 	virtual void keyCallback(int key, int state) = 0;
-	virtual void simThreadFunc();
 	bool isInitialized();
-	static void GLFWCALL startThread(void * state);
 
 protected:
 	virtual void display() = 0;
 	virtual void updateSim(double deltaT) = 0;
-	std::vector<bool> keyState;
+	static std::vector<bool> keyState;
 	bool initialized;
+	bool shouldStopStateLoop;
 	StateManager* manager;
 };
 
