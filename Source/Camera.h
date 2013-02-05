@@ -10,6 +10,7 @@ public:
 	virtual void back() = 0;
 	virtual void left() = 0;
 	virtual void right() = 0;
+	virtual void mouseView(int x, int y) = 0;
 };
 
 #endif

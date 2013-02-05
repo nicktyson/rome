@@ -18,6 +18,7 @@ public:
 	void pause();
 	void end();
 	void keyCallback(int key, int state);
+	void mousePosCallback(int x, int y);
 	void keyOps();
 	void initScene();
 	static void GLFWCALL startThread(void * state);

@@ -13,6 +13,7 @@ public:
 	void back();
 	void left();
 	void right();
+	void mouseView(int x, int y);
 
 private:
 	std::vector<float> velocity;

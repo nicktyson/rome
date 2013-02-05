@@ -32,17 +32,21 @@ int main(int argc, char **argv) {
 
 	glfwEnable(GLFW_KEY_REPEAT);
 
+	manager = new StateManager();
+
 	//GLFW doesn't accept object member functions, so use local ones that redirect
 	glfwSetWindowSizeCallback(reshape);
 	glfwSetKeyCallback(keyCallback);
+	glfwSetMousePosCallback(mousePosCallback);
 
 	//set ROME_PATH to the main project directory
 	setupPath();
 
 	//state management loop
-	manager = new StateManager();
+
 	manager->run();
 
+	//calls KeyCallback apparently
 	glfwCloseWindow();
 	glfwTerminate();
 
@@ -61,6 +65,11 @@ void GLFWCALL reshape (int width, int height) {
 void GLFWCALL keyCallback(int key, int state) {
 	State* currentState = manager->getCurrentState();
 	currentState->keyCallback(key, state);
+}
+
+void GLFWCALL mousePosCallback(int x, int y) {
+	State* currentState = manager->getCurrentState();
+	currentState->mousePosCallback(x, y);
 }
 
 void setupPath() {

@@ -57,3 +57,7 @@ void TPCamera::left() {
 void TPCamera::right() {
 	velocity[0] = -8;
 }
+
+void TPCamera::mouseView(int x, int y) {
+
+}

@@ -5,6 +5,7 @@
 
 void GLFWCALL reshape(int width, int height);
 void GLFWCALL keyCallback(int key, int state);
+void GLFWCALL mousePosCallback(int x, int y);
 void setupPath();
 
 #endif

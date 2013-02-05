@@ -13,3 +13,7 @@ bool State::isInitialized() {
 void State::initialize(StateManager* mngr) {
 
 }
+
+void State::mousePosCallback(int x, int y) {
+
+}

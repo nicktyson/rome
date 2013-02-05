@@ -5,6 +5,7 @@
 #include "MeshNode.h"
 #include "VitalEntity.h"
 #include "Camera.h"
+#include "FPCamera.h"
 #include "TPCamera.h"
 
 std::vector<bool> State::keyState;
@@ -90,30 +91,41 @@ void SimState::keyCallback(int key, int state) {
 	}
 }
 
+void SimState::mousePosCallback(int x, int y) {
+	camera->mouseView(x, y);
+}
+
 void SimState::initScene() {
 	extern std::string ROME_PATH;
 
-	camera = new TPCamera();
+	camera = new FPCamera();
 	std::string location = ROME_PATH + "/Assets/Meshes/test_icosphere.msh";
 	std::string cubeLocation = ROME_PATH + "/Assets/Meshes/test_cube.msh";
 
 	//make two offset objects
 	MeshNode * childNode = new MeshNode(location);
-	childNode->setTranslation(1, 1, 0);
+	childNode->setTranslation(0, 0, 0);
 	camera->addChild(childNode);
 
 	//float randRot = rand() % 90;
-	VitalEntity * secondChild = new VitalEntity(cubeLocation, 0.6, 0, 0);
-	secondChild->setTranslation(-2, -2, 0);
+	VitalEntity * secondChild = new VitalEntity(cubeLocation, 0, 0, 0);
+	secondChild->setTranslation(0, 1, 0);
+	secondChild->setScaling(1, 1, 2);
 	//secondChild->setRotation(20, randRot, 0);
 	childNode->addChild(secondChild);
 
+	//add a floor
+	MeshNode * floor = new MeshNode(cubeLocation);
+	floor->setScaling(5, 5, 0.1);
+	floor->setTranslation(0, 0, -4);
+	camera->addChild(floor);
+
 	//make a ring of spheres
-	//for(double i = 0; i < 6; ++i) {
-	//	MeshNode * newNode = new MeshNode(location);
-	//	camera->addChild(newNode);
-	//	newNode->setTranslation(3*sin(i*6.28/6), 3*cos(i*6.28/6), 0);
-	//}
+	/*for(double i = 0; i < 6; ++i) {
+		MeshNode * newNode = new MeshNode(location);
+		camera->addChild(newNode);
+		newNode->setTranslation(3*sin(i*6.28/6), 3*cos(i*6.28/6), 0);
+	}*/
 }
 
 void SimState::display() {
