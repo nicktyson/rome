@@ -98,14 +98,19 @@ void SimState::mousePosCallback(int x, int y) {
 void SimState::initScene() {
 	extern std::string ROME_PATH;
 
-	camera = new FPCamera();
+	camera = new TPCamera();
+	secondCamera = new FPCamera();
 	std::string location = ROME_PATH + "/Assets/Meshes/test_icosphere.msh";
 	std::string cubeLocation = ROME_PATH + "/Assets/Meshes/test_cube.msh";
+
+	root = new scene_node();
+	camera->addChild(root);
+	secondCamera->addChild(root);
 
 	//make two offset objects
 	MeshNode * childNode = new MeshNode(location);
 	childNode->setTranslation(0, 0, 0);
-	camera->addChild(childNode);
+	root->addChild(childNode);
 
 	//float randRot = rand() % 90;
 	VitalEntity * secondChild = new VitalEntity(cubeLocation, 0, 0, 0);
@@ -118,7 +123,7 @@ void SimState::initScene() {
 	MeshNode * floor = new MeshNode(cubeLocation);
 	floor->setScaling(5, 5, 0.1);
 	floor->setTranslation(0, 0, -4);
-	camera->addChild(floor);
+	root->addChild(floor);
 
 	//make a ring of spheres
 	/*for(double i = 0; i < 6; ++i) {
@@ -164,6 +169,8 @@ void SimState::simThreadFunc() {
 			return;
 		}
 
+		stateKeyOps();
+
 		simStartTime = glfwGetTime();
 		deltaT = simStartTime - previousFrameStart;
 
@@ -201,6 +208,15 @@ void SimState::keyOps() {
 		keyState['P'] = false;
 	}
 
+
+	if (keyState[GLFW_KEY_ESC]) {
+		manager->changeState(StateManager::END);
+		shouldStopStateLoop = true;
+		keyState[GLFW_KEY_ESC] = false;
+	}
+}
+
+void SimState::stateKeyOps() {
 	if (keyState['W']) {
 		camera->forward();
 	}
@@ -214,9 +230,14 @@ void SimState::keyOps() {
 		camera->right();
 	}
 
-	if (keyState[GLFW_KEY_ESC]) {
-		manager->changeState(StateManager::END);
-		shouldStopStateLoop = true;
-		keyState[GLFW_KEY_ESC] = false;
+	if (keyState['V']) {
+		switchCameras();
+		keyState['V'] = false;
 	}
+}
+
+void SimState::switchCameras() {
+	Camera* temp = camera;
+	camera = secondCamera;
+	secondCamera = temp;
 }

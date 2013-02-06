@@ -20,6 +20,11 @@ private:
 	std::vector<float> angVelocity;
 	std::vector<int> lastMouse;
 	std::vector<int> currentMouse;
+
+	static const float MAX_VELOCITY;
+	static const float MOUSE_SENSITIVITY;
+	static const float VELOCITY_DRAG;
+	static const float VIEW_DRAG;
 };
 
 #endif

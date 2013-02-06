@@ -23,11 +23,15 @@ public:
 	void initScene();
 	static void GLFWCALL startThread(void * state);
 	void simThreadFunc();
+	void stateKeyOps();
+	void switchCameras();
 	
 protected:
 	void display();
 	void updateSim(double deltaT);
 	Camera* camera;
+	Camera* secondCamera;
+	scene_node* root;
 	int DISPLAY_FRAME_RATE;
 	double DISPLAY_FRAME_TIME;
 	int SIM_RATE;

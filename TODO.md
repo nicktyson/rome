@@ -1,12 +1,11 @@
 * improve scene creation
-	* make more node/entity classes
-	* generate interesting default scene
-* centralize constants
+	* terrain?
+* make more node/entity classes
+	* more-capable player object
 * improve node update() behavior
+* centralize constants
 * move dll's?
 * change file structure of source files
-* handle mouse movement
-	* implement camera(s) / player object
 * integrate GLSL shaders
 * handle texture coordinates
 * update sim in a thread-safe way

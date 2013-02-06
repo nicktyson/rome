@@ -17,6 +17,10 @@ public:
 
 private:
 	std::vector<float> velocity;
+	std::vector<int> mousePos;
+
+	static const float MAX_VELOCITY;
+	static const float DRAG;
 };
 
 #endif
