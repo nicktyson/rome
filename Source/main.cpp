@@ -38,6 +38,7 @@ int main(int argc, char **argv) {
 	glfwSetWindowSizeCallback(reshape);
 	glfwSetKeyCallback(keyCallback);
 	glfwSetMousePosCallback(mousePosCallback);
+	glfwSetMouseWheelCallback(mouseWheelCallback);
 
 	//set ROME_PATH to the main project directory
 	setupPath();
@@ -70,6 +71,11 @@ void GLFWCALL keyCallback(int key, int state) {
 void GLFWCALL mousePosCallback(int x, int y) {
 	State* currentState = manager->getCurrentState();
 	currentState->mousePosCallback(x, y);
+}
+
+void GLFWCALL mouseWheelCallback(int pos) {
+	State* currentState = manager->getCurrentState();
+	currentState->mouseWheelCallback(pos);
 }
 
 void setupPath() {

@@ -101,6 +101,10 @@ void SimState::mousePosCallback(int x, int y) {
 	camera->mouseView(x, y);
 }
 
+void SimState::mouseWheelCallback(int pos) {
+	camera->zoom(pos);
+}
+
 void SimState::initScene() {
 	extern std::string ROME_PATH;
 
@@ -110,20 +114,18 @@ void SimState::initScene() {
 	//make two offset objects
 	MeshNode * childNode = new MeshNode(cubeLocation);
 	childNode->setTranslation(0, 0, 0);
-	childNode->setScaling(1, 1, 2);
 	root->addChild(childNode);
 
 	//float randRot = rand() % 90;
-	VitalEntity * secondChild = new VitalEntity(location, 0, 0, 0);
-	secondChild->setTranslation(1, 1, 0);
-	secondChild->setScaling(1, 1, 0.5);
+	VitalEntity * secondChild = new VitalEntity(location, 1, 0, 0);
+	secondChild->setTranslation(2, 2, 0);
 	//secondChild->setRotation(20, randRot, 0);
 	childNode->addChild(secondChild);
 
 	//add a floor
 	MeshNode * floor = new MeshNode(cubeLocation);
 	floor->setScaling(5, 5, 0.1);
-	floor->setTranslation(0, 0, -4);
+	floor->setTranslation(0, 0, -1.1);
 	root->addChild(floor);
 
 	//make a ring of spheres

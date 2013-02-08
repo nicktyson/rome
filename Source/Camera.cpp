@@ -3,3 +3,7 @@
 Camera::Camera() {
 
 }
+
+void Camera::zoom(int pos) {
+
+}

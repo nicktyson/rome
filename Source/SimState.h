@@ -24,6 +24,7 @@ public:
 	void end();
 	void keyCallback(int key, int state);
 	void mousePosCallback(int x, int y);
+	void mouseWheelCallback(int pos);
 	void keyOps();
 	void initScene();
 	void initCameras();

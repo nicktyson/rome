@@ -3,6 +3,7 @@
 * make more node/entity classes
 	* more-capable player object
 * improve node update() behavior
+* make camera movements affect all cameras
 * centralize constants
 * move dll's?
 * change file structure of source files
