@@ -27,10 +27,6 @@ void scene_node::addChild(scene_node * newChild) {
 	children.push_back(newChild);
 }
 
-bool scene_node::doesHaveMesh() {
-	return hasMesh;
-}
-
 std::vector<float> scene_node::getTranslation() {
 	return translation;
 }

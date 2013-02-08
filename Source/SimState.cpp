@@ -1,6 +1,7 @@
 #include "SimState.h"
 #include <GL/glfw.h>
 #include <iostream>
+#include <vector>
 #include "StateManager.h"
 #include "MeshNode.h"
 #include "VitalEntity.h"
@@ -10,11 +11,12 @@
 
 std::vector<bool> State::keyState;
 
+const int SimState::DISPLAY_FRAME_RATE = 60;
+const double SimState::DISPLAY_FRAME_TIME = 1.0 / DISPLAY_FRAME_RATE;
+const int SimState::SIM_RATE = 120;
+const double SimState::SIM_TIME = 1.0 / SIM_RATE;
+
 SimState::SimState() {
-	DISPLAY_FRAME_RATE = 60;
-	DISPLAY_FRAME_TIME = 1.0 / DISPLAY_FRAME_RATE;
-	SIM_RATE = 120;
-	SIM_TIME = 1.0 / SIM_RATE;
 	initialized = false;
 	shouldStopStateLoop = false;
 	pauseSimThread = false;
@@ -23,15 +25,19 @@ SimState::SimState() {
 
 void SimState::initialize(StateManager* mngr) {
 	manager = mngr;
+
+	root = new scene_node();
+
+	initCameras();
+
 	initScene();
 	pauseMutex = glfwCreateMutex();
 	simThread = glfwCreateThread(startThread, this);
 	initialized = true;
-
 }
 
 void SimState::run() {
-
+	
 	int frameCount = 0;
 	double fpsTimeSum = 0;
 
@@ -98,24 +104,19 @@ void SimState::mousePosCallback(int x, int y) {
 void SimState::initScene() {
 	extern std::string ROME_PATH;
 
-	camera = new TPCamera();
-	secondCamera = new FPCamera();
 	std::string location = ROME_PATH + "/Assets/Meshes/test_icosphere.msh";
 	std::string cubeLocation = ROME_PATH + "/Assets/Meshes/test_cube.msh";
 
-	root = new scene_node();
-	camera->addChild(root);
-	secondCamera->addChild(root);
-
 	//make two offset objects
-	MeshNode * childNode = new MeshNode(location);
+	MeshNode * childNode = new MeshNode(cubeLocation);
 	childNode->setTranslation(0, 0, 0);
+	childNode->setScaling(1, 1, 2);
 	root->addChild(childNode);
 
 	//float randRot = rand() % 90;
-	VitalEntity * secondChild = new VitalEntity(cubeLocation, 0, 0, 0);
-	secondChild->setTranslation(0, 1, 0);
-	secondChild->setScaling(1, 1, 2);
+	VitalEntity * secondChild = new VitalEntity(location, 0, 0, 0);
+	secondChild->setTranslation(1, 1, 0);
+	secondChild->setScaling(1, 1, 0.5);
 	//secondChild->setRotation(20, randRot, 0);
 	childNode->addChild(secondChild);
 
@@ -128,9 +129,24 @@ void SimState::initScene() {
 	//make a ring of spheres
 	/*for(double i = 0; i < 6; ++i) {
 		MeshNode * newNode = new MeshNode(location);
-		camera->addChild(newNode);
+		root->addChild(newNode);
 		newNode->setTranslation(3*sin(i*6.28/6), 3*cos(i*6.28/6), 0);
 	}*/
+}
+
+void SimState::initCameras() {
+	cameraType = THIRDPERSON;
+
+	camera = new TPCamera();
+	camera->addChild(root);
+	cameras.push_back(camera);
+
+	camera = new FPCamera();
+	camera->addChild(root);
+	cameras.push_back(camera);
+
+	camera = cameras.front();
+	cameras.pop_front();
 }
 
 void SimState::display() {
@@ -230,6 +246,26 @@ void SimState::stateKeyOps() {
 		camera->right();
 	}
 
+	if (keyState['Q']) {
+		switch (cameraType) {
+		case FIRSTPERSON:
+			break;
+		case THIRDPERSON:
+			camera->rotateCCW();
+			break;
+		}
+
+	}
+	if (keyState['E']) {
+		switch (cameraType) {
+		case FIRSTPERSON:
+			break;
+		case THIRDPERSON:
+			camera->rotateCW();
+			break;
+		}
+	}
+
 	if (keyState['V']) {
 		switchCameras();
 		keyState['V'] = false;
@@ -237,7 +273,16 @@ void SimState::stateKeyOps() {
 }
 
 void SimState::switchCameras() {
-	Camera* temp = camera;
-	camera = secondCamera;
-	secondCamera = temp;
+	cameras.push_back(camera);
+	camera = cameras.front();
+	cameras.pop_front();
+
+	switch(cameraType) {
+	case FIRSTPERSON:
+		cameraType = THIRDPERSON;
+		break;
+	case THIRDPERSON:
+		cameraType = FIRSTPERSON;
+		break;
+	}
 }

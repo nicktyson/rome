@@ -11,6 +11,8 @@ public:
 	virtual void left() = 0;
 	virtual void right() = 0;
 	virtual void mouseView(int x, int y) = 0;
+	virtual void rotateCW() = 0;
+	virtual void rotateCCW() = 0;
 };
 
 #endif

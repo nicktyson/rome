@@ -14,6 +14,8 @@ public:
 	void left();
 	void right();
 	void mouseView(int x, int y);
+	void rotateCW();
+	void rotateCCW();
 
 private:
 	std::vector<float> velocity;

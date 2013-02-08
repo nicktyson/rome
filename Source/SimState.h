@@ -2,6 +2,7 @@
 #define SIMSTATE_H
 
 #include <gl/glfw.h>
+#include <deque>
 #include "State.h"
 
 class State;
@@ -12,6 +13,10 @@ class Camera;
 class SimState : public State {
 public:
 	SimState();
+	enum Cameras {
+		FIRSTPERSON,
+		THIRDPERSON
+	};
 	void initialize(StateManager* mngr);
 	void run();
 	void resume();
@@ -21,6 +26,7 @@ public:
 	void mousePosCallback(int x, int y);
 	void keyOps();
 	void initScene();
+	void initCameras();
 	static void GLFWCALL startThread(void * state);
 	void simThreadFunc();
 	void stateKeyOps();
@@ -29,18 +35,20 @@ public:
 protected:
 	void display();
 	void updateSim(double deltaT);
+	Cameras cameraType;
 	Camera* camera;
-	Camera* secondCamera;
-	scene_node* root;
-	int DISPLAY_FRAME_RATE;
-	double DISPLAY_FRAME_TIME;
-	int SIM_RATE;
-	double SIM_TIME;
+	std::deque<Camera*> cameras;
+	scene_node* root;	
 	bool shouldStopStateLoop;
 	bool pauseSimThread;
 	bool endSimThread;
 	GLFWmutex pauseMutex;
 	GLFWthread simThread;
+
+	static const int DISPLAY_FRAME_RATE;
+	static const double DISPLAY_FRAME_TIME;
+	static const int SIM_RATE;
+	static const double SIM_TIME;
 };
 
 #endif

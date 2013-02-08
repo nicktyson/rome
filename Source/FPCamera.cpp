@@ -133,3 +133,11 @@ void FPCamera::mouseView(int x, int y) {
 	angVelocity[0] += ((float)(currentMouse[1] - lastMouse[1])) * MOUSE_SENSITIVITY;
 	angVelocity[2] += ((float)(currentMouse[0] - lastMouse[0])) * MOUSE_SENSITIVITY;
 }
+
+void FPCamera::rotateCW() {
+
+}
+
+void FPCamera::rotateCCW() {
+
+}

@@ -10,7 +10,6 @@ public:
 	std::vector<scene_node *> getChildren();
 	void setParent(scene_node * newParent);
 	void addChild(scene_node * newChild);
-	bool doesHaveMesh();
 	std::vector<float> getTranslation();
 	std::vector<float> getRotation();
 	std::vector<float> getScaling();
@@ -22,7 +21,6 @@ public:
 	virtual void update(double deltaT);
 
 protected:
-	bool hasMesh;
 	scene_node * parent;
 	std::vector<scene_node *> children;
 	std::vector<float> translation;

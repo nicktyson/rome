@@ -14,13 +14,18 @@ public:
 	void left();
 	void right();
 	void mouseView(int x, int y);
+	void rotateCW();
+	void rotateCCW();
 
 private:
 	std::vector<float> velocity;
+	std::vector<float> angVelocity;
 	std::vector<int> mousePos;
 
 	static const float MAX_VELOCITY;
+	static const float MAX_ROTATE_VELOCITY;
 	static const float DRAG;
+	static const float VIEW_DRAG;
 };
 
 #endif

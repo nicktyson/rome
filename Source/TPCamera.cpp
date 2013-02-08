@@ -4,11 +4,14 @@
 #include <iostream>
 #include "TPCamera.h"
 
-const float TPCamera::MAX_VELOCITY = 5.0; // meters/second
+const float TPCamera::MAX_VELOCITY = 7.0; // meters/second
 const float TPCamera::DRAG = 5.0;
+const float TPCamera::MAX_ROTATE_VELOCITY = 30.0;
+const float TPCamera::VIEW_DRAG = 12.0;
 
 TPCamera::TPCamera() {
 	velocity.resize(3);
+	angVelocity.resize(3);
 	mousePos.resize(2);
 	mousePos[0] = 400;
 	mousePos[1] = 300;
@@ -54,6 +57,11 @@ void TPCamera::update(double deltaT) {
 	translation[1] += deltaT * velocity[1];
 	translation[2] += deltaT * velocity[2];
 
+	//update rotation
+	rotation[0] += deltaT  * angVelocity[0];
+	rotation[1] += deltaT  * angVelocity[1];
+	rotation[2] += deltaT  * angVelocity[2];
+
 	//smoothly decrease velocity
 	if(abs(velocity[0]) < 0.1 && abs(velocity[1]) < 0.1) {
 		velocity[0] = 0;
@@ -63,6 +71,17 @@ void TPCamera::update(double deltaT) {
 		velocity[0] -= velocity[0] * DRAG * deltaT;
 		velocity[1] -= velocity[1] * DRAG * deltaT;
 		velocity[2] -= velocity[2] * DRAG * deltaT;
+	}
+
+	//smoothly decrease camera velocity to prevent stuttering
+	if(abs(angVelocity[2]) < 0.1) {
+		angVelocity[0] = 0;
+		angVelocity[1] = 0;
+		angVelocity[2] = 0;
+	} else {
+		angVelocity[0] -= angVelocity[0] * VIEW_DRAG * deltaT;
+		angVelocity[1] -= angVelocity[1] * VIEW_DRAG * deltaT;
+		angVelocity[2] -= angVelocity[2] * VIEW_DRAG * deltaT;
 	}
 
 	//update children
@@ -91,4 +110,12 @@ void TPCamera::right() {
 void TPCamera::mouseView(int x, int y) {
 	mousePos[0] = x;
 	mousePos[1] = y;
+}
+
+void TPCamera::rotateCW() {
+	angVelocity[2] += MAX_ROTATE_VELOCITY;
+}
+
+void TPCamera::rotateCCW() {
+	angVelocity[2] += -MAX_ROTATE_VELOCITY;
 }
