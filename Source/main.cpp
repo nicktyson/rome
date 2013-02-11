@@ -6,6 +6,7 @@
 #include "main.h"
 #include "State.h"
 #include "StateManager.h"
+#include "ShaderProgram.h"
 
 //desired fps (display and sim)
 //keypresses are detected at the display rate
@@ -13,16 +14,26 @@
 
 std::string ROME_PATH;
 StateManager* manager;
+ShaderProgram* shaderProgram;
 
 //contains init functions and the main loop
 int main(int argc, char **argv) {
 	//create window
 	glfwInit();
+	glfwOpenWindowHint(GLFW_OPENGL_VERSION_MAJOR, 2);
 	glfwOpenWindow(800, 600, 8, 8, 8, 8, 24, 8, GLFW_WINDOW);
 	glfwSetWindowTitle("Rome graphics");
+	
+	glewInit();
 
 	//gets perspective correct
 	//reshape(800, 600);
+
+	//set ROME_PATH to the main project directory
+	setupPath();
+
+	//load and compile shaders
+	initShaders();
 
 	//move to SimState?
 	glEnable(GL_DEPTH_TEST);
@@ -30,27 +41,21 @@ int main(int argc, char **argv) {
     glEnable(GL_LIGHTING);
     glEnable(GL_LIGHT0);
 
-	glfwEnable(GLFW_KEY_REPEAT);
-
 	manager = new StateManager();
 
+	glfwEnable(GLFW_KEY_REPEAT);
 	//GLFW doesn't accept object member functions, so use local ones that redirect
 	glfwSetWindowSizeCallback(reshape);
 	glfwSetKeyCallback(keyCallback);
 	glfwSetMousePosCallback(mousePosCallback);
 	glfwSetMouseWheelCallback(mouseWheelCallback);
 
-	//set ROME_PATH to the main project directory
-	setupPath();
-
 	//state management loop
-
 	manager->run();
 
 	//calls KeyCallback apparently
 	glfwCloseWindow();
 	glfwTerminate();
-
 }
 
 //reshape the window
@@ -99,4 +104,8 @@ void setupPath() {
 	}
 
 	ROME_PATH = exePath;
+}
+
+void initShaders() {
+	shaderProgram = new ShaderProgram();
 }

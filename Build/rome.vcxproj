@@ -19,6 +19,7 @@
     <ClCompile Include="..\Source\MeshNode.cpp" />
     <ClCompile Include="..\Source\PauseState.cpp" />
     <ClCompile Include="..\Source\scene_node.cpp" />
+    <ClCompile Include="..\Source\ShaderProgram.cpp" />
     <ClCompile Include="..\Source\SimState.cpp" />
     <ClCompile Include="..\Source\State.cpp" />
     <ClCompile Include="..\Source\StateManager.cpp" />
@@ -34,6 +35,7 @@
     <ClInclude Include="..\Source\MeshNode.h" />
     <ClInclude Include="..\Source\PauseState.h" />
     <ClInclude Include="..\Source\scene_node.h" />
+    <ClInclude Include="..\Source\ShaderProgram.h" />
     <ClInclude Include="..\Source\SimState.h" />
     <ClInclude Include="..\Source\State.h" />
     <ClInclude Include="..\Source\StateManager.h" />

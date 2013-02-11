@@ -1,5 +1,6 @@
-#include "SimState.h"
+#include <gl/glew.h>
 #include <GL/glfw.h>
+#include "SimState.h"
 #include <iostream>
 #include <vector>
 #include "StateManager.h"
@@ -8,6 +9,7 @@
 #include "Camera.h"
 #include "FPCamera.h"
 #include "TPCamera.h"
+#include "ShaderProgram.h"
 
 std::vector<bool> State::keyState;
 
@@ -156,7 +158,10 @@ void SimState::display() {
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 	glLoadIdentity();
 
+	extern ShaderProgram* shaderProgram;
+	shaderProgram->use();
 	camera->draw();
+	glUseProgram(0);
 }
 
 void SimState::updateSim(double deltaT) {
