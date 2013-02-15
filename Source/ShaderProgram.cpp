@@ -7,10 +7,18 @@
 #include "ShaderProgram.h"
 
 ShaderProgram::ShaderProgram() {
+	init("green_test");
+}
+
+ShaderProgram::ShaderProgram(std::string shaderName) {
+	init(shaderName);
+}
+
+void ShaderProgram::init(std::string shaderName) {
 	// make paths
 	extern std::string ROME_PATH;
-	std::string vshader_loc = ROME_PATH + "/Source/Shaders/green_test.vp";
-	std::string fshader_loc = ROME_PATH + "/Source/Shaders/green_test.fp";
+	std::string vshader_loc = ROME_PATH + "/Source/Shaders/" + shaderName + ".vp";
+	std::string fshader_loc = ROME_PATH + "/Source/Shaders/" + shaderName + ".fp";
 
 	// load vertex shader into char array
 	std::ifstream vertstream(vshader_loc);
@@ -49,4 +57,8 @@ ShaderProgram::ShaderProgram() {
 
 void ShaderProgram::use() {
 	glUseProgram(openglProgram);
+}
+
+void ShaderProgram::unuse() {
+	glUseProgram(0);
 }

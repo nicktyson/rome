@@ -7,6 +7,7 @@
 #include "State.h"
 #include "StateManager.h"
 #include "ShaderProgram.h"
+#include "Materials/GreenTestMaterial.h"
 
 //desired fps (display and sim)
 //keypresses are detected at the display rate
@@ -14,7 +15,7 @@
 
 std::string ROME_PATH;
 StateManager* manager;
-ShaderProgram* shaderProgram;
+GreenTestMaterial* material;
 
 //contains init functions and the main loop
 int main(int argc, char **argv) {
@@ -107,5 +108,5 @@ void setupPath() {
 }
 
 void initShaders() {
-	shaderProgram = new ShaderProgram();
+	material = new GreenTestMaterial();
 }

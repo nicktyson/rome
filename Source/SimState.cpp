@@ -9,7 +9,7 @@
 #include "Camera.h"
 #include "FPCamera.h"
 #include "TPCamera.h"
-#include "ShaderProgram.h"
+#include "Materials/GreenTestMaterial.h"
 
 std::vector<bool> State::keyState;
 
@@ -158,10 +158,10 @@ void SimState::display() {
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 	glLoadIdentity();
 
-	extern ShaderProgram* shaderProgram;
-	shaderProgram->use();
+	extern GreenTestMaterial* material;
+	material->use();
 	camera->draw();
-	glUseProgram(0);
+	material->unuse();
 }
 
 void SimState::updateSim(double deltaT) {

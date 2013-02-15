@@ -6,7 +6,7 @@
 * make camera movements affect all cameras
 * centralize constants
 * move dll's?
-* change file structure of source files
+* make file structure of source files less horrible
 * integrate GLSL shaders
 * handle texture coordinates
 * update sim in a thread-safe way

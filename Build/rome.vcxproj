@@ -15,11 +15,13 @@
     <ClCompile Include="..\Source\FPCamera.cpp" />
     <ClCompile Include="..\Source\IntroState.cpp" />
     <ClCompile Include="..\Source\main.cpp" />
+    <ClCompile Include="..\Source\Materials\GreenTestMaterial.cpp" />
     <ClCompile Include="..\Source\mesh.cpp" />
     <ClCompile Include="..\Source\MeshNode.cpp" />
     <ClCompile Include="..\Source\PauseState.cpp" />
     <ClCompile Include="..\Source\scene_node.cpp" />
     <ClCompile Include="..\Source\ShaderProgram.cpp" />
+    <ClCompile Include="..\Source\Shaders\Material.cpp" />
     <ClCompile Include="..\Source\SimState.cpp" />
     <ClCompile Include="..\Source\State.cpp" />
     <ClCompile Include="..\Source\StateManager.cpp" />
@@ -31,16 +33,26 @@
     <ClInclude Include="..\Source\FPCamera.h" />
     <ClInclude Include="..\Source\IntroState.h" />
     <ClInclude Include="..\Source\main.h" />
+    <ClInclude Include="..\Source\Materials\GreenTestMaterial.h" />
     <ClInclude Include="..\Source\mesh.h" />
     <ClInclude Include="..\Source\MeshNode.h" />
     <ClInclude Include="..\Source\PauseState.h" />
     <ClInclude Include="..\Source\scene_node.h" />
     <ClInclude Include="..\Source\ShaderProgram.h" />
+    <ClInclude Include="..\Source\Shaders\Material.h" />
     <ClInclude Include="..\Source\SimState.h" />
     <ClInclude Include="..\Source\State.h" />
     <ClInclude Include="..\Source\StateManager.h" />
     <ClInclude Include="..\Source\TPCamera.h" />
     <ClInclude Include="..\Source\VitalEntity.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="..\Source\Shaders\green_test.fp" />
+    <None Include="..\Source\Shaders\green_test.vp" />
+    <None Include="..\Source\Shaders\lambertian.fp" />
+    <None Include="..\Source\Shaders\lambertian.vp" />
+    <None Include="..\Source\Shaders\normal.fp" />
+    <None Include="..\Source\Shaders\normal.vp" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectGuid>{61C16C09-1649-4659-AE11-F9CD8E2E1A01}</ProjectGuid>

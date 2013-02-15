@@ -1,0 +1,17 @@
+/*
+* Lambertian Shader
+* just testing for now
+* basically totally broken until I actually do lights
+*/
+
+varying vec3 normal;
+varying vec3 position;
+varying vec3 lightPosition;
+
+void main()
+{
+	normal = vec3(gl_NormalMatrix * gl_Normal);
+	position = vec3(gl_ModelViewMatrix * gl_Vertex);
+	lightPosition = vec3(4.0, 4.0, 4.0) * gl_ModelViewMatrix;
+    gl_Position = gl_ModelViewProjectionMatrix * gl_Vertex;
+}
