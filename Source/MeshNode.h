@@ -14,7 +14,7 @@ public:
 	MeshNode(std::string fileLocation, MaterialList::Materials materialType);
 	mesh* getMesh();
 	void setMesh(mesh*);
-	void setMaterial(Material* newMaterial);
+	void setMaterial(MaterialList::Materials materialType);
 	virtual void draw();
 	virtual void update(double deltaT);
 	

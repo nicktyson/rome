@@ -8,19 +8,19 @@
 MeshNode::MeshNode() {
 	objectMesh = new mesh();
 	extern MaterialList* materialList;
-	setMaterial(materialList->getMaterial(MaterialList::Materials::NORMAL));
+	setMaterial(MaterialList::NORMAL);
 }
 
 MeshNode::MeshNode(std::string fileLocation) {
 	objectMesh = new mesh(fileLocation);
 	extern MaterialList* materialList;
-	setMaterial(materialList->getMaterial(MaterialList::Materials::NORMAL));
+	setMaterial(MaterialList::NORMAL);
 }
 
 MeshNode::MeshNode(std::string fileLocation, MaterialList::Materials materialType) {
 	objectMesh = new mesh(fileLocation);
 	extern MaterialList* materialList;
-	setMaterial(materialList->getMaterial(materialType));
+	setMaterial(materialType);
 }
 
 mesh * MeshNode::getMesh() {
@@ -31,8 +31,9 @@ void MeshNode::setMesh(mesh* newMesh) {
 	objectMesh = newMesh;
 }
 
-void MeshNode::setMaterial(Material* newMaterial) {
-	material = newMaterial;
+void MeshNode::setMaterial(MaterialList::Materials materialType) {
+	extern MaterialList* materialList;
+	material = materialList->getMaterial(materialType);
 }
 
 void MeshNode::draw() {

@@ -24,7 +24,7 @@ MaterialList* materialList;
 int main(int argc, char **argv) {
 	//create window
 	glfwInit();
-	glfwOpenWindowHint(GLFW_OPENGL_VERSION_MAJOR, 2);
+	//glfwOpenWindowHint(GLFW_OPENGL_VERSION_MAJOR, 2);
 	glfwOpenWindow(800, 600, 8, 8, 8, 8, 24, 8, GLFW_WINDOW);
 	glfwSetWindowTitle("Rome graphics");
 	

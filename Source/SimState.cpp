@@ -114,7 +114,7 @@ void SimState::initScene() {
 	std::string cubeLocation = ROME_PATH + "/Assets/Meshes/test_cube.msh";
 
 	//make two offset objects
-	MeshNode * childNode = new MeshNode(cubeLocation, MaterialList::Materials::GREENTEST);
+	MeshNode * childNode = new MeshNode(cubeLocation, MaterialList::GREENTEST);
 	childNode->setTranslation(0, 0, 0);
 	root->addChild(childNode);
 
@@ -125,7 +125,7 @@ void SimState::initScene() {
 	childNode->addChild(secondChild);
 
 	//add a floor
-	MeshNode * floor = new MeshNode(cubeLocation, MaterialList::Materials::NORMAL);
+	MeshNode * floor = new MeshNode(cubeLocation, MaterialList::NORMAL);
 	floor->setScaling(5, 5, 0.1);
 	floor->setTranslation(0, 0, -1.1);
 	root->addChild(floor);

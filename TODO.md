@@ -1,14 +1,14 @@
+* finish conversion to OpenGL 3
+	* switch to VBO/VAO/etc
+	* add uniforms, lights
 * improve scene creation
 	* terrain?
 * make more node/entity classes
 	* more-capable player object
-* improve node update() behavior
 * make camera movements affect all cameras
 * centralize constants
 * move dll's?
 * make file structure of source files less horrible
-* integrate GLSL shaders
-* handle texture coordinates
 * update sim in a thread-safe way
 * add additional states
-* convert to OpenGL 3?
+* physics
