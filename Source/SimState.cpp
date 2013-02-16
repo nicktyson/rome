@@ -9,7 +9,7 @@
 #include "Camera.h"
 #include "FPCamera.h"
 #include "TPCamera.h"
-#include "Materials/GreenTestMaterial.h"
+#include "Materials\MaterialList.h"
 
 std::vector<bool> State::keyState;
 
@@ -114,7 +114,7 @@ void SimState::initScene() {
 	std::string cubeLocation = ROME_PATH + "/Assets/Meshes/test_cube.msh";
 
 	//make two offset objects
-	MeshNode * childNode = new MeshNode(cubeLocation);
+	MeshNode * childNode = new MeshNode(cubeLocation, MaterialList::Materials::GREENTEST);
 	childNode->setTranslation(0, 0, 0);
 	root->addChild(childNode);
 
@@ -125,7 +125,7 @@ void SimState::initScene() {
 	childNode->addChild(secondChild);
 
 	//add a floor
-	MeshNode * floor = new MeshNode(cubeLocation);
+	MeshNode * floor = new MeshNode(cubeLocation, MaterialList::Materials::NORMAL);
 	floor->setScaling(5, 5, 0.1);
 	floor->setTranslation(0, 0, -1.1);
 	root->addChild(floor);
@@ -158,10 +158,7 @@ void SimState::display() {
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 	glLoadIdentity();
 
-	extern GreenTestMaterial* material;
-	material->use();
 	camera->draw();
-	material->unuse();
 }
 
 void SimState::updateSim(double deltaT) {
@@ -230,7 +227,6 @@ void SimState::keyOps() {
 		shouldStopStateLoop = true;
 		keyState['P'] = false;
 	}
-
 
 	if (keyState[GLFW_KEY_ESC]) {
 		manager->changeState(StateManager::END);

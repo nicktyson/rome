@@ -63,10 +63,16 @@
     <ClCompile Include="..\Source\ShaderProgram.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\Source\Shaders\Material.cpp">
+    <ClCompile Include="..\Source\Materials\GreenTestMaterial.cpp">
       <Filter>Source Files\Materials</Filter>
     </ClCompile>
-    <ClCompile Include="..\Source\Materials\GreenTestMaterial.cpp">
+    <ClCompile Include="..\Source\Materials\Material.cpp">
+      <Filter>Source Files\Materials</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Source\Materials\NormalMaterial.cpp">
+      <Filter>Source Files\Materials</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Source\Materials\MaterialList.cpp">
       <Filter>Source Files\Materials</Filter>
     </ClCompile>
   </ItemGroup>
@@ -113,10 +119,16 @@
     <ClInclude Include="..\Source\ShaderProgram.h">
       <Filter>Source Files</Filter>
     </ClInclude>
-    <ClInclude Include="..\Source\Shaders\Material.h">
+    <ClInclude Include="..\Source\Materials\GreenTestMaterial.h">
       <Filter>Source Files\Materials</Filter>
     </ClInclude>
-    <ClInclude Include="..\Source\Materials\GreenTestMaterial.h">
+    <ClInclude Include="..\Source\Materials\Material.h">
+      <Filter>Source Files\Materials</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Source\Materials\NormalMaterial.h">
+      <Filter>Source Files\Materials</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Source\Materials\MaterialList.h">
       <Filter>Source Files\Materials</Filter>
     </ClInclude>
   </ItemGroup>

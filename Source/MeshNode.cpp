@@ -2,21 +2,37 @@
 #include <iostream>
 #include <string>
 #include "MeshNode.h"
+#include "Materials\MaterialList.h"
+#include "Materials\Material.h"
 
 MeshNode::MeshNode() {
 	objectMesh = new mesh();
+	extern MaterialList* materialList;
+	setMaterial(materialList->getMaterial(MaterialList::Materials::NORMAL));
 }
 
 MeshNode::MeshNode(std::string fileLocation) {
 	objectMesh = new mesh(fileLocation);
+	extern MaterialList* materialList;
+	setMaterial(materialList->getMaterial(MaterialList::Materials::NORMAL));
+}
+
+MeshNode::MeshNode(std::string fileLocation, MaterialList::Materials materialType) {
+	objectMesh = new mesh(fileLocation);
+	extern MaterialList* materialList;
+	setMaterial(materialList->getMaterial(materialType));
 }
 
 mesh * MeshNode::getMesh() {
 	return objectMesh;
 }
 
-void MeshNode::setMesh(mesh * newMesh) {
+void MeshNode::setMesh(mesh* newMesh) {
 	objectMesh = newMesh;
+}
+
+void MeshNode::setMaterial(Material* newMaterial) {
+	material = newMaterial;
 }
 
 void MeshNode::draw() {
@@ -30,6 +46,8 @@ void MeshNode::draw() {
 	std::vector<int> cheatTris = objectMesh->getTriangles();
 	std::vector<float> cheatNorms = objectMesh->getNormals();
 
+	material->use();
+
 	//draw triangles
 	glBegin(GL_TRIANGLES);
 
@@ -39,6 +57,8 @@ void MeshNode::draw() {
 	}
 
 	glEnd();
+
+	material->unuse();
 
 	//draw children
 	for(std::vector<scene_node*>::iterator it = children.begin(); it != children.end(); ++it) {
