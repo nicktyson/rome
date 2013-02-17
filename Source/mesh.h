@@ -12,11 +12,19 @@ public:
 	std::vector<int>& getTriangles();
 	std::vector<float>& getNormals();
 	std::vector<float>& getVertices();
+	int getVertCount();
+	int getTriCount();
+	void setupBuffers();
 
 private:
 	std::vector<int> triangles;
 	std::vector<float> normals;
 	std::vector<float> vertices;
+	int vertCount;
+	int triCount;
+	GLuint vbo;
+	GLuint vao;
+	GLuint indexBuffer;
 };
 
 #endif

@@ -131,11 +131,11 @@ void SimState::initScene() {
 	root->addChild(floor);
 
 	//make a ring of spheres
-	/*for(double i = 0; i < 6; ++i) {
+	for(double i = 0; i < 6; ++i) {
 		MeshNode * newNode = new MeshNode(location);
 		root->addChild(newNode);
 		newNode->setTranslation(3*sin(i*6.28/6), 3*cos(i*6.28/6), 0);
-	}*/
+	}
 }
 
 void SimState::initCameras() {
