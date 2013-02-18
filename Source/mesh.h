@@ -15,6 +15,8 @@ public:
 	int getVertCount();
 	int getTriCount();
 	void setupBuffers();
+	void bindBuffers();
+	void unbindBuffers();
 
 private:
 	std::vector<int> triangles;

@@ -11,6 +11,7 @@
 #include "Materials/GreenTestMaterial.h"
 #include "Materials/NormalMaterial.h"
 #include "Materials\MaterialList.h"
+#include "MatrixStack.h"
 
 //desired fps (display and sim)
 //keypresses are detected at the display rate
@@ -19,6 +20,7 @@
 std::string ROME_PATH;
 StateManager* manager;
 MaterialList* materialList;
+MatrixStack* sceneGraphMatrixStack;
 
 //contains init functions and the main loop
 int main(int argc, char **argv) {
@@ -35,6 +37,8 @@ int main(int argc, char **argv) {
 
 	//set ROME_PATH to the main project directory
 	setupPath();
+
+	sceneGraphMatrixStack = new MatrixStack();
 
 	//load and compile shaders
 	initShaders();

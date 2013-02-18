@@ -4,6 +4,7 @@
 #include "MeshNode.h"
 #include "Materials\MaterialList.h"
 #include "Materials\Material.h"
+#include "MatrixStack.h"
 
 MeshNode::MeshNode() {
 	objectMesh = new mesh();
@@ -37,7 +38,7 @@ void MeshNode::setMaterial(MaterialList::Materials materialType) {
 }
 
 void MeshNode::draw() {
-	//std::cout << "hi" << std::endl;
+	extern MatrixStack* sceneGraphMatrixStack;
 
 	applyTransformation();
 
@@ -67,7 +68,8 @@ void MeshNode::draw() {
 	}
 
 	//undo changes to matrix
-	glPopMatrix();
+	//glPopMatrix();
+	sceneGraphMatrixStack->popMatrix();
 }
 
 void MeshNode::update(double deltaT) {

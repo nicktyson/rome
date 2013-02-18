@@ -1,6 +1,7 @@
 #include <GL/glew.h> // GLEW
 #include <vector>
 #include "scene_node.h"
+#include "MatrixStack.h"
 
 scene_node::scene_node() {
 	translation.resize(3);
@@ -58,22 +59,33 @@ void scene_node::setScaling(float sx, float sy, float sz) {
 }
 
 void scene_node::draw() {
+	extern MatrixStack* sceneGraphMatrixStack;
+
 	applyTransformation();
 
 	for(std::vector<scene_node*>::iterator it = children.begin(); it != children.end(); ++it) {
 		(*it)->draw();
 	}
 
-	glPopMatrix();
+	sceneGraphMatrixStack->popMatrix();
+	//glPopMatrix();
 }
 
 void scene_node::applyTransformation() {
-	glPushMatrix();
+	extern MatrixStack* sceneGraphMatrixStack;
+
+	sceneGraphMatrixStack->pushMatrix();
+	sceneGraphMatrixStack->translated(translation[0], translation[1], translation[2]);
+	sceneGraphMatrixStack->rotated(rotation[2], 0, 0, 1);
+	sceneGraphMatrixStack->rotated(rotation[1], 0, 1, 0);
+	sceneGraphMatrixStack->rotated(rotation[0], 1, 0, 0);
+	sceneGraphMatrixStack->scaled(scaling[0], scaling[1], scaling[2]);
+	/*glPushMatrix();
 	glTranslated(translation[0], translation[1], translation[2]);
 	glRotated(rotation[2], 0, 0, 1);
 	glRotated(rotation[1], 0, 1, 0);
 	glRotated(rotation[0], 1, 0, 0);
-	glScaled(scaling[0], scaling[1], scaling[2]);
+	glScaled(scaling[0], scaling[1], scaling[2]);*/
 }
 
 void scene_node::update(double deltaT) {

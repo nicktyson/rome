@@ -3,6 +3,7 @@
 #include <vector>
 #include <iostream>
 #include <cmath>
+#include "MatrixStack.h"
 
 const float FPCamera::MAX_VELOCITY = 8.0; // meters/second
 const float FPCamera::MOUSE_SENSITIVITY = 6.0; // degrees/second per mouse coordinate
@@ -28,20 +29,28 @@ FPCamera::FPCamera() {
 }
 
 void FPCamera::draw() {
-	glPushMatrix();
+	extern MatrixStack* sceneGraphMatrixStack;
 
-	glRotated(rotation[0], 1, 0, 0);
+	//glPushMatrix();
+	sceneGraphMatrixStack->pushMatrix();
+
+	/*glRotated(rotation[0], 1, 0, 0);
 	glRotated(rotation[1], 0, 1, 0);
 	glRotated(rotation[2], 0, 0, 1);
 
-	glTranslated(translation[0], translation[1], translation[2]);
+	glTranslated(translation[0], translation[1], translation[2]);*/
 
+	sceneGraphMatrixStack->rotated(rotation[0], 1, 0, 0);
+	sceneGraphMatrixStack->rotated(rotation[1], 0, 1, 0);
+	sceneGraphMatrixStack->rotated(rotation[2], 0, 0, 1);
+	sceneGraphMatrixStack->translated(translation[0], translation[1], translation[2]);
 
 	for(std::vector<scene_node*>::iterator it = children.begin(); it != children.end(); ++it) {
 		(*it)->draw();
 	}
 
-	glPopMatrix();
+	//glPopMatrix();
+	sceneGraphMatrixStack->popMatrix();
 }
 
 void FPCamera::update(double deltaT) {

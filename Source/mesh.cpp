@@ -76,6 +76,20 @@ int mesh::getTriCount() {
 }
 
 void mesh::setupBuffers() {
+	// combine vertices and normals into one array to send to VBO
+	float* bufferData = new float[6*vertCount];
+
+	for (int i = 0; i < vertCount; i++) {
+		bufferData[3*i] = vertices[3*i];
+		bufferData[3*i + 1] = vertices[3*i + 1];
+		bufferData[3*i + 2] = vertices[3*i + 2];
+
+		bufferData[3*i + 3] = normals[3*i];
+		bufferData[3*i + 4] = normals[3*i + 1];
+		bufferData[3*i + 5] = normals[3*i + 2];
+	}
+
+	//generate and fill vertex data and index buffers
 	glGenBuffers(1, &vbo);
 	glGenVertexArrays(1, &vao);
 	glGenBuffers(1, &indexBuffer);
@@ -84,9 +98,23 @@ void mesh::setupBuffers() {
 	glBindVertexArray(vao);
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, indexBuffer);
 
-	glBufferData(GL_ARRAY_BUFFER, sizeof(float) * vertCount, &vertices[0], GL_STATIC_DRAW);
+	glBufferData(GL_ARRAY_BUFFER, sizeof(float) * 6 * vertCount, bufferData, GL_STATIC_DRAW);
 	glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(int) * triCount * 3, &triangles[0], GL_STATIC_DRAW);
 
+	//set up VAO
+	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 6*sizeof(GLfloat), NULL);
+	glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 6*sizeof(GLfloat), (GLvoid*)(3*sizeof(GLfloat)));
 
+	glEnableVertexAttribArray(0);
+	glEnableVertexAttribArray(1);
+
+	glBindVertexArray(0);
+}
+
+void mesh::bindBuffers() {
+	glBindVertexArray(vao);
+}
+
+void mesh::unbindBuffers() {
 	glBindVertexArray(0);
 }
