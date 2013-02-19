@@ -1,6 +1,8 @@
 #include <GL/glew.h>
 #include <iostream>
 #include <string>
+#include "../Lib/glm/glm.hpp"
+#include "../Lib/glm/gtc/type_ptr.hpp"
 #include "MeshNode.h"
 #include "Materials\MaterialList.h"
 #include "Materials\Material.h"
@@ -8,19 +10,16 @@
 
 MeshNode::MeshNode() {
 	objectMesh = new mesh();
-	extern MaterialList* materialList;
 	setMaterial(MaterialList::NORMAL);
 }
 
 MeshNode::MeshNode(std::string fileLocation) {
 	objectMesh = new mesh(fileLocation);
-	extern MaterialList* materialList;
 	setMaterial(MaterialList::NORMAL);
 }
 
 MeshNode::MeshNode(std::string fileLocation, MaterialList::Materials materialType) {
 	objectMesh = new mesh(fileLocation);
-	extern MaterialList* materialList;
 	setMaterial(materialType);
 }
 
@@ -39,26 +38,20 @@ void MeshNode::setMaterial(MaterialList::Materials materialType) {
 
 void MeshNode::draw() {
 	extern MatrixStack* sceneGraphMatrixStack;
+	extern MatrixStack* projectionMatrixStack;
 
 	applyTransformation();
 
-	//shortcut variables to prevent otherwise-atrocious verbosity
-	//returns reference
-	std::vector<float> meshVerts = objectMesh->getVertices();
-	std::vector<int> cheatTris = objectMesh->getTriangles();
-	std::vector<float> cheatNorms = objectMesh->getNormals();
-
 	material->use();
+	
+	glUniformMatrix4fv(0, 1, GL_FALSE, glm::value_ptr(sceneGraphMatrixStack->last()));
+	glUniformMatrix4fv(1, 1, GL_FALSE, glm::value_ptr(projectionMatrixStack->last()));
 
-	//draw triangles
-	glBegin(GL_TRIANGLES);
+	objectMesh->bindBuffers();
 
-	for(unsigned int i = 0; i < cheatTris.size(); i++) {
-		glNormal3f(cheatNorms[3*cheatTris[i]], cheatNorms[3*cheatTris[i]+1], cheatNorms[3*cheatTris[i]+2]);
-		glVertex3f(meshVerts[3*cheatTris[i]], meshVerts[3*cheatTris[i]+1], meshVerts[3*cheatTris[i]+2]);
-	}
+	glDrawElements(GL_TRIANGLES, 3*objectMesh->getTriCount(), GL_UNSIGNED_INT, NULL);
 
-	glEnd();
+	objectMesh->unbindBuffers();
 
 	material->unuse();
 
@@ -68,7 +61,6 @@ void MeshNode::draw() {
 	}
 
 	//undo changes to matrix
-	//glPopMatrix();
 	sceneGraphMatrixStack->popMatrix();
 }
 

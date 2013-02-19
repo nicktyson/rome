@@ -1,6 +1,7 @@
 #ifndef MESH_H
 #define MESH_H
 
+#include <gl\glew.h>
 #include <string>
 #include <vector>
 

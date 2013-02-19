@@ -77,16 +77,17 @@ int mesh::getTriCount() {
 
 void mesh::setupBuffers() {
 	// combine vertices and normals into one array to send to VBO
-	float* bufferData = new float[6*vertCount];
+	std::vector<float> bufferData;
+	bufferData.resize(6*vertCount);
 
 	for (int i = 0; i < vertCount; i++) {
-		bufferData[3*i] = vertices[3*i];
-		bufferData[3*i + 1] = vertices[3*i + 1];
-		bufferData[3*i + 2] = vertices[3*i + 2];
+		bufferData[6*i] = vertices[3*i];
+		bufferData[6*i + 1] = vertices[3*i + 1];
+		bufferData[6*i + 2] = vertices[3*i + 2];
 
-		bufferData[3*i + 3] = normals[3*i];
-		bufferData[3*i + 4] = normals[3*i + 1];
-		bufferData[3*i + 5] = normals[3*i + 2];
+		bufferData[6*i + 3] = normals[3*i];
+		bufferData[6*i + 4] = normals[3*i + 1];
+		bufferData[6*i + 5] = normals[3*i + 2];
 	}
 
 	//generate and fill vertex data and index buffers
@@ -98,7 +99,7 @@ void mesh::setupBuffers() {
 	glBindVertexArray(vao);
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, indexBuffer);
 
-	glBufferData(GL_ARRAY_BUFFER, sizeof(float) * 6 * vertCount, bufferData, GL_STATIC_DRAW);
+	glBufferData(GL_ARRAY_BUFFER, sizeof(float) * 6 * vertCount, &bufferData[0], GL_STATIC_DRAW);
 	glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(int) * triCount * 3, &triangles[0], GL_STATIC_DRAW);
 
 	//set up VAO

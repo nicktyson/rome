@@ -21,15 +21,18 @@ std::string ROME_PATH;
 StateManager* manager;
 MaterialList* materialList;
 MatrixStack* sceneGraphMatrixStack;
+MatrixStack* projectionMatrixStack;
 
 //contains init functions and the main loop
 int main(int argc, char **argv) {
 	//create window
 	glfwInit();
-	//glfwOpenWindowHint(GLFW_OPENGL_VERSION_MAJOR, 2);
+	//glfwOpenWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
 	glfwOpenWindow(800, 600, 8, 8, 8, 8, 24, 8, GLFW_WINDOW);
 	glfwSetWindowTitle("Rome graphics");
 	
+	std::cout << glfwGetWindowParam(GLFW_OPENGL_VERSION_MAJOR) << "." << glfwGetWindowParam(GLFW_OPENGL_VERSION_MINOR) << std::endl;
+
 	glewInit();
 
 	//gets perspective correct
@@ -39,6 +42,7 @@ int main(int argc, char **argv) {
 	setupPath();
 
 	sceneGraphMatrixStack = new MatrixStack();
+	projectionMatrixStack = new MatrixStack();
 
 	//load and compile shaders
 	initShaders();
@@ -69,11 +73,9 @@ int main(int argc, char **argv) {
 //reshape the window
 void GLFWCALL reshape (int width, int height) {  
 	glViewport(0, 0, (GLint)width, (GLint)height);
-	glMatrixMode(GL_PROJECTION);
-	glLoadIdentity();  
+	projectionMatrixStack->loadIdentity();
 	//field of view, aspect ratio of window, and the new and far planes
-	gluPerspective(60, (GLfloat)width / (GLfloat)height, 1.0, 50.0);
-	glMatrixMode(GL_MODELVIEW);
+	projectionMatrixStack->perspective(60.0, (float)width / (float)height, 1.0, 50.0);
 }
 
 void GLFWCALL keyCallback(int key, int state) {

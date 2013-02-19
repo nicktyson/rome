@@ -31,14 +31,7 @@ FPCamera::FPCamera() {
 void FPCamera::draw() {
 	extern MatrixStack* sceneGraphMatrixStack;
 
-	//glPushMatrix();
 	sceneGraphMatrixStack->pushMatrix();
-
-	/*glRotated(rotation[0], 1, 0, 0);
-	glRotated(rotation[1], 0, 1, 0);
-	glRotated(rotation[2], 0, 0, 1);
-
-	glTranslated(translation[0], translation[1], translation[2]);*/
 
 	sceneGraphMatrixStack->rotated(rotation[0], 1, 0, 0);
 	sceneGraphMatrixStack->rotated(rotation[1], 0, 1, 0);
@@ -49,7 +42,6 @@ void FPCamera::draw() {
 		(*it)->draw();
 	}
 
-	//glPopMatrix();
 	sceneGraphMatrixStack->popMatrix();
 }
 

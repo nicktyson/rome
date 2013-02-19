@@ -1,6 +1,6 @@
 * finish conversion to OpenGL 3
-	* switch to VBO/VAO/etc
-	* add uniforms, lights
+	* add more uniforms, lights
+	* cleanup
 * improve scene creation
 	* terrain?
 * make more node/entity classes
@@ -12,3 +12,4 @@
 * update sim in a thread-safe way
 * add additional states
 * physics
+* better error/exception handling

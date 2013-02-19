@@ -16,9 +16,11 @@ public:
 	void translated(double x, double y, double z);
 	void scaled(double x, double y, double z);
 	void loadIdentity();
+	void perspective(float fov, float aspect, float zNear, float zFar);
+	glm::mat4 last();
 
 private:
-	std::vector<glm::dmat4> stack;
+	std::vector<glm::mat4> stack;
 };
 
 #endif

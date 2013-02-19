@@ -52,7 +52,7 @@ void ShaderProgram::init(std::string shaderName) {
 	glLinkProgram(openglProgram);
 
 	glDetachShader(openglProgram, vshader);
-	glDetachShader(openglProgram, fshader);
+	glDetachShader(openglProgram, fshader);	
 }
 
 void ShaderProgram::use() {

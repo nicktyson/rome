@@ -68,7 +68,6 @@ void scene_node::draw() {
 	}
 
 	sceneGraphMatrixStack->popMatrix();
-	//glPopMatrix();
 }
 
 void scene_node::applyTransformation() {
@@ -80,12 +79,6 @@ void scene_node::applyTransformation() {
 	sceneGraphMatrixStack->rotated(rotation[1], 0, 1, 0);
 	sceneGraphMatrixStack->rotated(rotation[0], 1, 0, 0);
 	sceneGraphMatrixStack->scaled(scaling[0], scaling[1], scaling[2]);
-	/*glPushMatrix();
-	glTranslated(translation[0], translation[1], translation[2]);
-	glRotated(rotation[2], 0, 0, 1);
-	glRotated(rotation[1], 0, 1, 0);
-	glRotated(rotation[0], 1, 0, 0);
-	glScaled(scaling[0], scaling[1], scaling[2]);*/
 }
 
 void scene_node::update(double deltaT) {
