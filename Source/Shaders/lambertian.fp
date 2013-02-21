@@ -1,19 +1,20 @@
-/*
-* Lambertian Shader
-*
-*/
+#version 330
+#extension GL_ARB_explicit_uniform_location : require
 
-uniform float lightsOn;
+in vec3 normal;
+in vec4 position;
 
-varying vec3 normal;
-varying vec3 position;
-varying vec3 lightPosition;
+out vec4 fragColor;
 
 void main()
 {
-	normalize(normal);
-	vec3 lightDirection = lightPosition - position;
+	vec3 newnormal = vec3(normal);
+	vec3 lightPosition = vec3(2.0, 2.0, 2.0);
+	vec3 lightDirection = vec3(lightPosition.xyz - position.xyz);
 	normalize(lightDirection);
-	vec3 diffuse = dot(lightDirection, normal);
-    gl_FragColor = vec4(diffuse * vec3(1.0), 1.0);
+	normalize(newnormal);
+	float ndotl = dot(lightDirection, newnormal);
+	vec3 diffuse = vec3(1.0, 0.0, 0.0);
+	diffuse = diffuse * ndotl;
+    fragColor = vec4(diffuse, 1.0);
 }

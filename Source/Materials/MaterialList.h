@@ -11,7 +11,8 @@ public:
 	MaterialList();
 	enum Materials {
 		NORMAL,
-		GREENTEST
+		GREENTEST,
+		LAMBERTIAN
 	};
 	Material* getMaterial(Materials materialName);
 

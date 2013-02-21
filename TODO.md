@@ -13,3 +13,4 @@
 * add additional states
 * physics
 * better error/exception handling
+* deferred rendering

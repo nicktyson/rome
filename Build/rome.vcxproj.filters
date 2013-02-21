@@ -78,6 +78,12 @@
     <ClCompile Include="..\Source\MatrixStack.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="..\Source\Materials\LambertianMaterial.cpp">
+      <Filter>Source Files\Materials</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Source\LightNode.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\Source\main.h">
@@ -135,6 +141,12 @@
       <Filter>Source Files\Materials</Filter>
     </ClInclude>
     <ClInclude Include="..\Source\MatrixStack.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Source\Materials\LambertianMaterial.h">
+      <Filter>Source Files\Materials</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Source\LightNode.h">
       <Filter>Source Files</Filter>
     </ClInclude>
   </ItemGroup>
