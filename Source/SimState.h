@@ -1,6 +1,7 @@
 #ifndef SIMSTATE_H
 #define SIMSTATE_H
 
+#include <gl/glew.h>
 #include <gl/glfw.h>
 #include <deque>
 #include "State.h"
@@ -9,6 +10,7 @@ class State;
 class StateManager;
 class scene_node;
 class Camera;
+class Renderer;
 
 class SimState : public State {
 public:
@@ -36,6 +38,8 @@ public:
 protected:
 	void display();
 	void updateSim(double deltaT);
+
+	Renderer* renderer;
 	Cameras cameraType;
 	Camera* camera;
 	std::deque<Camera*> cameras;

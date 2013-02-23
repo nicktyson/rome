@@ -10,6 +10,8 @@
 #include "FPCamera.h"
 #include "TPCamera.h"
 #include "Materials\MaterialList.h"
+#include "MatrixStack.h"
+#include "Renderer.h"
 
 std::vector<bool> State::keyState;
 
@@ -27,6 +29,8 @@ SimState::SimState() {
 
 void SimState::initialize(StateManager* mngr) {
 	manager = mngr;
+
+	renderer = new Renderer();
 
 	root = new scene_node();
 
@@ -125,14 +129,14 @@ void SimState::initScene() {
 	childNode->addChild(secondChild);
 
 	//add a floor
-	MeshNode * floor = new MeshNode(cubeLocation, MaterialList::NORMAL);
+	MeshNode * floor = new MeshNode(cubeLocation, MaterialList::GREENTEST);
 	floor->setScaling(5, 5, 0.1);
 	floor->setTranslation(0, 0, -1.1);
 	root->addChild(floor);
 
 	//make a ring of spheres
 	for(double i = 0; i < 6; ++i) {
-		MeshNode * newNode = new MeshNode(location, MaterialList::NORMAL);
+		MeshNode * newNode = new MeshNode(location, MaterialList::GREENTEST);
 		root->addChild(newNode);
 		newNode->setTranslation(3*sin(i*6.28/6), 3*cos(i*6.28/6), 0);
 	}
@@ -154,11 +158,7 @@ void SimState::initCameras() {
 }
 
 void SimState::display() {
-	glClearColor(0.4f, 0.0f, 0.0f, 1.0f);
-	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-	glLoadIdentity();
-
-	camera->draw();
+	renderer->render(camera);	
 }
 
 void SimState::updateSim(double deltaT) {

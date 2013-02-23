@@ -14,3 +14,4 @@
 * physics
 * better error/exception handling
 * deferred rendering
+* separate rendering from state
