@@ -57,6 +57,10 @@ void Renderer::firstPass(scene_node* root) {
 	glViewport(0, 0, 800, 600);
 	glClearColor(0.4f, 0.0f, 0.0f, 1.0f);
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+	
+	glEnable(GL_DEPTH_TEST);
+	glEnable(GL_BLEND);
+
 	sceneGraphMatrixStack->loadIdentity();
 
 	//tell fbo to draw to the diffuse texture
@@ -81,20 +85,20 @@ void Renderer::deferredPass() {
 	glBindFramebuffer(GL_FRAMEBUFFER, fbo);
 
 	//attach textures to fbo for writing
-	glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT1, GL_TEXTURE_RECTANGLE, finalBuffer, 0);
+	glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_RECTANGLE, finalBuffer, 0);
 
 	//reset stuff
 	glViewport(0, 0, 800, 600);
-	glClearColor(0.4f, 0.0f, 0.0f, 1.0f);
+	glClearColor(0.0f, 0.0f, 0.4f, 1.0f);
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-
-	//make fbo draw to the final texture
-	GLenum buffer[1];
-	buffer[0] = GL_COLOR_ATTACHMENT1;
-	glDrawBuffers(1, &buffer[0]);
 
 	glDisable(GL_DEPTH_TEST);
 	glDisable(GL_BLEND);
+
+	//make fbo draw to the final texture
+	GLenum buffer[1];
+	buffer[0] = GL_COLOR_ATTACHMENT0;
+	glDrawBuffers(1, &buffer[0]);
 
 	//bind ubershader
 	uberShader->use();
@@ -104,7 +108,6 @@ void Renderer::deferredPass() {
 	//give access to the diffuse texture as uniform sampler
 	glActiveTexture(GL_TEXTURE0);
 	glBindTexture(GL_TEXTURE_RECTANGLE, diffuseBuffer);
-	//glUniform1i(0, 0);
 
 	//draw quad to the final texture
 	fullscreenQuad.draw();
@@ -113,7 +116,7 @@ void Renderer::deferredPass() {
 	uberShader->unuse();
 
 	//detach textures from fbo
-	glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT1, GL_TEXTURE_RECTANGLE, 0, 0);
+	glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_RECTANGLE, 0, 0);
 
 	//unbind fbo
 	glBindFramebuffer(GL_FRAMEBUFFER, 0);
@@ -122,7 +125,7 @@ void Renderer::deferredPass() {
 void Renderer::postProcess() {
 	//reset stuff
 	glViewport(0, 0, 800, 600);
-	glClearColor(0.4f, 0.0f, 0.0f, 1.0f);
+	glClearColor(0.4f, 0.4f, 0.0f, 1.0f);
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
 	glDisable(GL_DEPTH_TEST);
@@ -135,7 +138,6 @@ void Renderer::postProcess() {
 	//access final texture as uniform sampler
 	glActiveTexture(GL_TEXTURE0);
 	glBindTexture(GL_TEXTURE_RECTANGLE, finalBuffer);
-	//glUniform1i(2, 0);
 
 	//draw quad with post-processed final texture
 	fullscreenQuad.draw();
