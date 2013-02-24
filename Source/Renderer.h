@@ -4,6 +4,8 @@
 #include <gl\glew.h>
 
 class scene_node;
+class ScreenQuad;
+class ShaderProgram;
 
 class Renderer {
 public:
@@ -12,6 +14,7 @@ public:
 
 protected:
 	void init();
+	void initPostShaders();
 	void firstPass(scene_node* root);
 	void deferredPass();
 	void postProcess();
@@ -20,6 +23,9 @@ protected:
 	GLuint depthBuffer;
 	GLuint diffuseBuffer;
 	GLuint finalBuffer;
+	ScreenQuad fullscreenQuad;
+	ShaderProgram* uberShader;
+	ShaderProgram* postprocessShader;
 };
 
 #endif

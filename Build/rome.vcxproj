@@ -25,6 +25,7 @@
     <ClCompile Include="..\Source\mesh.cpp" />
     <ClCompile Include="..\Source\MeshNode.cpp" />
     <ClCompile Include="..\Source\PauseState.cpp" />
+    <ClCompile Include="..\Source\Renderer.cpp" />
     <ClCompile Include="..\Source\scene_node.cpp" />
     <ClCompile Include="..\Source\ShaderProgram.cpp" />
     <ClCompile Include="..\Source\SimState.cpp" />
@@ -48,6 +49,7 @@
     <ClInclude Include="..\Source\mesh.h" />
     <ClInclude Include="..\Source\MeshNode.h" />
     <ClInclude Include="..\Source\PauseState.h" />
+    <ClInclude Include="..\Source\Renderer.h" />
     <ClInclude Include="..\Source\scene_node.h" />
     <ClInclude Include="..\Source\ShaderProgram.h" />
     <ClInclude Include="..\Source\SimState.h" />
@@ -63,6 +65,8 @@
     <None Include="..\Source\Shaders\lambertian.vp" />
     <None Include="..\Source\Shaders\normal.fp" />
     <None Include="..\Source\Shaders\normal.vp" />
+    <None Include="..\Source\Shaders\ubershader.fp" />
+    <None Include="..\Source\Shaders\ubershader.vp" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectGuid>{61C16C09-1649-4659-AE11-F9CD8E2E1A01}</ProjectGuid>
