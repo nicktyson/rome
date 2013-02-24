@@ -1,7 +1,6 @@
 #ifndef STATE_H
 #define STATE_H
 
-#include <gl/glfw.h>
 #include <vector>
 
 class StateManager;

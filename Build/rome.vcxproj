@@ -27,6 +27,7 @@
     <ClCompile Include="..\Source\PauseState.cpp" />
     <ClCompile Include="..\Source\Renderer.cpp" />
     <ClCompile Include="..\Source\scene_node.cpp" />
+    <ClCompile Include="..\Source\ScreenQuad.cpp" />
     <ClCompile Include="..\Source\ShaderProgram.cpp" />
     <ClCompile Include="..\Source\SimState.cpp" />
     <ClCompile Include="..\Source\State.cpp" />
@@ -51,6 +52,7 @@
     <ClInclude Include="..\Source\PauseState.h" />
     <ClInclude Include="..\Source\Renderer.h" />
     <ClInclude Include="..\Source\scene_node.h" />
+    <ClInclude Include="..\Source\ScreenQuad.h" />
     <ClInclude Include="..\Source\ShaderProgram.h" />
     <ClInclude Include="..\Source\SimState.h" />
     <ClInclude Include="..\Source\State.h" />
@@ -65,6 +67,8 @@
     <None Include="..\Source\Shaders\lambertian.vp" />
     <None Include="..\Source\Shaders\normal.fp" />
     <None Include="..\Source\Shaders\normal.vp" />
+    <None Include="..\Source\Shaders\plain_post.fp" />
+    <None Include="..\Source\Shaders\plain_post.vp" />
     <None Include="..\Source\Shaders\ubershader.fp" />
     <None Include="..\Source\Shaders\ubershader.vp" />
   </ItemGroup>

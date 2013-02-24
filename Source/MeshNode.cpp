@@ -10,12 +10,12 @@
 
 MeshNode::MeshNode() {
 	objectMesh = new mesh();
-	setMaterial(MaterialList::NORMAL);
+	setMaterial(MaterialList::GREENTEST);
 }
 
 MeshNode::MeshNode(std::string fileLocation) {
 	objectMesh = new mesh(fileLocation);
-	setMaterial(MaterialList::NORMAL);
+	setMaterial(MaterialList::GREENTEST);
 }
 
 MeshNode::MeshNode(std::string fileLocation, MaterialList::Materials materialType) {

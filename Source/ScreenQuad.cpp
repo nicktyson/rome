@@ -15,19 +15,19 @@ void ScreenQuad::init() {
 	indices.resize(6);
 
 	//bottom-left vertex
-	coords[0] = 0.0;
-	coords[1] = 0.0;
+	coords[0] = -1.0;
+	coords[1] = -1.0;
 	coords[2] = 0.0;
 	//bottom-right
 	coords[3] = 1.0;
-	coords[4] = 0.0;
+	coords[4] = -1.0;
 	coords[5] = 0.0;
 	//top-right
 	coords[6] = 1.0;
 	coords[7] = 1.0;
 	coords[8] = 0.0;
 	//top-left
-	coords[9] = 0.0;
+	coords[9] = -1.0;
 	coords[10] = 1.0;
 	coords[11] = 0.0;
 

@@ -1,5 +1,6 @@
 #version 330
 #extension GL_ARB_explicit_uniform_location : require
+#extension GL_ARB_texture_rectangle : require
 
 layout(location=0) uniform sampler2DRect diffuseBuffer;
 

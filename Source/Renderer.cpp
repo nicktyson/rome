@@ -16,26 +16,25 @@ void Renderer::init() {
 
 	// diffuse color
 	glGenTextures(1, &diffuseBuffer);
-	glBindTexture(GL_TEXTURE_2D, diffuseBuffer);
-	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA8,  800, 600, 0, GL_RGBA, GL_UNSIGNED_BYTE, NULL);
-	glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, diffuseBuffer, 0); 
+	glBindTexture(GL_TEXTURE_RECTANGLE, diffuseBuffer);
+	glTexImage2D(GL_TEXTURE_RECTANGLE, 0, GL_RGBA8,  800, 600, 0, GL_RGBA, GL_UNSIGNED_BYTE, NULL); 
 
 	// depth
 	glGenTextures(1, &depthBuffer);
-	glBindTexture(GL_TEXTURE_2D, depthBuffer);
-	glTexImage2D(GL_TEXTURE_2D, 0, GL_DEPTH_COMPONENT32,  800, 600, 0, GL_DEPTH_COMPONENT, GL_UNSIGNED_BYTE, NULL);
-	glFramebufferTexture2D(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_TEXTURE_2D, depthBuffer, 0);
-
+	glBindTexture(GL_TEXTURE_RECTANGLE, depthBuffer);
+	glTexImage2D(GL_TEXTURE_RECTANGLE, 0, GL_DEPTH_COMPONENT32,  800, 600, 0, GL_DEPTH_COMPONENT, GL_UNSIGNED_BYTE, NULL);
+	
 	// final - result of 2nd pass
 	glGenTextures(1, &finalBuffer);
-	glBindTexture(GL_TEXTURE_2D, finalBuffer);
-	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA8,  800, 600, 0, GL_RGBA, GL_UNSIGNED_BYTE, NULL);
-	glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT1, GL_TEXTURE_2D, finalBuffer, 0);
+	glBindTexture(GL_TEXTURE_RECTANGLE, finalBuffer);
+	glTexImage2D(GL_TEXTURE_RECTANGLE, 0, GL_RGBA8,  800, 600, 0, GL_RGBA, GL_UNSIGNED_BYTE, NULL);
+
+	glBindFramebuffer(GL_FRAMEBUFFER, 0);
 }
 
 void Renderer::initPostShaders() {
 	uberShader = new ShaderProgram("ubershader");
-	postprocessShader = new ShaderProgram("");
+	postprocessShader = new ShaderProgram("plain_post");
 }
 
 void Renderer::render(scene_node* root) {
@@ -49,6 +48,10 @@ void Renderer::firstPass(scene_node* root) {
 
 	//bind the fbo
 	glBindFramebuffer(GL_FRAMEBUFFER, fbo);
+
+	//attach textures to fbo for writing
+	glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_RECTANGLE, diffuseBuffer, 0);
+	glFramebufferTexture2D(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_TEXTURE_RECTANGLE, depthBuffer, 0);
 
 	//reset stuff
 	glViewport(0, 0, 800, 600);
@@ -65,6 +68,10 @@ void Renderer::firstPass(scene_node* root) {
 	//nodes bind their own shaders, uniforms, and vao
 	root->draw();
 
+	//detach textures from fbo
+	glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_RECTANGLE, 0, 0);
+	glFramebufferTexture2D(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_TEXTURE_RECTANGLE, 0, 0);
+
 	//unbind fbo
 	glBindFramebuffer(GL_FRAMEBUFFER, 0);
 }
@@ -73,8 +80,12 @@ void Renderer::deferredPass() {
 	//bind fbo
 	glBindFramebuffer(GL_FRAMEBUFFER, fbo);
 
+	//attach textures to fbo for writing
+	glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT1, GL_TEXTURE_RECTANGLE, finalBuffer, 0);
+
 	//reset stuff
 	glViewport(0, 0, 800, 600);
+	glClearColor(0.4f, 0.0f, 0.0f, 1.0f);
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
 	//make fbo draw to the final texture
@@ -92,14 +103,17 @@ void Renderer::deferredPass() {
 
 	//give access to the diffuse texture as uniform sampler
 	glActiveTexture(GL_TEXTURE0);
-	glBindTexture(GL_TEXTURE_2D, diffuseBuffer);
-	glUniform1i(0, 0);
+	glBindTexture(GL_TEXTURE_RECTANGLE, diffuseBuffer);
+	//glUniform1i(0, 0);
 
 	//draw quad to the final texture
 	fullscreenQuad.draw();
 
 	//unbind shader
 	uberShader->unuse();
+
+	//detach textures from fbo
+	glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT1, GL_TEXTURE_RECTANGLE, 0, 0);
 
 	//unbind fbo
 	glBindFramebuffer(GL_FRAMEBUFFER, 0);
@@ -108,21 +122,24 @@ void Renderer::deferredPass() {
 void Renderer::postProcess() {
 	//reset stuff
 	glViewport(0, 0, 800, 600);
+	glClearColor(0.4f, 0.0f, 0.0f, 1.0f);
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
 	glDisable(GL_DEPTH_TEST);
 	glDisable(GL_BLEND);
 
 	//bind post-process shader
+	postprocessShader->use();
 
 	//set uniforms
 	//access final texture as uniform sampler
 	glActiveTexture(GL_TEXTURE0);
-	glBindTexture(GL_TEXTURE_2D, finalBuffer);
-	glUniform1i(2, 0);
+	glBindTexture(GL_TEXTURE_RECTANGLE, finalBuffer);
+	//glUniform1i(2, 0);
 
 	//draw quad with post-processed final texture
 	fullscreenQuad.draw();
 
 	//unbind shader
+	postprocessShader->unuse();
 }

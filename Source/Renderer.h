@@ -2,9 +2,9 @@
 #define RENDERER_H
 
 #include <gl\glew.h>
+#include "ScreenQuad.h"
 
 class scene_node;
-class ScreenQuad;
 class ShaderProgram;
 
 class Renderer {

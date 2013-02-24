@@ -1,6 +1,5 @@
 #include "State.h"
 #include "StateManager.h"
-#include <gl/glfw.h>
 
 State::State() {
 	keyState.resize(300);
