@@ -8,10 +8,12 @@
 
 in vec3 normal;
 
-out vec4 fragColor;
+out vec4 fragData[2];
 
 void main()
 {
-	normalize(normal);
-    fragColor = vec4(vec3(0.5) + normal * 0.5, 1.0);
+	vec3 newNormal = normal;
+	normalize(newNormal);
+    fragData[0] = vec4(1,0,0,0);
+	fragData[1] = vec4(newNormal, 1);
 }

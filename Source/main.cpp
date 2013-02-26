@@ -28,7 +28,7 @@ int main(int argc, char **argv) {
 	//create window
 	glfwInit();
 	//glfwOpenWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
-	glfwOpenWindow(800, 600, 8, 8, 8, 8, 24, 8, GLFW_WINDOW);
+	glfwOpenWindow(800, 600, 8, 8, 8, 8, 0, 8, GLFW_WINDOW);
 	glfwSetWindowTitle("Rome graphics");
 	
 	std::cout << glfwGetWindowParam(GLFW_OPENGL_VERSION_MAJOR) << "." << glfwGetWindowParam(GLFW_OPENGL_VERSION_MINOR) << std::endl;

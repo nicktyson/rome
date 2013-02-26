@@ -22,6 +22,7 @@ protected:
 	GLuint fbo;
 	GLuint depthBuffer;
 	GLuint diffuseBuffer;
+	GLuint normalBuffer;
 	GLuint finalBuffer;
 	ScreenQuad fullscreenQuad;
 	ShaderProgram* uberShader;

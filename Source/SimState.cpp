@@ -122,11 +122,11 @@ void SimState::initScene() {
 	childNode->setTranslation(0, 0, 0);
 	root->addChild(childNode);
 
-	////float randRot = rand() % 90;
-	//VitalEntity * secondChild = new VitalEntity(location, 1, 0, 0);
-	//secondChild->setTranslation(2, 2, 0);
-	////secondChild->setRotation(20, randRot, 0);
-	//childNode->addChild(secondChild);
+	//float randRot = rand() % 90;
+	VitalEntity * secondChild = new VitalEntity(location, 1, 0, 0);
+	secondChild->setTranslation(2, 2, 0);
+	//secondChild->setRotation(20, randRot, 0);
+	childNode->addChild(secondChild);
 
 	//add a floor
 	MeshNode * floor = new MeshNode(cubeLocation, MaterialList::GREENTEST);
@@ -136,7 +136,7 @@ void SimState::initScene() {
 
 	//make a ring of spheres
 	for(double i = 0; i < 6; ++i) {
-		MeshNode * newNode = new MeshNode(location, MaterialList::GREENTEST);
+		MeshNode * newNode = new MeshNode(location, MaterialList::NORMAL);
 		root->addChild(newNode);
 		newNode->setTranslation(3*sin(i*6.28/6), 3*cos(i*6.28/6), 0);
 	}

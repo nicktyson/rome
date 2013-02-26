@@ -1,6 +1,7 @@
 * finish conversion to OpenGL 3
 	* add more uniforms, lights
 	* cleanup
+	* fixup shaderProgram
 * improve scene creation
 	* terrain?
 * make more node/entity classes

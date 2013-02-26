@@ -4,6 +4,7 @@
 layout(location=0) in vec3 in_Position;
 
 layout(location=0) uniform sampler2DRect diffuseBuffer;
+layout(location=1) uniform sampler2DRect normalBuffer;
 
 void main()
 {
