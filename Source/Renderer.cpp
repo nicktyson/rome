@@ -17,7 +17,12 @@ void Renderer::init() {
 	// diffuse buffer: rgb = diffuse color, a = material id
 	glGenTextures(1, &diffuseBuffer);
 	glBindTexture(GL_TEXTURE_RECTANGLE, diffuseBuffer);
-	glTexImage2D(GL_TEXTURE_RECTANGLE, 0, GL_RGBA8,  800, 600, 0, GL_RGBA, GL_UNSIGNED_BYTE, NULL); 
+	glTexImage2D(GL_TEXTURE_RECTANGLE, 0, GL_RGBA8, 800, 600, 0, GL_RGBA, GL_UNSIGNED_BYTE, NULL);
+
+	// position buffer: rgb = position.xyz
+	glGenTextures(1, &positionBuffer);
+	glBindTexture(GL_TEXTURE_RECTANGLE, positionBuffer);
+	glTexImage2D(GL_TEXTURE_RECTANGLE, 0, GL_RGBA8, 800, 600, 0, GL_RGBA, GL_UNSIGNED_BYTE, NULL);
 
 	// normals (currently all 3 dimensions)
 	glGenTextures(1, &normalBuffer);
@@ -56,14 +61,16 @@ void Renderer::firstPass(scene_node* root) {
 
 	//attach textures to fbo for writing
 	glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_RECTANGLE, diffuseBuffer, 0);
-	glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT1, GL_TEXTURE_RECTANGLE, normalBuffer, 0);
+	glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT1, GL_TEXTURE_RECTANGLE, positionBuffer, 0);
+	glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT2, GL_TEXTURE_RECTANGLE, normalBuffer, 0);
 	glFramebufferTexture2D(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_TEXTURE_RECTANGLE, depthBuffer, 0);
 
-	//tell fbo to draw to the diffuse and normal textures
-	GLenum buffer[2];
+	//tell fbo to draw to the diffuse, position, and normal textures
+	GLenum buffer[3];
 	buffer[0] = GL_COLOR_ATTACHMENT0;
 	buffer[1] = GL_COLOR_ATTACHMENT1;
-	glDrawBuffers(2, &buffer[0]);
+	buffer[2] = GL_COLOR_ATTACHMENT2;
+	glDrawBuffers(3, &buffer[0]);
 
 	//reset stuff
 	glViewport(0, 0, 800, 600);
@@ -82,6 +89,7 @@ void Renderer::firstPass(scene_node* root) {
 	//detach textures from fbo
 	glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_RECTANGLE, 0, 0);
 	glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT1, GL_TEXTURE_RECTANGLE, 0, 0);
+	glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT2, GL_TEXTURE_RECTANGLE, 0, 0);
 	glFramebufferTexture2D(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_TEXTURE_RECTANGLE, 0, 0);
 
 	//unbind fbo
@@ -113,13 +121,18 @@ void Renderer::deferredPass() {
 
 	//set uniforms (mostly just lights) - don't need immediately
 
-	//give access to the diffuse and normal textures as uniform sampler
+	//give access to the diffuse, position, and normal textures as uniform samplers
 	glActiveTexture(GL_TEXTURE0);
 	glBindTexture(GL_TEXTURE_RECTANGLE, diffuseBuffer);
 	glUniform1i(0, 0);
+
 	glActiveTexture(GL_TEXTURE1);
-	glBindTexture(GL_TEXTURE_RECTANGLE, normalBuffer);
+	glBindTexture(GL_TEXTURE_RECTANGLE, positionBuffer);
 	glUniform1i(1, 1);
+
+	glActiveTexture(GL_TEXTURE2);
+	glBindTexture(GL_TEXTURE_RECTANGLE, normalBuffer);
+	glUniform1i(2, 2);
 
 	glActiveTexture(GL_TEXTURE0);
 
@@ -129,7 +142,7 @@ void Renderer::deferredPass() {
 	//unbind shader
 	uberShader->unuse();
 
-	//detach textures from fbo
+	//detach final texture from fbo
 	glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_RECTANGLE, 0, 0);
 
 	//unbind fbo

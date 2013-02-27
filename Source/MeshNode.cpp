@@ -2,6 +2,7 @@
 #include <iostream>
 #include <string>
 #include "../Lib/glm/glm.hpp"
+#include "../Lib/glm/gtc/matrix_inverse.hpp"
 #include "../Lib/glm/gtc/type_ptr.hpp"
 #include "MeshNode.h"
 #include "Materials\MaterialList.h"
@@ -10,12 +11,12 @@
 
 MeshNode::MeshNode() {
 	objectMesh = new mesh();
-	setMaterial(MaterialList::GREENTEST);
+	setMaterial(MaterialList::NORMAL);
 }
 
 MeshNode::MeshNode(std::string fileLocation) {
 	objectMesh = new mesh(fileLocation);
-	setMaterial(MaterialList::GREENTEST);
+	setMaterial(MaterialList::NORMAL);
 }
 
 MeshNode::MeshNode(std::string fileLocation, MaterialList::Materials materialType) {
@@ -44,8 +45,15 @@ void MeshNode::draw() {
 
 	material->use();
 	
+	//construct normal matrix
+	glm::mat4 normalMatrix = glm::mat4(sceneGraphMatrixStack->last());
+	glm::inverse(normalMatrix);
+	glm::transpose(normalMatrix);
+
+	//apply uniforms
 	glUniformMatrix4fv(0, 1, GL_FALSE, glm::value_ptr(sceneGraphMatrixStack->last()));
 	glUniformMatrix4fv(1, 1, GL_FALSE, glm::value_ptr(projectionMatrixStack->last()));
+	glUniformMatrix4fv(2, 1, GL_FALSE, glm::value_ptr(normalMatrix));
 
 	objectMesh->bindBuffers();
 

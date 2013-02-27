@@ -15,6 +15,9 @@
 
 std::vector<bool> State::keyState;
 
+//desired fps (display and sim)
+//keypresses are detected at the display rate
+//times are in seconds
 const int SimState::DISPLAY_FRAME_RATE = 60;
 const double SimState::DISPLAY_FRAME_TIME = 1.0 / DISPLAY_FRAME_RATE;
 const int SimState::SIM_RATE = 120;
@@ -129,7 +132,7 @@ void SimState::initScene() {
 	childNode->addChild(secondChild);
 
 	//add a floor
-	MeshNode * floor = new MeshNode(cubeLocation, MaterialList::GREENTEST);
+	MeshNode * floor = new MeshNode(cubeLocation, MaterialList::NORMAL);
 	floor->setScaling(5, 5, 0.1);
 	floor->setTranslation(0, 0, -1.1);
 	root->addChild(floor);

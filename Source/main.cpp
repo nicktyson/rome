@@ -13,10 +13,6 @@
 #include "Materials\MaterialList.h"
 #include "MatrixStack.h"
 
-//desired fps (display and sim)
-//keypresses are detected at the display rate
-//times are in seconds
-
 std::string ROME_PATH;
 StateManager* manager;
 MaterialList* materialList;

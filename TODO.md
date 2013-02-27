@@ -1,5 +1,6 @@
-* finish conversion to OpenGL 3
+* finish conversion to OpenGL 3 / deferred rendering
 	* add more uniforms, lights
+	* separate material properties from scenegraph nodes
 	* cleanup
 	* fixup shaderProgram
 * improve scene creation
@@ -14,4 +15,3 @@
 * add additional states
 * physics
 * better error/exception handling
-* deferred rendering

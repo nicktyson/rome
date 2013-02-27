@@ -3,6 +3,7 @@
 #extension GL_ARB_texture_rectangle : require
 
 uniform sampler2DRect diffuseBuffer;
+uniform sampler2DRect positionBuffer;
 uniform sampler2DRect normalBuffer;
 
 out vec4 fragColor;
@@ -10,6 +11,7 @@ out vec4 fragColor;
 void main()
 {
 	vec4 diffuseData = texture2DRect(diffuseBuffer, gl_FragCoord.xy);
+	vec4 positionData = texture2DRect(positionBuffer, gl_FragCoord.xy);
 	vec4 normalData = texture2DRect(normalBuffer, gl_FragCoord.xy);
 
 	vec3 diffuseColor = diffuseData.xyz;

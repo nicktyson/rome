@@ -15,7 +15,7 @@ void ScreenQuad::init() {
 	indices.resize(6);
 
 	//bottom-left vertex
-	coords[0] = -0.9;
+	coords[0] = -1.0;
 	coords[1] = -1.0;
 	coords[2] = 0.0;
 	//bottom-right
