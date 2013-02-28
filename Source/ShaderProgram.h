@@ -10,6 +10,7 @@ public:
 	ShaderProgram(std::string shaderName);
 	void use();
 	void unuse();
+	GLuint getUniformLocation(char* name);
 
 protected:
 	GLuint openglProgram;

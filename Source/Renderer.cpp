@@ -124,15 +124,15 @@ void Renderer::deferredPass() {
 	//give access to the diffuse, position, and normal textures as uniform samplers
 	glActiveTexture(GL_TEXTURE0);
 	glBindTexture(GL_TEXTURE_RECTANGLE, diffuseBuffer);
-	glUniform1i(0, 0);
+	glUniform1i(uberShader->getUniformLocation("diffuseBuffer"), 0);
 
 	glActiveTexture(GL_TEXTURE1);
 	glBindTexture(GL_TEXTURE_RECTANGLE, positionBuffer);
-	glUniform1i(1, 1);
+	glUniform1i(uberShader->getUniformLocation("positionBuffer"), 1);
 
 	glActiveTexture(GL_TEXTURE2);
 	glBindTexture(GL_TEXTURE_RECTANGLE, normalBuffer);
-	glUniform1i(2, 2);
+	glUniform1i(uberShader->getUniformLocation("normalBuffer"), 2);
 
 	glActiveTexture(GL_TEXTURE0);
 

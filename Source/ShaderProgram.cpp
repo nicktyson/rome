@@ -62,3 +62,7 @@ void ShaderProgram::use() {
 void ShaderProgram::unuse() {
 	glUseProgram(0);
 }
+
+GLuint ShaderProgram::getUniformLocation(char* name) {
+	return glGetUniformLocation(openglProgram, name);
+}
