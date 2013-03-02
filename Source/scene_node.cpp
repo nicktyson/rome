@@ -2,6 +2,7 @@
 #include <vector>
 #include "scene_node.h"
 #include "MatrixStack.h"
+#include "Renderer.h"
 
 scene_node::scene_node() {
 	translation.resize(3);
@@ -58,13 +59,13 @@ void scene_node::setScaling(float sx, float sy, float sz) {
 	scaling[2] = sz;
 }
 
-void scene_node::draw() {
+void scene_node::draw(Renderer* r) {
 	extern MatrixStack* sceneGraphMatrixStack;
 
 	applyTransformation();
 
 	for(std::vector<scene_node*>::iterator it = children.begin(); it != children.end(); ++it) {
-		(*it)->draw();
+		(*it)->draw(r);
 	}
 
 	sceneGraphMatrixStack->popMatrix();

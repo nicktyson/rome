@@ -4,6 +4,7 @@
 #include <iostream>
 #include <cmath>
 #include "MatrixStack.h"
+#include "Renderer.h"
 
 const float FPCamera::MAX_VELOCITY = 8.0; // meters/second
 const float FPCamera::MOUSE_SENSITIVITY = 6.0; // degrees/second per mouse coordinate
@@ -28,7 +29,7 @@ FPCamera::FPCamera() {
 	translation[1] = 6;
 }
 
-void FPCamera::draw() {
+void FPCamera::draw(Renderer* r) {
 	extern MatrixStack* sceneGraphMatrixStack;
 
 	sceneGraphMatrixStack->pushMatrix();
@@ -39,7 +40,7 @@ void FPCamera::draw() {
 	sceneGraphMatrixStack->translated(translation[0], translation[1], translation[2]);
 
 	for(std::vector<scene_node*>::iterator it = children.begin(); it != children.end(); ++it) {
-		(*it)->draw();
+		(*it)->draw(r);
 	}
 
 	sceneGraphMatrixStack->popMatrix();

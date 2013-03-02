@@ -8,6 +8,8 @@
 #include "Materials\MaterialList.h"
 #include "Materials\Material.h"
 #include "MatrixStack.h"
+#include "mesh.h"
+#include "Renderer.h"
 
 MeshNode::MeshNode() {
 	objectMesh = new mesh();
@@ -37,7 +39,7 @@ void MeshNode::setMaterial(MaterialList::Materials materialType) {
 	material = materialList->getMaterial(materialType);
 }
 
-void MeshNode::draw() {
+void MeshNode::draw(Renderer* r) {
 	extern MatrixStack* sceneGraphMatrixStack;
 	extern MatrixStack* projectionMatrixStack;
 
@@ -47,8 +49,8 @@ void MeshNode::draw() {
 	
 	//construct normal matrix
 	glm::mat4 normalMatrix = glm::mat4(sceneGraphMatrixStack->last());
-	glm::inverse(normalMatrix);
-	glm::transpose(normalMatrix);
+	normalMatrix = glm::inverse(normalMatrix);
+	normalMatrix = glm::transpose(normalMatrix);
 
 	//apply uniforms
 	glUniformMatrix4fv(0, 1, GL_FALSE, glm::value_ptr(sceneGraphMatrixStack->last()));
@@ -65,7 +67,7 @@ void MeshNode::draw() {
 
 	//draw children
 	for(std::vector<scene_node*>::iterator it = children.begin(); it != children.end(); ++it) {
-		(*it)->draw();
+		(*it)->draw(r);
 	}
 
 	//undo changes to matrix

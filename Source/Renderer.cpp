@@ -3,8 +3,11 @@
 #include "MatrixStack.h"
 #include "ScreenQuad.h"
 #include "ShaderProgram.h"
+#include "LightNode.h"
 
-Renderer::Renderer() : fullscreenQuad(){
+const int Renderer::MAX_LIGHTS = 20;
+
+Renderer::Renderer() : lights(MAX_LIGHTS){
 	init();
 	initPostShaders();
 }
@@ -48,6 +51,8 @@ void Renderer::initPostShaders() {
 }
 
 void Renderer::render(scene_node* root) {
+	lights.clear();
+
 	firstPass(root);
 	deferredPass();
 	postProcess();
@@ -84,7 +89,7 @@ void Renderer::firstPass(scene_node* root) {
 	
 	//draw the scene
 	//nodes bind their own shaders, uniforms, and vao
-	root->draw();
+	root->draw(this);
 
 	//detach textures from fbo
 	glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_RECTANGLE, 0, 0);
@@ -119,7 +124,12 @@ void Renderer::deferredPass() {
 	//bind ubershader
 	uberShader->use();
 
-	//set uniforms (mostly just lights) - don't need immediately
+	//set uniforms (mostly just lights)
+	glUniform1i(0, lights.size());
+	for (int i = 0; i < lights.size(); i++) {
+		glUniform3f(1+i, lights[i]->eyespacePosition.x, lights[i]->eyespacePosition.y, lights[i]->eyespacePosition.z);
+		glUniform3f(61+i, lights[i]->color[0], lights[i]->color[1], lights[i]->color[2]);
+	}
 
 	//give access to the diffuse, position, and normal textures as uniform samplers
 	glActiveTexture(GL_TEXTURE0);
@@ -172,4 +182,8 @@ void Renderer::postProcess() {
 
 	//unbind shader
 	postprocessShader->unuse();
+}
+
+void Renderer::addLight(LightNode* light) {
+	lights.push_back(light);
 }

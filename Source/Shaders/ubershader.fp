@@ -6,6 +6,10 @@ uniform sampler2DRect diffuseBuffer;
 uniform sampler2DRect positionBuffer;
 uniform sampler2DRect normalBuffer;
 
+layout(location=0)uniform int numLights;
+layout(location=1)uniform vec3 LightEyespacePositions[20];
+layout(location=61)uniform vec3 LightColors[20]; 
+
 out vec4 fragColor;
 
 void main()
@@ -20,7 +24,6 @@ void main()
 	int materialID = int(diffuseData.w);
 
 	if(materialID == 0) {
-
 		diffuseColor = (normal * 0.5) + vec3(0.5);
 	}
 

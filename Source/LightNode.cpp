@@ -1,17 +1,24 @@
 #include "LightNode.h"
 #include "MatrixStack.h"
+#include "Renderer.h"
+#include "../Lib/glm/glm.hpp"
 
 LightNode::LightNode() {
 	color.resize(3);
 }
 
-void LightNode::draw() {
+void LightNode::draw(Renderer* r) {
 	extern MatrixStack* sceneGraphMatrixStack;
 
 	applyTransformation();
 
+	eyespacePosition = glm::vec4(0.0, 0.0, 0.0, 1.0);
+	eyespacePosition = sceneGraphMatrixStack->last() * eyespacePosition;
+
+	r->addLight(this);
+
 	for(std::vector<scene_node*>::iterator it = children.begin(); it != children.end(); ++it) {
-		(*it)->draw();
+		(*it)->draw(r);
 	}
 
 	sceneGraphMatrixStack->popMatrix();

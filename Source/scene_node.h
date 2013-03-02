@@ -3,6 +3,8 @@
 
 #include <vector>
 
+class Renderer;
+
 class scene_node {
 public:
 	scene_node();
@@ -16,7 +18,7 @@ public:
 	void setTranslation(float tx, float ty, float tz);
 	void setRotation(float rx, float ry, float rz);
 	void setScaling(float sx, float sy, float sz);
-	virtual void draw();
+	virtual void draw(Renderer* r);
 	void applyTransformation();
 	virtual void update(double deltaT);
 

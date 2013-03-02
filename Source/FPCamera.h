@@ -4,10 +4,12 @@
 #include "Camera.h"
 #include <vector>
 
+class Renderer;
+
 class FPCamera : public Camera {
 public:
 	FPCamera();
-	void draw();
+	void draw(Renderer* r);
 	void update(double deltaT);
 	void forward();
 	void back();

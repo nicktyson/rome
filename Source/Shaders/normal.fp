@@ -1,5 +1,5 @@
 /*
-* Normal shader (model space)
+* Normal shader (camera space)
 *
 */
 

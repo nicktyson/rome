@@ -2,10 +2,11 @@
 #define MESHNODE_H
 
 #include "scene_node.h"
-#include "mesh.h"
 #include "Materials\MaterialList.h"
 
 class Material;
+class Renderer;
+class mesh;
 
 class MeshNode : public scene_node {
 public:
@@ -15,7 +16,7 @@ public:
 	mesh* getMesh();
 	void setMesh(mesh*);
 	void setMaterial(MaterialList::Materials materialType);
-	virtual void draw();
+	virtual void draw(Renderer* r);
 	virtual void update(double deltaT);
 	
 protected:

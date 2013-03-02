@@ -4,6 +4,7 @@
 #include <iostream>
 #include "TPCamera.h"
 #include "MatrixStack.h"
+#include "Renderer.h"
 
 const float TPCamera::MAX_VELOCITY = 7.0; // meters/second
 const float TPCamera::DRAG = 5.0;
@@ -24,13 +25,13 @@ TPCamera::TPCamera() {
 	translation[2] = -6;
 }
 
-void TPCamera::draw() {
+void TPCamera::draw(Renderer* r) {
 	extern MatrixStack* sceneGraphMatrixStack;
 
 	applyTransformation();
 
 	for(std::vector<scene_node*>::iterator it = children.begin(); it != children.end(); ++it) {
-		(*it)->draw();
+		(*it)->draw(r);
 	}
 
 	//glPopMatrix();
