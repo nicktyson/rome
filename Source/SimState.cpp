@@ -6,6 +6,7 @@
 #include "StateManager.h"
 #include "MeshNode.h"
 #include "VitalEntity.h"
+#include "LightNode.h"
 #include "Camera.h"
 #include "FPCamera.h"
 #include "TPCamera.h"
@@ -139,10 +140,15 @@ void SimState::initScene() {
 
 	//make a ring of spheres
 	for(double i = 0; i < 6; ++i) {
-		MeshNode * newNode = new MeshNode(location, MaterialList::NORMAL);
+		MeshNode * newNode = new MeshNode(location, MaterialList::LAMBERTIAN);
 		root->addChild(newNode);
 		newNode->setTranslation(3*sin(i*6.28/6), 3*cos(i*6.28/6), 0);
 	}
+
+	//add a light
+	LightNode* light = new LightNode();
+	light->setTranslation(6.0, 6.0, 6.0);
+	root->addChild(light);
 }
 
 void SimState::initCameras() {

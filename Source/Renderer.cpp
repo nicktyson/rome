@@ -1,3 +1,4 @@
+#include <iostream>
 #include "Renderer.h"
 #include "scene_node.h"
 #include "MatrixStack.h"
@@ -20,17 +21,17 @@ void Renderer::init() {
 	// diffuse buffer: rgb = diffuse color, a = material id
 	glGenTextures(1, &diffuseBuffer);
 	glBindTexture(GL_TEXTURE_RECTANGLE, diffuseBuffer);
-	glTexImage2D(GL_TEXTURE_RECTANGLE, 0, GL_RGBA8, 800, 600, 0, GL_RGBA, GL_UNSIGNED_BYTE, NULL);
+	glTexImage2D(GL_TEXTURE_RECTANGLE, 0, GL_RGBA16F, 800, 600, 0, GL_RGBA, GL_FLOAT, NULL);
 
 	// position buffer: rgb = position.xyz
 	glGenTextures(1, &positionBuffer);
 	glBindTexture(GL_TEXTURE_RECTANGLE, positionBuffer);
-	glTexImage2D(GL_TEXTURE_RECTANGLE, 0, GL_RGBA8, 800, 600, 0, GL_RGBA, GL_UNSIGNED_BYTE, NULL);
+	glTexImage2D(GL_TEXTURE_RECTANGLE, 0, GL_RGBA16F, 800, 600, 0, GL_RGBA, GL_FLOAT, NULL);
 
 	// normals (currently all 3 dimensions)
 	glGenTextures(1, &normalBuffer);
 	glBindTexture(GL_TEXTURE_RECTANGLE, normalBuffer);
-	glTexImage2D(GL_TEXTURE_RECTANGLE, 0, GL_RGBA8, 800, 600, 0, GL_RGBA, GL_UNSIGNED_BYTE, NULL);
+	glTexImage2D(GL_TEXTURE_RECTANGLE, 0, GL_RGBA16F, 800, 600, 0, GL_RGBA, GL_FLOAT, NULL);
 
 	// depth
 	glGenTextures(1, &depthBuffer);
@@ -40,7 +41,7 @@ void Renderer::init() {
 	// final - result of 2nd pass
 	glGenTextures(1, &finalBuffer);
 	glBindTexture(GL_TEXTURE_RECTANGLE, finalBuffer);
-	glTexImage2D(GL_TEXTURE_RECTANGLE, 0, GL_RGBA8,  800, 600, 0, GL_RGBA, GL_UNSIGNED_BYTE, NULL);
+	glTexImage2D(GL_TEXTURE_RECTANGLE, 0, GL_RGBA16F,  800, 600, 0, GL_RGBA, GL_FLOAT, NULL);
 
 	glBindFramebuffer(GL_FRAMEBUFFER, 0);
 }
@@ -126,9 +127,10 @@ void Renderer::deferredPass() {
 
 	//set uniforms (mostly just lights)
 	glUniform1i(0, lights.size());
+	std::cout << lights.size() << std::endl;
 	for (int i = 0; i < lights.size(); i++) {
 		glUniform3f(1+i, lights[i]->eyespacePosition.x, lights[i]->eyespacePosition.y, lights[i]->eyespacePosition.z);
-		glUniform3f(61+i, lights[i]->color[0], lights[i]->color[1], lights[i]->color[2]);
+		glUniform3f(21+i, lights[i]->color[0], lights[i]->color[1], lights[i]->color[2]);
 	}
 
 	//give access to the diffuse, position, and normal textures as uniform samplers

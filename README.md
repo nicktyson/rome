@@ -1,7 +1,9 @@
 rome
 ====
 
-A simple graphics project written in C++.  It originally used OpenGL 2.x, but has now mostly been ported to 3.3.  
+A simple (in-progress) graphics project written in C++.  It originally used OpenGL 2.x, but has now mostly been ported to 3.3.  
+  
+In its current form, it consists of a deferred renderer with geometry, shading, and post-processing passes.  One thread renders the scene, while another updates object positions.  It includes both first-person and top-down third-person cameras.  
   
 Requires Windows.  
   

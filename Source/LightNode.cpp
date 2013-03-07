@@ -5,6 +5,9 @@
 
 LightNode::LightNode() {
 	color.resize(3);
+	color[0] = 1.0;
+	color[1] = 1.0;
+	color[2] = 1.0;
 }
 
 void LightNode::draw(Renderer* r) {
