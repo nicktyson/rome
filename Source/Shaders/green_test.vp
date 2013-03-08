@@ -9,9 +9,11 @@ layout(location=1) uniform mat4 projectionMatrix;
 layout(location=2) uniform mat4 normalMatrix;
 
 out vec4 normal;
+out vec4 position;
 
 void main()
 {
 	normal = normalMatrix * vec4(in_Normal, 0.0);
-    gl_Position = projectionMatrix * modelViewMatrix * vec4(in_Position, 1.0);
+    position = modelViewMatrix * vec4(in_Position, 1.0);
+	gl_Position = projectionMatrix * position;
 }

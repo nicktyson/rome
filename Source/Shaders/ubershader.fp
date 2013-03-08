@@ -29,7 +29,6 @@ void main()
 		diffuseColor = (normal * 0.5) + vec3(0.5);
 	//lambertian
 	} else if(materialID == 2) {
-		
 		for (int i = 0; i < numLights; i++) {
 			vec3 lightDirection = vec3(LightEyespacePositions[i] - position);
 			lightDirection = normalize(lightDirection);
