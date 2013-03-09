@@ -71,7 +71,7 @@ void GLFWCALL reshape (int width, int height) {
 	glViewport(0, 0, (GLint)width, (GLint)height);
 	projectionMatrixStack->loadIdentity();
 	//field of view, aspect ratio of window, and the new and far planes
-	projectionMatrixStack->perspective(60.0, (float)width / (float)height, 1.0, 50.0);
+	projectionMatrixStack->perspective(60.0, (float)width / (float)height, 1.0, 300.0);
 }
 
 void GLFWCALL keyCallback(int key, int state) {

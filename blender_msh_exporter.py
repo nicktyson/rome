@@ -2,14 +2,14 @@ import bpy
 import os
 
 # To run, Blender's working directory should be the rome folder.
-# An easy way to set that is to right click this file -> Open With -> Blender
-# (assuming you haven't moved this script)
+# import os
+# os.chdir()
 
 # sharp edges need to be split for them to look correct
 # quads are automatically converted to triangles
 
 current_obj = bpy.context.active_object
-f = open('Assets/Meshes/test_torus.msh', 'w')
+f = open('Assets/Meshes/castle.msh', 'w')
 
 bpy.ops.object.mode_set(mode='EDIT')
 bpy.ops.mesh.select_all() 

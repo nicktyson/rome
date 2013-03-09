@@ -12,6 +12,7 @@ Lib/
 [Rr]elease/
 
 intermediate/
+*.msh
 
 [Tt]est[Rr]esult
 [Bb]uild[Ll]og.*

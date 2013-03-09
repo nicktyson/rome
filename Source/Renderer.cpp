@@ -127,7 +127,6 @@ void Renderer::deferredPass() {
 
 	//set uniforms (mostly just lights)
 	glUniform1i(0, lights.size());
-	std::cout << lights.size() << std::endl;
 	for (int i = 0; i < lights.size(); i++) {
 		glUniform3f(1+i, lights[i]->eyespacePosition.x, lights[i]->eyespacePosition.y, lights[i]->eyespacePosition.z);
 		glUniform3f(21+i, lights[i]->color[0], lights[i]->color[1], lights[i]->color[2]);
