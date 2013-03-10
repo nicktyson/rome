@@ -90,6 +90,9 @@
     <ClCompile Include="..\Source\ScreenQuad.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="..\Source\MaterialProperties.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\Source\main.h">
@@ -159,6 +162,9 @@
       <Filter>Source Files</Filter>
     </ClInclude>
     <ClInclude Include="..\Source\ScreenQuad.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Source\MaterialProperties.h">
       <Filter>Source Files</Filter>
     </ClInclude>
   </ItemGroup>

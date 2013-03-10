@@ -1,4 +1,5 @@
 #include "LambertianMaterial.h"
+#include "../MaterialProperties.h"
 #include "../ShaderProgram.h"
 
 LambertianMaterial::LambertianMaterial() {
@@ -11,4 +12,8 @@ void LambertianMaterial::use() {
 
 void LambertianMaterial::unuse() {
 	shader->unuse();
+}
+
+void LambertianMaterial::setUniforms(MaterialProperties* properties) {
+
 }

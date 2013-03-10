@@ -10,6 +10,7 @@
 #include "MatrixStack.h"
 #include "mesh.h"
 #include "Renderer.h"
+#include "MaterialProperties.h"
 
 MeshNode::MeshNode() {
 	objectMesh = new mesh();
@@ -52,15 +53,17 @@ void MeshNode::draw(Renderer* r) {
 	normalMatrix = glm::inverse(normalMatrix);
 	normalMatrix = glm::transpose(normalMatrix);
 
-	//apply uniforms
+	//apply geometry/mesh uniforms
 	glUniformMatrix4fv(0, 1, GL_FALSE, glm::value_ptr(sceneGraphMatrixStack->last()));
 	glUniformMatrix4fv(1, 1, GL_FALSE, glm::value_ptr(projectionMatrixStack->last()));
 	glUniformMatrix4fv(2, 1, GL_FALSE, glm::value_ptr(normalMatrix));
 
+	//apply material uniforms
+	material->setUniforms(properties);
+
+	//bind, draw, and unbind vertices
 	objectMesh->bindBuffers();
-
 	glDrawElements(GL_TRIANGLES, 3*objectMesh->getTriCount(), GL_UNSIGNED_INT, NULL);
-
 	objectMesh->unbindBuffers();
 
 	material->unuse();

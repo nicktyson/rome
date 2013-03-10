@@ -7,6 +7,7 @@
 class Material;
 class Renderer;
 class mesh;
+class MaterialProperties;
 
 class MeshNode : public scene_node {
 public:
@@ -22,6 +23,7 @@ public:
 protected:
 	mesh* objectMesh;
 	Material* material;
+	MaterialProperties* properties;
 };
 
 #endif
