@@ -148,14 +148,22 @@ void SimState::initScene() {
 	//make a ring of spheres
 	for(double i = 0; i < 6; ++i) {
 		MeshNode * newNode = new MeshNode(location, MaterialList::LAMBERTIAN);
+		newNode->setMaterialProperties(0.0, 0.4, 0.0, 1.0, 1.0);
 		root->addChild(newNode);
 		newNode->setTranslation(3*sin(i*6.28/6), 3*cos(i*6.28/6), 0);
 	}
 
 	//add a light
 	LightNode* light = new LightNode();
-	light->setTranslation(6.0, 6.0, 6.0);
+	light->setTranslation(16.0, 16.0, 6.0);
 	root->addChild(light);
+
+	//a second (blue) light to test shaders
+	//LightNode* light2 = new LightNode();
+	//light2->setTranslation(-16.0, -16.0, 6.0);
+	//light2->color[0] = 0.0;
+	//light2->color[1] = 0.0;
+	//root->addChild(light2);
 }
 
 void SimState::initCameras() {

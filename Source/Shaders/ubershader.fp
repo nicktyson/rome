@@ -33,6 +33,7 @@ void main()
 			vec3 lightDirection = vec3(LightEyespacePositions[i] - position);
 			lightDirection = normalize(lightDirection);
 			float ndotl = dot(lightDirection, normal);
+			ndotl = max(ndotl, 0);
 			diffuseColor += ndotl * LightColors[i];
 		}
 	}

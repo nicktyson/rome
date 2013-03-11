@@ -15,16 +15,19 @@
 MeshNode::MeshNode() {
 	objectMesh = new mesh();
 	setMaterial(MaterialList::NORMAL);
+	properties = new MaterialProperties();
 }
 
 MeshNode::MeshNode(std::string fileLocation) {
 	objectMesh = new mesh(fileLocation);
 	setMaterial(MaterialList::NORMAL);
+	properties = new MaterialProperties();
 }
 
 MeshNode::MeshNode(std::string fileLocation, MaterialList::Materials materialType) {
 	objectMesh = new mesh(fileLocation);
 	setMaterial(materialType);
+	properties = new MaterialProperties();
 }
 
 mesh * MeshNode::getMesh() {
@@ -38,6 +41,14 @@ void MeshNode::setMesh(mesh* newMesh) {
 void MeshNode::setMaterial(MaterialList::Materials materialType) {
 	extern MaterialList* materialList;
 	material = materialList->getMaterial(materialType);
+}
+
+void MeshNode::setMaterialProperties(float r, float g, float b, float bpExp, float ctM) {
+	properties->diffuse[0] = r;
+	properties->diffuse[1] = g;
+	properties->diffuse[2] = b;
+	properties->blinnPhongExponent = bpExp;
+	properties->cookTorrM = ctM;
 }
 
 void MeshNode::draw(Renderer* r) {

@@ -1,4 +1,5 @@
 #include <iostream>
+#include <algorithm>
 #include "Renderer.h"
 #include "scene_node.h"
 #include "MatrixStack.h"
@@ -126,8 +127,9 @@ void Renderer::deferredPass() {
 	uberShader->use();
 
 	//set uniforms (mostly just lights)
-	glUniform1i(0, lights.size());
-	for (int i = 0; i < lights.size(); i++) {
+	int numLights = std::min((int)lights.size(), MAX_LIGHTS);
+	glUniform1i(0, numLights);
+	for (int i = 0; i < numLights; i++) {
 		glUniform3f(1+i, lights[i]->eyespacePosition.x, lights[i]->eyespacePosition.y, lights[i]->eyespacePosition.z);
 		glUniform3f(21+i, lights[i]->color[0], lights[i]->color[1], lights[i]->color[2]);
 	}

@@ -1,10 +1,10 @@
-* finish conversion to OpenGL 3 / deferred rendering
+* finish deferred rendering
 	* add more uniforms, lights
-	* separate material properties from scenegraph nodes
 	* cleanup
 	* fixup shaderProgram
 * improve scene creation
 	* terrain?
+	* data-driven approach
 * make more node/entity classes
 	* more-capable player object
 * make camera movements affect all cameras

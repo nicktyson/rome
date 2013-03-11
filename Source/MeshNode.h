@@ -17,6 +17,7 @@ public:
 	mesh* getMesh();
 	void setMesh(mesh*);
 	void setMaterial(MaterialList::Materials materialType);
+	void setMaterialProperties(float r, float g, float b, float bpExp, float ctM);
 	virtual void draw(Renderer* r);
 	virtual void update(double deltaT);
 	
