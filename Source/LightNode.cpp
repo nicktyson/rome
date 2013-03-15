@@ -5,9 +5,14 @@
 
 LightNode::LightNode() {
 	color.resize(3);
-	color[0] = 1.0;
-	color[1] = 1.0;
-	color[2] = 1.0;
+	setColor(1.0, 1.0, 1.0);
+	setIntensity(1.0);
+}
+
+LightNode::LightNode(float r, float g, float b, float i) {
+	color.resize(3);
+	setColor(r, g, b);
+	setIntensity(i);
 }
 
 void LightNode::draw(Renderer* r) {
@@ -31,4 +36,8 @@ void LightNode::setColor(float r, float g, float b) {
 	color[0] = r;
 	color[1] = g;
 	color[2] = b;
+}
+
+void LightNode::setIntensity(float i) {
+	intensity = i;
 }

@@ -132,6 +132,7 @@ void Renderer::deferredPass() {
 	for (int i = 0; i < numLights; i++) {
 		glUniform3f(1+i, lights[i]->eyespacePosition.x, lights[i]->eyespacePosition.y, lights[i]->eyespacePosition.z);
 		glUniform3f(21+i, lights[i]->color[0], lights[i]->color[1], lights[i]->color[2]);
+		glUniform1f(41+i, lights[i]->intensity);
 	}
 
 	//give access to the diffuse, position, and normal textures as uniform samplers

@@ -8,7 +8,8 @@ uniform sampler2DRect normalBuffer;
 
 layout(location=0)uniform int numLights;
 layout(location=1)uniform vec3 LightEyespacePositions[20];
-layout(location=21)uniform vec3 LightColors[20]; 
+layout(location=21)uniform vec3 LightColors[20];
+layout(location=41)uniform float LightIntensities[20];
 
 out vec4 fragColor;
 
@@ -34,7 +35,7 @@ void main()
 			lightDirection = normalize(lightDirection);
 			float ndotl = dot(lightDirection, normal);
 			ndotl = max(ndotl, 0);
-			diffuseColor += ndotl * LightColors[i];
+			diffuseColor += LightIntensities[i] * ndotl * LightColors[i];
 		}
 	}
 
