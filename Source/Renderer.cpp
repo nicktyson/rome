@@ -49,7 +49,7 @@ void Renderer::init() {
 
 void Renderer::initPostShaders() {
 	uberShader = new ShaderProgram("ubershader");
-	postprocessShader = new ShaderProgram("plain_post");
+	postprocessShader = new ShaderProgram("bloom");
 }
 
 void Renderer::render(scene_node* root) {

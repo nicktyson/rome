@@ -63,6 +63,8 @@
     <ClInclude Include="..\Source\VitalEntity.h" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="..\Source\Shaders\bloom.fp" />
+    <None Include="..\Source\Shaders\bloom.vp" />
     <None Include="..\Source\Shaders\green_test.fp" />
     <None Include="..\Source\Shaders\green_test.vp" />
     <None Include="..\Source\Shaders\lambertian.fp" />

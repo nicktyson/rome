@@ -199,5 +199,11 @@
     <None Include="..\Source\Shaders\plain_post.vp">
       <Filter>Source Files\Shaders</Filter>
     </None>
+    <None Include="..\Source\Shaders\bloom.vp">
+      <Filter>Source Files\Shaders</Filter>
+    </None>
+    <None Include="..\Source\Shaders\bloom.fp">
+      <Filter>Source Files\Shaders</Filter>
+    </None>
   </ItemGroup>
 </Project>
