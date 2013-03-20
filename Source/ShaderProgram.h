@@ -15,6 +15,7 @@ public:
 protected:
 	GLuint openglProgram;
 	void init(std::string shaderName);
+	GLuint ShaderProgram::prepareShader(std::string location, GLenum type);
 };
 
 
