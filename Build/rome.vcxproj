@@ -17,6 +17,7 @@
     <ClCompile Include="..\Source\LightNode.cpp" />
     <ClCompile Include="..\Source\main.cpp" />
     <ClCompile Include="..\Source\MaterialProperties.cpp" />
+    <ClCompile Include="..\Source\Materials\BlinnPhongMaterial.cpp" />
     <ClCompile Include="..\Source\Materials\GreenTestMaterial.cpp" />
     <ClCompile Include="..\Source\Materials\LambertianMaterial.cpp" />
     <ClCompile Include="..\Source\Materials\Material.cpp" />
@@ -43,6 +44,7 @@
     <ClInclude Include="..\Source\LightNode.h" />
     <ClInclude Include="..\Source\main.h" />
     <ClInclude Include="..\Source\MaterialProperties.h" />
+    <ClInclude Include="..\Source\Materials\BlinnPhongMaterial.h" />
     <ClInclude Include="..\Source\Materials\GreenTestMaterial.h" />
     <ClInclude Include="..\Source\Materials\LambertianMaterial.h" />
     <ClInclude Include="..\Source\Materials\Material.h" />
@@ -63,6 +65,8 @@
     <ClInclude Include="..\Source\VitalEntity.h" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="..\Source\Shaders\blinn_phong.fp" />
+    <None Include="..\Source\Shaders\blinn_phong.vp" />
     <None Include="..\Source\Shaders\bloom.fp" />
     <None Include="..\Source\Shaders\bloom.vp" />
     <None Include="..\Source\Shaders\green_test.fp" />

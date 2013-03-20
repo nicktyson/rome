@@ -25,9 +25,14 @@ void main()
 
 	int materialID = int(diffuseData.w);
 
+	vec3 finalColor = vec3(0.0);
+
 	//normal shader
 	if(materialID == 0) {
-		diffuseColor = (normal * 0.5) + vec3(0.5);
+		finalColor = (normal * 0.5) + vec3(0.5);
+	//green test shader
+	} else if(materialID == 1) {
+		finalColor = diffuseColor;
 	//lambertian
 	} else if(materialID == 2) {
 		for (int i = 0; i < numLights; i++) {
@@ -35,9 +40,33 @@ void main()
 			lightDirection = normalize(lightDirection);
 			float ndotl = dot(lightDirection, normal);
 			ndotl = max(ndotl, 0);
-			diffuseColor += LightIntensities[i] * ndotl * LightColors[i];
+			finalColor += diffuseColor * LightIntensities[i] * ndotl * LightColors[i];
+			//hacky ambient
+			finalColor += diffuseColor * LightIntensities[i] * LightColors[i] * 0.3;
+		}
+	//blinn-phong
+	} else if(materialID == 3) {
+		float exponent = positionData.w;
+		vec3 viewDirection = -normalize(vec3(position));
+
+		for (int i = 0; i < numLights; i++) {
+			vec3 lightDirection = normalize(vec3(LightEyespacePositions[i] - position));
+
+			vec3 halfVector = normalize(vec3(lightDirection + viewDirection));
+
+			float ndotl = max(dot(normal, lightDirection), 0.0);
+			float ndoth = max(dot(normal, halfVector), 0.0);
+			
+			if(ndotl > 0.0 && ndoth > 0.0) {
+				ndoth = pow(ndoth, exponent);
+				finalColor += LightIntensities[i] * ndoth * LightColors[i];
+			}
+			
+			finalColor += diffuseColor * LightIntensities[i] * ndotl * LightColors[i];
+			//hacky ambient
+			finalColor += diffuseColor * LightIntensities[i] * LightColors[i] * 0.3;	
 		}
 	}
 
-	fragColor = vec4(diffuseColor, 1.0);
+	fragColor = vec4(finalColor, 1.0);
 }

@@ -147,8 +147,8 @@ void SimState::initScene() {
 
 	//make a ring of spheres
 	for(double i = 0; i < 6; ++i) {
-		MeshNode * newNode = new MeshNode(location, MaterialList::LAMBERTIAN);
-		newNode->setMaterialProperties(0.0, 0.4, 0.0, 1.0, 1.0);
+		MeshNode * newNode = new MeshNode(location, MaterialList::BLINNPHONG);
+		newNode->setMaterialProperties(0.0, 0.4, 0.0, 7.0, 1.0);
 		root->addChild(newNode);
 		newNode->setTranslation(3*sin(i*6.28/6), 3*cos(i*6.28/6), 0);
 	}

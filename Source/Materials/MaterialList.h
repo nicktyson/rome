@@ -12,7 +12,8 @@ public:
 	enum Materials {
 		NORMAL,
 		GREENTEST,
-		LAMBERTIAN
+		LAMBERTIAN,
+		BLINNPHONG
 	};
 	Material* getMaterial(Materials materialName);
 

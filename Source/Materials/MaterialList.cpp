@@ -5,6 +5,7 @@
 #include "GreenTestMaterial.h"
 #include "NormalMaterial.h"
 #include "LambertianMaterial.h"
+#include "BlinnPhongMaterial.h"
 
 MaterialList::MaterialList() {
 	numMaterials = 0;
@@ -15,7 +16,8 @@ void MaterialList::initMaterials() {
 	list.insert(std::make_pair(NORMAL, new NormalMaterial()));
 	list.insert(std::make_pair(GREENTEST, new GreenTestMaterial()));
 	list.insert(std::make_pair(LAMBERTIAN, new LambertianMaterial()));
-	numMaterials = 3;
+	list.insert(std::make_pair(BLINNPHONG, new BlinnPhongMaterial()));
+	numMaterials = 4;
 }
 
 Material* MaterialList::getMaterial(Materials materialName) {

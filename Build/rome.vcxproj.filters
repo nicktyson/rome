@@ -93,6 +93,9 @@
     <ClCompile Include="..\Source\MaterialProperties.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="..\Source\Materials\BlinnPhongMaterial.cpp">
+      <Filter>Source Files\Materials</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\Source\main.h">
@@ -167,6 +170,9 @@
     <ClInclude Include="..\Source\MaterialProperties.h">
       <Filter>Source Files</Filter>
     </ClInclude>
+    <ClInclude Include="..\Source\Materials\BlinnPhongMaterial.h">
+      <Filter>Source Files\Materials</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="..\Source\Shaders\green_test.fp">
@@ -203,6 +209,12 @@
       <Filter>Source Files\Shaders</Filter>
     </None>
     <None Include="..\Source\Shaders\bloom.fp">
+      <Filter>Source Files\Shaders</Filter>
+    </None>
+    <None Include="..\Source\Shaders\blinn_phong.fp">
+      <Filter>Source Files\Shaders</Filter>
+    </None>
+    <None Include="..\Source\Shaders\blinn_phong.vp">
       <Filter>Source Files\Shaders</Filter>
     </None>
   </ItemGroup>
