@@ -42,7 +42,7 @@ void main()
 			ndotl = max(ndotl, 0);
 			finalColor += diffuseColor * LightIntensities[i] * ndotl * LightColors[i];
 			//hacky ambient
-			finalColor += diffuseColor * LightIntensities[i] * LightColors[i] * 0.3;
+			finalColor += diffuseColor * LightIntensities[i] * LightColors[i] * 0.1;
 		}
 	//blinn-phong
 	} else if(materialID == 3) {
@@ -57,14 +57,17 @@ void main()
 			float ndotl = max(dot(normal, lightDirection), 0.0);
 			float ndoth = max(dot(normal, halfVector), 0.0);
 			
-			if(ndotl > 0.0 && ndoth > 0.0) {
+			if(ndotl > 0.0) {
+				//specular
 				ndoth = pow(ndoth, exponent);
 				finalColor += LightIntensities[i] * ndoth * LightColors[i];
+
+				//diffuse
+				finalColor += diffuseColor * LightIntensities[i] * ndotl * LightColors[i];
 			}
 			
-			finalColor += diffuseColor * LightIntensities[i] * ndotl * LightColors[i];
 			//hacky ambient
-			finalColor += diffuseColor * LightIntensities[i] * LightColors[i] * 0.3;	
+			finalColor += diffuseColor * LightIntensities[i] * LightColors[i] * 0.1;	
 		}
 	}
 

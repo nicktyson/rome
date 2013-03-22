@@ -1,7 +1,5 @@
-* finish deferred rendering
-	* add more uniforms, lights
-	* cleanup
-	* fixup shaderProgram
+* add more uniforms as necessary
+* texture mapping
 * improve scene creation
 	* terrain?
 	* data-driven approach
