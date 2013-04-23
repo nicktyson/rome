@@ -13,6 +13,7 @@ public:
 	std::vector<int>& getTriangles();
 	std::vector<float>& getNormals();
 	std::vector<float>& getVertices();
+	std::vector<float>& getTexCoords();
 	int getVertCount();
 	int getTriCount();
 	void setupBuffers();
@@ -23,6 +24,7 @@ private:
 	std::vector<int> triangles;
 	std::vector<float> normals;
 	std::vector<float> vertices;
+	std::vector<float> texCoords;
 	int vertCount;
 	int triCount;
 	GLuint vbo;

@@ -10,26 +10,35 @@ ScreenQuad::ScreenQuad() {
 
 void ScreenQuad::init() {
 	std::vector<float> coords;
-	coords.resize(12);
+	coords.resize(20);
 	std::vector<int> indices;
 	indices.resize(6);
 
+	//position.xyz, texture.uv
 	//bottom-left vertex
 	coords[0] = -1.0;
 	coords[1] = -1.0;
 	coords[2] = 0.0;
+	coords[3] = 0.0;
+	coords[4] = 0.0;
 	//bottom-right
-	coords[3] = 1.0;
-	coords[4] = -1.0;
-	coords[5] = 0.0;
+	coords[5] = 1.0;
+	coords[6] = -1.0;
+	coords[7] = 0.0;
+	coords[8] = 1.0;
+	coords[9] = 0.0;
 	//top-right
-	coords[6] = 1.0;
-	coords[7] = 1.0;
-	coords[8] = 0.0;
-	//top-left
-	coords[9] = -1.0;
 	coords[10] = 1.0;
-	coords[11] = 0.0;
+	coords[11] = 1.0;
+	coords[12] = 0.0;
+	coords[13] = 1.0;
+	coords[14] = 1.0;
+	//top-left
+	coords[15] = -1.0;
+	coords[16] = 1.0;
+	coords[17] = 0.0;
+	coords[18] = 0.0;
+	coords[19] = 1.0;
 
 	//triangle indices
 	indices[0] = 0;
@@ -47,12 +56,14 @@ void ScreenQuad::init() {
 	glBindVertexArray(vao);
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, indexBuffer);
 
-	glBufferData(GL_ARRAY_BUFFER, sizeof(float) * 12, &coords[0], GL_STATIC_DRAW);
+	glBufferData(GL_ARRAY_BUFFER, sizeof(float) * 20, &coords[0], GL_STATIC_DRAW);
 	glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(int) * 6, &indices[0], GL_STATIC_DRAW);
 
 	//set up VAO
-	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3*sizeof(GLfloat), NULL);
+	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 5*sizeof(GLfloat), NULL);
+	glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, 5*sizeof(GLfloat), (GLvoid*)(3*sizeof(GLfloat)));
 	glEnableVertexAttribArray(0);
+	glEnableVertexAttribArray(1);
 
 	glBindVertexArray(0);
 }

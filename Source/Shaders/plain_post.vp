@@ -2,10 +2,14 @@
 #extension GL_ARB_explicit_uniform_location : require
 
 layout(location=0) in vec3 in_Position;
+layout(location=1) in vec2 in_TexCoord;
 
 layout(location=0) uniform sampler2DRect finalBuffer;
 
+out vec2 texcoord;
+
 void main()
 {
+	texcoord = in_TexCoord;
 	gl_Position = vec4(in_Position, 1.0);
 }

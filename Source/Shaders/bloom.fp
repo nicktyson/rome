@@ -6,6 +6,8 @@
 
 layout(location=0) uniform sampler2DRect finalBuffer;
 
+in vec2 texcoord;
+
 out vec4 fragColor;
 
 void main()

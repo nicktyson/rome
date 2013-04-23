@@ -3,6 +3,7 @@
 
 in vec4 normal;
 in vec4 position;
+in vec2 texcoord;
 
 out vec4 fragData[3];
 

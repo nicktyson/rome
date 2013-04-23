@@ -1,6 +1,7 @@
 #ifndef MATERIALPROPERTIES_H
 #define MATERIALPROPERTIES_H
 
+#include <gl/glew.h>
 #include <vector>
 
 class MaterialProperties {
@@ -11,7 +12,7 @@ public:
 	std::vector<float> diffuse;
 	float blinnPhongExponent;
 	float cookTorrM;
+	GLuint texture;
 };
-
 
 #endif

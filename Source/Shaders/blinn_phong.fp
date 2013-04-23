@@ -4,6 +4,7 @@
 in vec4 normal;
 in vec4 position;
 in vec3 diffuse;
+in vec2 texcoord;
 
 layout(location=4) uniform float exponent;
 
