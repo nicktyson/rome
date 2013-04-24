@@ -13,6 +13,7 @@ Lib/
 
 intermediate/
 *.msh
+*.tga
 
 [Tt]est[Rr]esult
 [Bb]uild[Ll]og.*
