@@ -3,6 +3,7 @@
 * improve scene creation
 	* terrain?
 	* data-driven approach
+* XML parsing
 * make more node/entity classes
 	* more-capable player object
 * make camera movements affect all cameras

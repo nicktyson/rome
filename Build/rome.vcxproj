@@ -34,6 +34,7 @@
     <ClCompile Include="..\Source\SimState.cpp" />
     <ClCompile Include="..\Source\State.cpp" />
     <ClCompile Include="..\Source\StateManager.cpp" />
+    <ClCompile Include="..\Source\TextureManager.cpp" />
     <ClCompile Include="..\Source\TPCamera.cpp" />
     <ClCompile Include="..\Source\VitalEntity.cpp" />
   </ItemGroup>
@@ -61,6 +62,7 @@
     <ClInclude Include="..\Source\SimState.h" />
     <ClInclude Include="..\Source\State.h" />
     <ClInclude Include="..\Source\StateManager.h" />
+    <ClInclude Include="..\Source\TextureManager.h" />
     <ClInclude Include="..\Source\TPCamera.h" />
     <ClInclude Include="..\Source\VitalEntity.h" />
   </ItemGroup>
