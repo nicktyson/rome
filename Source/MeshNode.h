@@ -1,6 +1,7 @@
 #ifndef MESHNODE_H
 #define MESHNODE_H
 
+#include <string>
 #include "scene_node.h"
 #include "Materials\MaterialList.h"
 
@@ -18,6 +19,7 @@ public:
 	void setMesh(mesh*);
 	void setMaterial(MaterialList::Materials materialType);
 	void setMaterialProperties(float r, float g, float b, float bpExp, float ctM);
+	void setMaterialProperties(float r, float g, float b, float bpExp, float ctM, std::string diffuseTextureName);
 	virtual void draw(Renderer* r);
 	virtual void update(double deltaT);
 	

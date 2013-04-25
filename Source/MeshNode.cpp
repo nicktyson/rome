@@ -51,6 +51,16 @@ void MeshNode::setMaterialProperties(float r, float g, float b, float bpExp, flo
 	properties->cookTorrM = ctM;
 }
 
+void MeshNode::setMaterialProperties(float r, float g, float b, float bpExp, float ctM, std::string diffuseTextureName) {
+	properties->diffuse[0] = r;
+	properties->diffuse[1] = g;
+	properties->diffuse[2] = b;
+	properties->blinnPhongExponent = bpExp;
+	properties->cookTorrM = ctM;
+	
+	properties->setTexture(diffuseTextureName);
+}
+
 void MeshNode::draw(Renderer* r) {
 	extern MatrixStack* sceneGraphMatrixStack;
 	extern MatrixStack* projectionMatrixStack;

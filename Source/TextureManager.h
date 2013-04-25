@@ -8,8 +8,6 @@
 class TextureManager {
 public:
 	static GLuint getTexture(std::string fileName);
-
-protected:
 	static std::map<std::string, GLuint> textures;
 	static void init();
 

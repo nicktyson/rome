@@ -121,6 +121,9 @@ void SimState::initScene() {
 	std::string location = ROME_PATH + "/Assets/Meshes/hires_icosphere.msh";
 	std::string cubeLocation = ROME_PATH + "/Assets/Meshes/test_cube.msh";
 	std::string castleLocation = ROME_PATH + "/Assets/Meshes/castle.msh";
+	std::string quadLocation = ROME_PATH + "/Assets/Meshes/test_quad.msh";
+
+	std::string testTextureLocation = ROME_PATH + "/Assets/Textures/test.tga";
 
 	//make two offset objects
 	MeshNode * childNode = new MeshNode(cubeLocation, MaterialList::GREENTEST);
@@ -133,17 +136,18 @@ void SimState::initScene() {
 	//secondChild->setRotation(20, randRot, 0);
 	childNode->addChild(secondChild);
 
-	////add a floor
-	//MeshNode * floor = new MeshNode(cubeLocation, MaterialList::NORMAL);
-	//floor->setScaling(5, 5, 0.1);
+	//add a floor
+	MeshNode* floor = new MeshNode(quadLocation, MaterialList::LAMBERTIAN);
+	floor->setMaterialProperties(1.0, 1.0, 1.0, 1.0, 1.0, testTextureLocation);
+	floor->setScaling(5, 5, 1.0);
 	//floor->setTranslation(0, 0, -1.1);
-	//root->addChild(floor);
+	root->addChild(floor);
 
 	//add a castle
-	MeshNode* castle = new MeshNode(castleLocation, MaterialList::LAMBERTIAN);
-	castle->setScaling(2.0, 2.0, 2.0);
-	castle->setTranslation(0.0, 0.0, -2.0);
-	root->addChild(castle);
+	//MeshNode* castle = new MeshNode(castleLocation, MaterialList::LAMBERTIAN);
+	//castle->setScaling(2.0, 2.0, 2.0);
+	//castle->setTranslation(0.0, 0.0, -2.0);
+	//root->addChild(castle);
 
 	//make a ring of spheres
 	for(double i = 0; i < 6; ++i) {

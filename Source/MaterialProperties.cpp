@@ -44,3 +44,12 @@ MaterialProperties::MaterialProperties(float r, float g, float b, float bpExp, f
 		hasDiffuseTexture = 1;
 	}
 }
+
+void MaterialProperties::setTexture(std::string diffuseTextureName) {
+	diffuseTexture = TextureManager::getTexture(diffuseTextureName);
+	if(diffuseTexture == -1) {
+		hasDiffuseTexture = 0;
+	} else {
+		hasDiffuseTexture = 1;
+	}
+}

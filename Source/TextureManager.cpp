@@ -1,6 +1,9 @@
 #include "TextureManager.h"
 #include <gl/glfw.h>
 #include <string>
+#include <map>
+
+std::map<std::string, GLuint> TextureManager::textures;
 
 TextureManager::TextureManager() {
 
@@ -13,7 +16,7 @@ GLuint TextureManager::getTexture(std::string fileName) {
 		GLuint location;
 		glGenTextures(1, &location);
 		glBindTexture(GL_TEXTURE_RECTANGLE, location);
-		glfwLoadTexture2D(fileName.c_str(), 0);
+		glfwLoadTexture2D(fileName.c_str(), GLFW_BUILD_MIPMAPS_BIT);
 		textures.insert(std::make_pair(fileName, location));
 		return location;
 	//return an existing texture
