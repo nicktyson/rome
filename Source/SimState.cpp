@@ -118,9 +118,8 @@ void SimState::mouseWheelCallback(int pos) {
 void SimState::initScene() {
 	extern std::string ROME_PATH;
 
-	std::string location = ROME_PATH + "/Assets/Meshes/hires_icosphere.msh";
+	std::string location = ROME_PATH + "/Assets/Meshes/test_sphere_hires.msh";
 	std::string cubeLocation = ROME_PATH + "/Assets/Meshes/test_cube.msh";
-	std::string castleLocation = ROME_PATH + "/Assets/Meshes/castle.msh";
 	std::string quadLocation = ROME_PATH + "/Assets/Meshes/test_quad.msh";
 
 	std::string testTextureLocation = ROME_PATH + "/Assets/Textures/test.tga";
@@ -140,19 +139,13 @@ void SimState::initScene() {
 	MeshNode* floor = new MeshNode(quadLocation, MaterialList::LAMBERTIAN);
 	floor->setMaterialProperties(1.0, 1.0, 1.0, 1.0, 1.0, testTextureLocation);
 	floor->setScaling(5, 5, 1.0);
-	//floor->setTranslation(0, 0, -1.1);
+	floor->setTranslation(0, 0, -1.1);
 	root->addChild(floor);
-
-	//add a castle
-	//MeshNode* castle = new MeshNode(castleLocation, MaterialList::LAMBERTIAN);
-	//castle->setScaling(2.0, 2.0, 2.0);
-	//castle->setTranslation(0.0, 0.0, -2.0);
-	//root->addChild(castle);
 
 	//make a ring of spheres
 	for(double i = 0; i < 6; ++i) {
 		MeshNode * newNode = new MeshNode(location, MaterialList::BLINNPHONG);
-		newNode->setMaterialProperties(0.0, 0.4, 0.0, 40.0, 1.0);
+		newNode->setMaterialProperties(0.0, 0.4, 0.0, 40.0, 1.0, testTextureLocation);
 		root->addChild(newNode);
 		newNode->setTranslation(3*sin(i*6.28/6), 3*cos(i*6.28/6), 0);
 	}

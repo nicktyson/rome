@@ -10,6 +10,8 @@ layout(location=1) uniform mat4 projectionMatrix;
 layout(location=2) uniform mat4 normalMatrix;
 layout(location=3) uniform vec3 diffuseColor;
 layout(location=4) uniform float exponent;
+uniform int hasDiffuseTexture;
+uniform sampler2D diffuseTexture;
 
 out vec4 normal;
 out vec4 position;
