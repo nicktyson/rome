@@ -123,6 +123,7 @@ void SimState::initScene() {
 	std::string quadLocation = ROME_PATH + "/Assets/Meshes/test_quad.msh";
 
 	std::string testTextureLocation = ROME_PATH + "/Assets/Textures/test.tga";
+	std::string testNormalLocation = ROME_PATH + "/Assets/Textures/normal_face.tga";
 
 	//make two offset objects
 	MeshNode * childNode = new MeshNode(cubeLocation, MaterialList::GREENTEST);
@@ -145,7 +146,7 @@ void SimState::initScene() {
 	//make a ring of spheres
 	for(double i = 0; i < 6; ++i) {
 		MeshNode * newNode = new MeshNode(location, MaterialList::BLINNPHONG);
-		newNode->setMaterialProperties(0.0, 0.4, 0.0, 40.0, 1.0, testTextureLocation);
+		newNode->setMaterialProperties(0.1, 0.4, 0.1, 40.0, 1.0, testNormalLocation);
 		root->addChild(newNode);
 		newNode->setTranslation(3*sin(i*6.28/6), 3*cos(i*6.28/6), 0);
 	}

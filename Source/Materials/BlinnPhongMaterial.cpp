@@ -21,6 +21,6 @@ void BlinnPhongMaterial::setUniforms(MaterialProperties* properties) {
 	glUniform1i(shader->getUniformLocation("hasDiffuseTexture"), properties->hasDiffuseTexture);
 
 	glActiveTexture(GL_TEXTURE0);
-	glBindTexture(GL_TEXTURE_RECTANGLE, properties->diffuseTexture);
+	glBindTexture(GL_TEXTURE_2D, properties->diffuseTexture);
 	glUniform1i(shader->getUniformLocation("diffuseTexture"), 0);
 }
