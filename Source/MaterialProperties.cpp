@@ -53,3 +53,13 @@ void MaterialProperties::setTexture(std::string diffuseTextureName) {
 		hasDiffuseTexture = 1;
 	}
 }
+
+///set the normal map
+void MaterialProperties::setNormalMap(std::string normalMapName) {
+	normalMap = TextureManager::getTexture(normalMapName);
+	if (normalMap == -1) {
+		hasNormalMap = 0;
+	} else {
+		hasNormalMap = 1;
+	}
+}

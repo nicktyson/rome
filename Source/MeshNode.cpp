@@ -61,6 +61,10 @@ void MeshNode::setMaterialProperties(float r, float g, float b, float bpExp, flo
 	properties->setTexture(diffuseTextureName);
 }
 
+void MeshNode::setMaterialProperties(std::string normalMapName) {
+	properties->setNormalMap(normalMapName);
+}
+
 void MeshNode::draw(Renderer* r) {
 	extern MatrixStack* sceneGraphMatrixStack;
 	extern MatrixStack* projectionMatrixStack;

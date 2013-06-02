@@ -137,8 +137,10 @@ void SimState::initScene() {
 	childNode->addChild(secondChild);
 
 	//add a floor
-	MeshNode* floor = new MeshNode(quadLocation, MaterialList::LAMBERTIAN);
+	MeshNode* floor = new MeshNode(quadLocation, MaterialList::BLINNPHONG);
 	floor->setMaterialProperties(1.0, 1.0, 1.0, 1.0, 1.0, testTextureLocation);
+	//floor->setMaterialProperties(1.0, 1.0, 1.0, 1.0, 1.0);
+	floor->setMaterialProperties(testNormalLocation);
 	floor->setScaling(5, 5, 1.0);
 	floor->setTranslation(0, 0, -1.1);
 	root->addChild(floor);
@@ -147,6 +149,7 @@ void SimState::initScene() {
 	for(double i = 0; i < 6; ++i) {
 		MeshNode * newNode = new MeshNode(location, MaterialList::BLINNPHONG);
 		newNode->setMaterialProperties(0.1, 0.4, 0.1, 40.0, 1.0, testNormalLocation);
+		newNode->setMaterialProperties(testNormalLocation);
 		root->addChild(newNode);
 		newNode->setTranslation(3*sin(i*6.28/6), 3*cos(i*6.28/6), 0);
 	}

@@ -11,6 +11,8 @@ layout(location=2) uniform mat4 normalMatrix;
 layout(location=3) uniform vec3 diffuseColor;
 uniform int hasDiffuseTexture;
 uniform sampler2D diffuseTexture;
+uniform int hasNormalMap;
+uniform sampler2D normalMap;
 
 out vec4 normal;
 out vec4 position;

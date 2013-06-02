@@ -12,11 +12,14 @@ public:
 	MaterialProperties(float r, float g, float b, float bpExp, float ctM);
 	MaterialProperties(float r, float g, float b, float bpExp, float ctM, std::string diffuseTextureName);
 	void setTexture(std::string diffuseTextureName);
+	void setNormalMap(std::string normalMapName);
 	std::vector<float> diffuse;
 	float blinnPhongExponent;
 	float cookTorrM;
 	GLuint diffuseTexture;
 	int hasDiffuseTexture;
+	GLuint normalMap;
+	int hasNormalMap;
 };
 
 #endif

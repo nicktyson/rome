@@ -20,6 +20,7 @@ public:
 	void setMaterial(MaterialList::Materials materialType);
 	void setMaterialProperties(float r, float g, float b, float bpExp, float ctM);
 	void setMaterialProperties(float r, float g, float b, float bpExp, float ctM, std::string diffuseTextureName);
+	void setMaterialProperties(std::string normalMapName);
 	virtual void draw(Renderer* r);
 	virtual void update(double deltaT);
 	
