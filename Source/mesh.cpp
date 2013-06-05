@@ -4,6 +4,7 @@
 #include <vector>
 #include <fstream>
 #include <iostream>
+#include "../Lib/glm/glm.hpp"
 
 mesh::mesh() {
 	vbo = -1;
@@ -79,6 +80,7 @@ void mesh::loadMesh(std::string fileLocation) {
 
 	fileStream.close();
 
+	calculateTangents();
 	setupBuffers();
 }
 
@@ -138,4 +140,98 @@ void mesh::bindBuffers() {
 
 void mesh::unbindBuffers() {
 	glBindVertexArray(0);
+}
+
+void mesh::calculateTangents() {
+	std::vector<float> tans(3*vertCount, 0);
+	std::vector<float> bitans(3*vertCount, 0);
+	tangents.resize(4 * vertCount);
+
+	//calculate tentative tangents and bitangents for each triangle
+	for (int i = 0; i < triCount; i++) {
+		//find the vertices of the current triangle, and their UV coords
+		int vi1 = triangles[3*i];
+		int vi2 = triangles[3*i + 1];
+		int vi3 = triangles[3*i + 2];
+
+		glm::vec3 vert0(vertices[3*vi1], vertices[3*vi1 + 1], vertices[3*vi1 + 2]);
+		glm::vec3 vert1(vertices[3*vi2], vertices[3*vi2 + 1], vertices[3*vi2 + 2]);
+		glm::vec3 vert2(vertices[3*vi3], vertices[3*vi3 + 1], vertices[3*vi3 + 2]);
+
+		glm::vec2 uv0(texCoords[2*vi1], texCoords[2*vi1 + 1]);
+		glm::vec2 uv1(texCoords[2*vi2], texCoords[2*vi2 + 1]);
+		glm::vec2 uv2(texCoords[2*vi3], texCoords[2*vi3 + 1]);
+
+		//differences in position and UV coords
+		glm::vec3 dPos1 = vert1 - vert0;
+		glm::vec3 dPos2 = vert2 - vert0;
+
+		glm::vec2 dUV1 = uv1 - uv0;
+		glm::vec2 dUV2 = uv2 - uv0;
+
+		//calculate and store the tangent and bitangent
+		float coeff = 1.0f / (dUV1.x * dUV2.y - dUV1.y * dUV2.x);
+
+		glm::vec3 tan = dPos1 * dUV2.y - dPos2 * dUV1.y;
+		glm::vec3 bitan = dPos2 * dUV1.x  - dPos1 * dUV2.x;
+		tan *= coeff;
+		bitan *= coeff;
+
+		tans[3*vi1] += tan.x;
+		tans[3*vi1 + 1] += tan.y;
+		tans[3*vi1 + 2] += tan.z;
+
+		tans[3*vi2] += tan.x;
+		tans[3*vi2 + 1] += tan.y;
+		tans[3*vi2 + 2] += tan.z;
+
+		tans[3*vi3] += tan.x;
+		tans[3*vi3 + 1] += tan.y;
+		tans[3*vi3 + 2] += tan.z;
+
+		bitans[3*vi1] += bitan.x;
+		bitans[3*vi1 + 1] += bitan.y;
+		bitans[3*vi1 + 2] += bitan.z;
+
+		bitans[3*vi2] += bitan.x;
+		bitans[3*vi2 + 1] += bitan.y;
+		bitans[3*vi2 + 2] += bitan.z;
+
+		bitans[3*vi3] += bitan.x;
+		bitans[3*vi3 + 1] += bitan.y;
+		bitans[3*vi3 + 2] += bitan.z;
+	}
+
+	//find the final tangent (and bitangent) for each vertex
+	for (int j = 0; j < vertCount; j++) {
+		glm::vec3 normal (normals[3*j], normals[3*j + 1], normals[3*j + 2]);
+		glm::vec3 tangent (tans[3*j], tans[3*j + 1], tans[3*j + 2]);
+		glm::vec3 bitangent (bitans[3*j], bitans[3*j + 1], bitans[3*j + 2]);
+
+		glm::normalize(tangent);
+		glm::normalize(bitangent);
+
+		//orthagonalize
+		glm::vec3 tangent_orth(normal);
+		tangent_orth *= glm::dot(normal, tangent);
+		tangent_orth = tangent - tangent_orth;
+		glm::normalize(tangent_orth);
+
+		//compute handedness
+		float handedness = 1.0f;
+		glm::vec3 nCrossT = glm::cross(normal, tangent_orth);
+		
+		if(glm::dot(nCrossT, bitangent) > 0) {
+			handedness = 1.0f;
+		} else {
+			handedness = -1.0f;
+		}
+
+		//store the orthagonalized tangent and handedness
+		tangents[4*j] = tangent_orth.x;
+		tangents[4*j + 1] = tangent_orth.y;
+		tangents[4*j + 2] = tangent_orth.z;
+		tangents[4*j + 3] = handedness;
+	}
+
 }

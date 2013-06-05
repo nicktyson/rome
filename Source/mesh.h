@@ -21,10 +21,12 @@ public:
 	void unbindBuffers();
 
 private:
+	void calculateTangents();
 	std::vector<int> triangles;
 	std::vector<float> normals;
 	std::vector<float> vertices;
 	std::vector<float> texCoords;
+	std::vector<float> tangents;
 	int vertCount;
 	int triCount;
 	GLuint vbo;

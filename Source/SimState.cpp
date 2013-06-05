@@ -123,7 +123,7 @@ void SimState::initScene() {
 	std::string quadLocation = ROME_PATH + "/Assets/Meshes/test_quad.msh";
 
 	std::string testTextureLocation = ROME_PATH + "/Assets/Textures/test.tga";
-	std::string testNormalLocation = ROME_PATH + "/Assets/Textures/normal_face.tga";
+	std::string testNormalLocation = ROME_PATH + "/Assets/Textures/normal_face2.tga";
 
 	//make two offset objects
 	MeshNode * childNode = new MeshNode(cubeLocation, MaterialList::GREENTEST);
