@@ -69,7 +69,10 @@ void main()
 			}
 			
 			//hacky ambient
-			finalColor += diffuseColor * LightIntensities[i] * LightColors[i] * 0.1;	
+			finalColor += diffuseColor * LightIntensities[i] * LightColors[i] * 0.1;
+			
+			//show normals instead
+			//finalColor = (0.5 * normal) + vec3(0.5);	
 		}
 	}
 

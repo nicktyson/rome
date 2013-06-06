@@ -122,11 +122,13 @@ void SimState::initScene() {
 	std::string cubeLocation = ROME_PATH + "/Assets/Meshes/test_cube.msh";
 	std::string quadLocation = ROME_PATH + "/Assets/Meshes/test_quad.msh";
 
-	std::string testTextureLocation = ROME_PATH + "/Assets/Textures/test.tga";
-	std::string testNormalLocation = ROME_PATH + "/Assets/Textures/normal_face2.tga";
+	std::string testTextureLocation = ROME_PATH + "/Assets/Textures/stone.tga";
+	std::string testNormalLocation = ROME_PATH + "/Assets/Textures/stone_normal.tga";
 
 	//make two offset objects
-	MeshNode * childNode = new MeshNode(cubeLocation, MaterialList::GREENTEST);
+	MeshNode * childNode = new MeshNode(cubeLocation, MaterialList::BLINNPHONG);
+	childNode->setMaterialProperties(1.0, 1.0, 1.0, 40.0, 1.0, testTextureLocation);
+	childNode->setMaterialProperties(testNormalLocation);
 	childNode->setTranslation(0, 0, 0);
 	root->addChild(childNode);
 
@@ -138,7 +140,7 @@ void SimState::initScene() {
 
 	//add a floor
 	MeshNode* floor = new MeshNode(quadLocation, MaterialList::BLINNPHONG);
-	floor->setMaterialProperties(1.0, 1.0, 1.0, 1.0, 1.0, testTextureLocation);
+	floor->setMaterialProperties(1.0, 1.0, 1.0, 40.0, 1.0, testTextureLocation);
 	//floor->setMaterialProperties(1.0, 1.0, 1.0, 1.0, 1.0);
 	floor->setMaterialProperties(testNormalLocation);
 	floor->setScaling(5, 5, 1.0);
@@ -147,8 +149,8 @@ void SimState::initScene() {
 
 	//make a ring of spheres
 	for(double i = 0; i < 6; ++i) {
-		MeshNode * newNode = new MeshNode(location, MaterialList::BLINNPHONG);
-		newNode->setMaterialProperties(0.1, 0.4, 0.1, 40.0, 1.0, testNormalLocation);
+		MeshNode * newNode = new MeshNode(location, MaterialList::LAMBERTIAN);
+		newNode->setMaterialProperties(1.0, 1.0, 1.0, 40.0, 1.0, testNormalLocation);
 		newNode->setMaterialProperties(testNormalLocation);
 		root->addChild(newNode);
 		newNode->setTranslation(3*sin(i*6.28/6), 3*cos(i*6.28/6), 0);
@@ -158,13 +160,6 @@ void SimState::initScene() {
 	LightNode* light = new LightNode();
 	light->setTranslation(16.0, 16.0, 6.0);
 	root->addChild(light);
-
-	//a second (blue) light to test shaders
-	//LightNode* light2 = new LightNode();
-	//light2->setTranslation(-16.0, -16.0, 6.0);
-	//light2->color[0] = 0.0;
-	//light2->color[1] = 0.0;
-	//root->addChild(light2);
 }
 
 void SimState::initCameras() {

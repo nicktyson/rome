@@ -95,19 +95,25 @@ int mesh::getTriCount() {
 void mesh::setupBuffers() {
 	// combine vertices, normals, and texture coordinates into one array to send to VBO
 	std::vector<float> bufferData;
-	bufferData.resize(8*vertCount);
+	//12 = floats per vert
+	bufferData.resize(12*vertCount);
 
 	for (int i = 0; i < vertCount; i++) {
-		bufferData[8*i] = vertices[3*i];
-		bufferData[8*i + 1] = vertices[3*i + 1];
-		bufferData[8*i + 2] = vertices[3*i + 2];
+		bufferData[12*i] = vertices[3*i];
+		bufferData[12*i + 1] = vertices[3*i + 1];
+		bufferData[12*i + 2] = vertices[3*i + 2];
 
-		bufferData[8*i + 3] = normals[3*i];
-		bufferData[8*i + 4] = normals[3*i + 1];
-		bufferData[8*i + 5] = normals[3*i + 2];
+		bufferData[12*i + 3] = normals[3*i];
+		bufferData[12*i + 4] = normals[3*i + 1];
+		bufferData[12*i + 5] = normals[3*i + 2];
 
-		bufferData[8*i + 6] = texCoords[2*i];
-		bufferData[8*i + 7] = texCoords[2*i + 1];
+		bufferData[12*i + 6] = texCoords[2*i];
+		bufferData[12*i + 7] = texCoords[2*i + 1];
+
+		bufferData[12*i + 8] = tangents[4*i];
+		bufferData[12*i + 9] = tangents[4*i + 1];
+		bufferData[12*i + 10] = tangents[4*i + 2];
+		bufferData[12*i + 11] = tangents[4*i + 3];
 	}
 
 	//generate and fill vertex data and index buffers
@@ -119,17 +125,19 @@ void mesh::setupBuffers() {
 	glBindVertexArray(vao);
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, indexBuffer);
 
-	glBufferData(GL_ARRAY_BUFFER, sizeof(float) * 8 * vertCount, &bufferData[0], GL_STATIC_DRAW);
+	glBufferData(GL_ARRAY_BUFFER, sizeof(float) * 12 * vertCount, &bufferData[0], GL_STATIC_DRAW);
 	glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(int) * triCount * 3, &triangles[0], GL_STATIC_DRAW);
 
 	//set up VAO
-	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 8*sizeof(GLfloat), NULL);
-	glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 8*sizeof(GLfloat), (GLvoid*)(3*sizeof(GLfloat)));
-	glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, 8*sizeof(GLfloat), (GLvoid*)(6*sizeof(GLfloat)));
+	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 12*sizeof(GLfloat), NULL);
+	glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 12*sizeof(GLfloat), (GLvoid*)(3*sizeof(GLfloat)));
+	glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, 12*sizeof(GLfloat), (GLvoid*)(6*sizeof(GLfloat)));
+	glVertexAttribPointer(3, 4, GL_FLOAT, GL_FALSE, 12*sizeof(GLfloat), (GLvoid*)(8*sizeof(GLfloat)));
 
 	glEnableVertexAttribArray(0);
 	glEnableVertexAttribArray(1);
 	glEnableVertexAttribArray(2);
+	glEnableVertexAttribArray(3);
 
 	glBindVertexArray(0);
 }
