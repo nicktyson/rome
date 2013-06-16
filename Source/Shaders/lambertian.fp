@@ -14,7 +14,7 @@ uniform sampler2D diffuseTexture;
 uniform int hasNormalMap;
 uniform sampler2D normalMap;
 
-out vec4 fragData[3];
+out vec4 fragData[4];
 
 void main()
 {
@@ -56,7 +56,9 @@ void main()
 		diffuseColor = texture2D(diffuseTexture, texcoord).xyz * diffuse.xyz;
 	}
 
+	//materialID = 2.0
     fragData[0] = vec4(diffuseColor.xyz, 2.0);
-	fragData[1] = vec4(position.xyz, 1.0);
-	fragData[2] = vec4(newNormal.xyz, 0.0);
+	fragData[1] = vec4(1.0, 1.0, 1.0, 1.0);
+	fragData[2] = vec4(position.xyz, 1.0);
+	fragData[3] = vec4(newNormal.xyz, 0.0);
 }

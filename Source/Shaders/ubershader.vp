@@ -5,6 +5,7 @@ layout(location=0) in vec3 in_Position;
 layout(location=1) in vec2 in_TexCoord;
 
 uniform sampler2DRect diffuseBuffer;
+uniform sampler2DRect specularBuffer;
 uniform sampler2DRect positionBuffer;
 uniform sampler2DRect normalBuffer;
 

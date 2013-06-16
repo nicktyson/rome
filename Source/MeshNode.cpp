@@ -43,25 +43,33 @@ void MeshNode::setMaterial(MaterialList::Materials materialType) {
 	material = materialList->getMaterial(materialType);
 }
 
-void MeshNode::setMaterialProperties(float r, float g, float b, float bpExp, float ctM) {
+void MeshNode::setMaterialColor(float r, float g, float b) {
 	properties->diffuse[0] = r;
 	properties->diffuse[1] = g;
 	properties->diffuse[2] = b;
-	properties->blinnPhongExponent = bpExp;
-	properties->cookTorrM = ctM;
 }
 
-void MeshNode::setMaterialProperties(float r, float g, float b, float bpExp, float ctM, std::string diffuseTextureName) {
-	properties->diffuse[0] = r;
-	properties->diffuse[1] = g;
-	properties->diffuse[2] = b;
+void MeshNode::setMaterialColor(float rD, float gD, float bD, float rS, float gS, float bS) {
+	properties->diffuse[0] = rD;
+	properties->diffuse[1] = gD;
+	properties->diffuse[2] = bD;
+
+	properties->specular[0] = rS;
+	properties->specular[1] = gS;
+	properties->specular[2] = bS;
+}
+
+void MeshNode::setMaterialProperties(float bpExp, float ctM, float ctN) {
 	properties->blinnPhongExponent = bpExp;
 	properties->cookTorrM = ctM;
-	
+	properties->cookTorrN = ctN;
+}
+
+void MeshNode::setMaterialTexture(std::string diffuseTextureName) {
 	properties->setTexture(diffuseTextureName);
 }
 
-void MeshNode::setMaterialProperties(std::string normalMapName) {
+void MeshNode::setMaterialNormalMap(std::string normalMapName) {
 	properties->setNormalMap(normalMapName);
 }
 

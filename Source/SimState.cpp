@@ -127,8 +127,10 @@ void SimState::initScene() {
 
 	//make two offset objects
 	MeshNode * childNode = new MeshNode(cubeLocation, MaterialList::BLINNPHONG);
-	childNode->setMaterialProperties(1.0, 1.0, 1.0, 40.0, 1.0, testTextureLocation);
-	childNode->setMaterialProperties(testNormalLocation);
+	childNode->setMaterialColor(1.0, 1.0, 1.0);
+	childNode->setMaterialProperties(40.0, 1.0, 1.0);
+	childNode->setMaterialTexture(testTextureLocation);
+	childNode->setMaterialNormalMap(testNormalLocation);
 	childNode->setTranslation(0, 0, 0);
 	root->addChild(childNode);
 
@@ -140,9 +142,10 @@ void SimState::initScene() {
 
 	//add a floor
 	MeshNode* floor = new MeshNode(quadLocation, MaterialList::BLINNPHONG);
-	floor->setMaterialProperties(1.0, 1.0, 1.0, 40.0, 1.0, testTextureLocation);
-	//floor->setMaterialProperties(1.0, 1.0, 1.0, 1.0, 1.0);
-	floor->setMaterialProperties(testNormalLocation);
+	floor->setMaterialColor(1.0, 1.0, 1.0, 1.0, 0.0, 0.0);
+	floor->setMaterialProperties(40.0, 1.0, 1.0);
+	floor->setMaterialTexture(testTextureLocation);
+	floor->setMaterialNormalMap(testNormalLocation);
 	floor->setScaling(5, 5, 1.0);
 	floor->setTranslation(0, 0, -1.1);
 	root->addChild(floor);
@@ -150,10 +153,12 @@ void SimState::initScene() {
 	//make a ring of spheres
 	for(double i = 0; i < 6; ++i) {
 		MeshNode * newNode = new MeshNode(location, MaterialList::LAMBERTIAN);
-		newNode->setMaterialProperties(1.0, 1.0, 1.0, 40.0, 1.0, testNormalLocation);
-		newNode->setMaterialProperties(testNormalLocation);
-		root->addChild(newNode);
+		newNode->setMaterialColor(1.0, 1.0, 1.0);
+		newNode->setMaterialProperties(40.0, 1.0, 1.0);
+		newNode->setMaterialTexture(testNormalLocation);
+		newNode->setMaterialNormalMap(testNormalLocation);
 		newNode->setTranslation(3*sin(i*6.28/6), 3*cos(i*6.28/6), 0);
+		root->addChild(newNode);
 	}
 
 	//add a light

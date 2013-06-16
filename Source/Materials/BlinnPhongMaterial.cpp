@@ -15,8 +15,9 @@ void BlinnPhongMaterial::unuse() {
 }
 
 void BlinnPhongMaterial::setUniforms(MaterialProperties* properties) {
-	glUniform3f(3, properties->diffuse[0], properties->diffuse[1], properties->diffuse[2]);
-	glUniform1f(4, properties->blinnPhongExponent);
+	glUniform3f(shader->getUniformLocation("diffuseColor"), properties->diffuse[0], properties->diffuse[1], properties->diffuse[2]);
+	glUniform3f(shader->getUniformLocation("specularColor"), properties->specular[0], properties->specular[1], properties->specular[2]);
+	glUniform1f(shader->getUniformLocation("exponent"), properties->blinnPhongExponent);
 
 	glUniform1i(shader->getUniformLocation("hasDiffuseTexture"), properties->hasDiffuseTexture);
 	glUniform1i(shader->getUniformLocation("hasNormalMap"), properties->hasNormalMap);

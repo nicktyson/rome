@@ -15,12 +15,17 @@ public:
 	MeshNode();
 	MeshNode(std::string fileLocation);
 	MeshNode(std::string fileLocation, MaterialList::Materials materialType);
+	
 	mesh* getMesh();
 	void setMesh(mesh*);
+
 	void setMaterial(MaterialList::Materials materialType);
-	void setMaterialProperties(float r, float g, float b, float bpExp, float ctM);
-	void setMaterialProperties(float r, float g, float b, float bpExp, float ctM, std::string diffuseTextureName);
-	void setMaterialProperties(std::string normalMapName);
+	void setMaterialColor(float r, float g, float b);
+	void setMaterialColor(float rD, float gD, float bD, float rS, float gS, float bS);
+	void setMaterialProperties(float bpExp, float ctM, float ctN);
+	void setMaterialTexture(std::string diffuseTextureName);
+	void setMaterialNormalMap(std::string normalMapName);
+
 	virtual void draw(Renderer* r);
 	virtual void update(double deltaT);
 	

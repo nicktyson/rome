@@ -3,6 +3,7 @@
 #extension GL_ARB_texture_rectangle : require
 
 uniform sampler2DRect diffuseBuffer;
+uniform sampler2DRect specularBuffer;
 uniform sampler2DRect positionBuffer;
 uniform sampler2DRect normalBuffer;
 
@@ -18,10 +19,12 @@ out vec4 fragColor;
 void main()
 {
 	vec4 diffuseData = texture2DRect(diffuseBuffer, gl_FragCoord.xy);
+	vec4 specularData = texture2DRect(specularBuffer, gl_FragCoord.xy);
 	vec4 positionData = texture2DRect(positionBuffer, gl_FragCoord.xy);
 	vec4 normalData = texture2DRect(normalBuffer, gl_FragCoord.xy);
 
 	vec3 diffuseColor = diffuseData.xyz;
+	vec3 specularColor = specularData.xyz;
 	vec3 normal = normalData.xyz;
 	vec3 position = positionData.xyz;
 
@@ -53,7 +56,6 @@ void main()
 
 		for (int i = 0; i < numLights; i++) {
 			vec3 lightDirection = normalize(vec3(LightEyespacePositions[i] - position));
-
 			vec3 halfVector = normalize(vec3(lightDirection + viewDirection));
 
 			float ndotl = max(dot(normal, lightDirection), 0.0);
@@ -62,7 +64,7 @@ void main()
 			if(ndotl > 0.0) {
 				//specular
 				ndoth = pow(ndoth, exponent);
-				finalColor += LightIntensities[i] * ndoth * LightColors[i];
+				finalColor += specularColor * LightIntensities[i] * ndoth * LightColors[i];
 
 				//diffuse
 				finalColor += diffuseColor * LightIntensities[i] * ndotl * LightColors[i];

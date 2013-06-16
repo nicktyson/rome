@@ -24,6 +24,11 @@ void Renderer::init() {
 	glBindTexture(GL_TEXTURE_RECTANGLE, diffuseBuffer);
 	glTexImage2D(GL_TEXTURE_RECTANGLE, 0, GL_RGBA16F, 800, 600, 0, GL_RGBA, GL_FLOAT, NULL);
 
+	//specular buffer: rgb = specular color
+	glGenTextures(1, &specularBuffer);
+	glBindTexture(GL_TEXTURE_RECTANGLE, specularBuffer);
+	glTexImage2D(GL_TEXTURE_RECTANGLE, 0, GL_RGBA16F, 800, 600, 0, GL_RGBA, GL_FLOAT, NULL);
+
 	// position buffer: rgb = position.xyz
 	glGenTextures(1, &positionBuffer);
 	glBindTexture(GL_TEXTURE_RECTANGLE, positionBuffer);
@@ -69,16 +74,18 @@ void Renderer::firstPass(scene_node* root) {
 
 	//attach textures to fbo for writing
 	glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_RECTANGLE, diffuseBuffer, 0);
-	glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT1, GL_TEXTURE_RECTANGLE, positionBuffer, 0);
-	glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT2, GL_TEXTURE_RECTANGLE, normalBuffer, 0);
+	glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT1, GL_TEXTURE_RECTANGLE, specularBuffer, 0);
+	glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT2, GL_TEXTURE_RECTANGLE, positionBuffer, 0);
+	glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT3, GL_TEXTURE_RECTANGLE, normalBuffer, 0);
 	glFramebufferTexture2D(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_TEXTURE_RECTANGLE, depthBuffer, 0);
 
 	//tell fbo to draw to the diffuse, position, and normal textures
-	GLenum buffer[3];
+	GLenum buffer[4];
 	buffer[0] = GL_COLOR_ATTACHMENT0;
 	buffer[1] = GL_COLOR_ATTACHMENT1;
 	buffer[2] = GL_COLOR_ATTACHMENT2;
-	glDrawBuffers(3, &buffer[0]);
+	buffer[3] = GL_COLOR_ATTACHMENT3;
+	glDrawBuffers(4, &buffer[0]);
 
 	//reset stuff
 	glViewport(0, 0, 800, 600);
@@ -98,6 +105,7 @@ void Renderer::firstPass(scene_node* root) {
 	glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_RECTANGLE, 0, 0);
 	glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT1, GL_TEXTURE_RECTANGLE, 0, 0);
 	glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT2, GL_TEXTURE_RECTANGLE, 0, 0);
+	glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT3, GL_TEXTURE_RECTANGLE, 0, 0);
 	glFramebufferTexture2D(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_TEXTURE_RECTANGLE, 0, 0);
 
 	//unbind fbo
@@ -108,7 +116,7 @@ void Renderer::deferredPass() {
 	//bind fbo
 	glBindFramebuffer(GL_FRAMEBUFFER, fbo);
 
-	//attach textures to fbo for writing
+	//attach texture to fbo for writing
 	glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_RECTANGLE, finalBuffer, 0);
 
 	//make fbo draw to the final texture
@@ -136,18 +144,22 @@ void Renderer::deferredPass() {
 		glUniform1f(41+i, lights[i]->intensity);
 	}
 
-	//give access to the diffuse, position, and normal textures as uniform samplers
+	//give access to the diffuse, specular, position, and normal textures as uniform samplers
 	glActiveTexture(GL_TEXTURE0);
 	glBindTexture(GL_TEXTURE_RECTANGLE, diffuseBuffer);
 	glUniform1i(uberShader->getUniformLocation("diffuseBuffer"), 0);
 
 	glActiveTexture(GL_TEXTURE1);
-	glBindTexture(GL_TEXTURE_RECTANGLE, positionBuffer);
-	glUniform1i(uberShader->getUniformLocation("positionBuffer"), 1);
-
+	glBindTexture(GL_TEXTURE_RECTANGLE, specularBuffer);
+	glUniform1i(uberShader->getUniformLocation("specularBuffer"), 1);
+	
 	glActiveTexture(GL_TEXTURE2);
+	glBindTexture(GL_TEXTURE_RECTANGLE, positionBuffer);
+	glUniform1i(uberShader->getUniformLocation("positionBuffer"), 2);
+
+	glActiveTexture(GL_TEXTURE3);
 	glBindTexture(GL_TEXTURE_RECTANGLE, normalBuffer);
-	glUniform1i(uberShader->getUniformLocation("normalBuffer"), 2);
+	glUniform1i(uberShader->getUniformLocation("normalBuffer"), 3);
 
 	glActiveTexture(GL_TEXTURE0);
 

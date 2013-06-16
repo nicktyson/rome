@@ -9,8 +9,10 @@ layout(location=3) in vec4 in_Tangent;
 layout(location=0) uniform mat4 modelViewMatrix;
 layout(location=1) uniform mat4 projectionMatrix;
 layout(location=2) uniform mat4 normalMatrix;
-layout(location=3) uniform vec3 diffuseColor;
-layout(location=4) uniform float exponent;
+uniform vec3 diffuseColor;
+uniform vec3 specularColor;
+uniform float exponent;
+
 uniform int hasDiffuseTexture;
 uniform sampler2D diffuseTexture;
 uniform int hasNormalMap;
@@ -19,6 +21,7 @@ uniform sampler2D normalMap;
 out vec4 normal;
 out vec4 position;
 out vec3 diffuse;
+out vec3 specular;
 out vec2 texcoord;
 out vec3 eyeSpaceTangent;
 out vec3 eyeSpaceBitangent;
@@ -28,6 +31,7 @@ void main()
 	normal = normalMatrix * vec4(in_Normal, 0.0);
     position = modelViewMatrix * vec4(in_Position, 1.0);
 	diffuse = diffuseColor;
+	specular = specularColor;
 	texcoord = in_TexCoord;
 	eyeSpaceTangent = (normalMatrix * vec4(in_Tangent.xyz, 0.0)).xyz;
 	eyeSpaceBitangent = cross(normal.xyz, eyeSpaceTangent) * in_Tangent.w;

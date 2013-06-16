@@ -8,14 +8,14 @@
 class MaterialProperties {
 public:
 	MaterialProperties();
-	MaterialProperties(float r, float g, float b);
-	MaterialProperties(float r, float g, float b, float bpExp, float ctM);
-	MaterialProperties(float r, float g, float b, float bpExp, float ctM, std::string diffuseTextureName);
 	void setTexture(std::string diffuseTextureName);
 	void setNormalMap(std::string normalMapName);
+
 	std::vector<float> diffuse;
+	std::vector<float> specular;
 	float blinnPhongExponent;
 	float cookTorrM;
+	float cookTorrN;
 	GLuint diffuseTexture;
 	int hasDiffuseTexture;
 	GLuint normalMap;

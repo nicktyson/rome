@@ -4,6 +4,7 @@
 in vec4 normal;
 in vec4 position;
 in vec3 diffuse;
+in vec3 specular;
 in vec2 texcoord;
 in vec3 eyeSpaceTangent;
 in vec3 eyeSpaceBitangent;
@@ -14,9 +15,9 @@ uniform sampler2D diffuseTexture;
 uniform int hasNormalMap;
 uniform sampler2D normalMap;
 
-layout(location=4) uniform float exponent;
+uniform float exponent;
 
-out vec4 fragData[3];
+out vec4 fragData[4];
 
 void main()
 {
@@ -59,7 +60,9 @@ void main()
 		diffuseColor = texture2D(diffuseTexture, texcoord).xyz * diffuse.xyz;
 	}
 
+	//materialID = 3.0
     fragData[0] = vec4(diffuseColor.xyz, 3.0);
-	fragData[1] = vec4(position.xyz, exponent);
-	fragData[2] = vec4(newNormal.xyz, 0.0);
+	fragData[1] = vec4(specular.xyz, 1.0);
+	fragData[2] = vec4(position.xyz, exponent);
+	fragData[3] = vec4(newNormal.xyz, 0.0);
 }

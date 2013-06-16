@@ -25,6 +25,7 @@ protected:
 	GLuint fbo;
 	GLuint depthBuffer;
 	GLuint diffuseBuffer;
+	GLuint specularBuffer;
 	GLuint positionBuffer;
 	GLuint normalBuffer;
 	GLuint finalBuffer;
