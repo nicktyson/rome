@@ -2,6 +2,8 @@
 #extension GL_ARB_explicit_uniform_location : require
 #extension GL_ARB_texture_rectangle : require
 
+const float PI = 3.14159265358979323846264;
+
 uniform sampler2DRect diffuseBuffer;
 uniform sampler2DRect specularBuffer;
 uniform sampler2DRect positionBuffer;
@@ -75,6 +77,40 @@ void main()
 			
 			//show normals instead
 			//finalColor = (0.5 * normal) + vec3(0.5);	
+		}
+	//Cook-Torr
+	} else if(materialID == 4) {
+		float ctM = positionData.w;
+		float ctN = normalData.w;
+		vec3 viewDirection = -normalize(vec3(position));
+
+		for (int i = 0; i < numLights; i++) {
+			vec3 lightDirection = normalize(vec3(LightEyespacePositions[i] - position));
+			vec3 halfVector = normalize(vec3(lightDirection + viewDirection));
+
+			float NdotL = max(dot(normal, lightDirection), 0.0);
+			float NdotH = max(dot(normal, halfVector), 0.0);
+			float VdotH = max(dot(viewDirection, halfVector), 0.0);
+			float NdotV = max(dot(normal, viewDirection), 0.0);
+
+			if (NdotL > 0.0 && NdotH > 0.0 && VdotH > 0.0 && NdotV > 0.0) {
+				//specular
+				float alpha = acos(NdotH);
+				float Rf = pow((ctN - 1)/(ctN + 1), 2);
+
+				float F = Rf + (1.0 - Rf) * pow(1 - NdotV, 5); // or NdotL?
+				float D = 1.0 / (4 * pow(ctM, 2) * pow(cos(alpha), 4)) * exp(-pow(tan(alpha) / ctM, 2));
+				float G = min(2 * NdotH * NdotV / VdotH, 2 * NdotH * NdotL / VdotH);
+				G = min(G, 1.0);
+
+				finalColor += (specularColor * LightIntensities[i] * LightColors[i] * F * D * G) / (PI * NdotL * NdotV);
+				
+				//diffuse
+				finalColor += diffuseColor * LightIntensities[i] * NdotL * LightColors[i];
+			}
+
+			//hacky ambient
+			finalColor += diffuseColor * LightIntensities[i] * LightColors[i] * 0.1;
 		}
 	}
 

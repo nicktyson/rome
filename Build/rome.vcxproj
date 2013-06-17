@@ -18,6 +18,7 @@
     <ClCompile Include="..\Source\main.cpp" />
     <ClCompile Include="..\Source\MaterialProperties.cpp" />
     <ClCompile Include="..\Source\Materials\BlinnPhongMaterial.cpp" />
+    <ClCompile Include="..\Source\Materials\CookTorrMaterial.cpp" />
     <ClCompile Include="..\Source\Materials\GreenTestMaterial.cpp" />
     <ClCompile Include="..\Source\Materials\LambertianMaterial.cpp" />
     <ClCompile Include="..\Source\Materials\Material.cpp" />
@@ -46,6 +47,7 @@
     <ClInclude Include="..\Source\main.h" />
     <ClInclude Include="..\Source\MaterialProperties.h" />
     <ClInclude Include="..\Source\Materials\BlinnPhongMaterial.h" />
+    <ClInclude Include="..\Source\Materials\CookTorrMaterial.h" />
     <ClInclude Include="..\Source\Materials\GreenTestMaterial.h" />
     <ClInclude Include="..\Source\Materials\LambertianMaterial.h" />
     <ClInclude Include="..\Source\Materials\Material.h" />
@@ -71,6 +73,8 @@
     <None Include="..\Source\Shaders\blinn_phong.vp" />
     <None Include="..\Source\Shaders\bloom.fp" />
     <None Include="..\Source\Shaders\bloom.vp" />
+    <None Include="..\Source\Shaders\cook_torr.fp" />
+    <None Include="..\Source\Shaders\cook_torr.vp" />
     <None Include="..\Source\Shaders\green_test.fp" />
     <None Include="..\Source\Shaders\green_test.vp" />
     <None Include="..\Source\Shaders\lambertian.fp" />

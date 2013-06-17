@@ -99,6 +99,9 @@
     <ClCompile Include="..\Source\TextureManager.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="..\Source\Materials\CookTorrMaterial.cpp">
+      <Filter>Source Files\Materials</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\Source\main.h">
@@ -179,6 +182,9 @@
     <ClInclude Include="..\Source\TextureManager.h">
       <Filter>Source Files</Filter>
     </ClInclude>
+    <ClInclude Include="..\Source\Materials\CookTorrMaterial.h">
+      <Filter>Source Files\Materials</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="..\Source\Shaders\green_test.fp">
@@ -221,6 +227,12 @@
       <Filter>Source Files\Shaders</Filter>
     </None>
     <None Include="..\Source\Shaders\blinn_phong.vp">
+      <Filter>Source Files\Shaders</Filter>
+    </None>
+    <None Include="..\Source\Shaders\cook_torr.fp">
+      <Filter>Source Files\Shaders</Filter>
+    </None>
+    <None Include="..\Source\Shaders\cook_torr.vp">
       <Filter>Source Files\Shaders</Filter>
     </None>
   </ItemGroup>

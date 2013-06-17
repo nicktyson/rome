@@ -126,9 +126,9 @@ void SimState::initScene() {
 	std::string testNormalLocation = ROME_PATH + "/Assets/Textures/stone_normal.tga";
 
 	//make two offset objects
-	MeshNode * childNode = new MeshNode(cubeLocation, MaterialList::BLINNPHONG);
+	MeshNode * childNode = new MeshNode(cubeLocation, MaterialList::COOKTORR);
 	childNode->setMaterialColor(1.0, 1.0, 1.0);
-	childNode->setMaterialProperties(40.0, 1.0, 1.0);
+	childNode->setMaterialProperties(40.0, 0.2, 4.0);
 	childNode->setMaterialTexture(testTextureLocation);
 	childNode->setMaterialNormalMap(testNormalLocation);
 	childNode->setTranslation(0, 0, 0);

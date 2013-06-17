@@ -13,7 +13,8 @@ public:
 		NORMAL,
 		GREENTEST,
 		LAMBERTIAN,
-		BLINNPHONG
+		BLINNPHONG,
+		COOKTORR
 	};
 	Material* getMaterial(Materials materialName);
 

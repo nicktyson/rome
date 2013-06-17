@@ -1,6 +1,6 @@
-* add more uniforms as necessary
-* normal mapping
-* transparency
+* environmental lighting
+* ssao
+* transparency (forward renderer)
 * improve scene creation
 	* terrain?
 	* data-driven approach

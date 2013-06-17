@@ -11,8 +11,8 @@ MaterialProperties::MaterialProperties() {
 	specular[1] = 1.0;
 	specular[2] = 1.0;
 	blinnPhongExponent = 40.0;
-	cookTorrM = 1.0;
-	cookTorrN = 1.0;
+	cookTorrM = 0.2;
+	cookTorrN = 4.0;
 	hasDiffuseTexture = 0;
 	hasNormalMap = 0;
 }
