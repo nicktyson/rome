@@ -3,6 +3,7 @@
 #include <string>
 #include <iostream>
 #include <map>
+#include "../Lib/stb_image.h"
 
 std::map<std::string, GLuint> TextureManager::textures;
 
@@ -17,7 +18,17 @@ GLuint TextureManager::getTexture(std::string fileName) {
 		GLuint location;
 		glGenTextures(1, &location);
 		glBindTexture(GL_TEXTURE_2D, location);
-		glfwLoadTexture2D(fileName.c_str(), GLFW_BUILD_MIPMAPS_BIT);
+
+		//old way - relies on TGA and is removed in newest GLFW release
+		//glfwLoadTexture2D(fileName.c_str(), GLFW_BUILD_MIPMAPS_BIT);
+		
+		//new way
+		int x, y, n;
+		unsigned char* pixelData = stbi_load(fileName.c_str(), &x, &y, &n, 3);
+		glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB16F, x, y, 0, GL_RGB, GL_UNSIGNED_BYTE, (GLvoid*) pixelData);
+		glGenerateMipmap(GL_TEXTURE_2D);
+		stbi_image_free(pixelData);
+		
 		textures.insert(std::make_pair(fileName, location));
 		return location;
 	//return an existing texture

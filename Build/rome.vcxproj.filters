@@ -19,6 +19,9 @@
     <Filter Include="Source Files\Materials">
       <UniqueIdentifier>{ef3f7f76-5d03-4043-a682-7ce7694c2918}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source Files\Lib">
+      <UniqueIdentifier>{d158fc3f-4bf5-4c3b-8a47-94746c999a6d}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\Source\main.cpp">
@@ -102,6 +105,15 @@
     <ClCompile Include="..\Source\Materials\CookTorrMaterial.cpp">
       <Filter>Source Files\Materials</Filter>
     </ClCompile>
+    <ClCompile Include="..\Source\Scene.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Lib\stb_image.c">
+      <Filter>Source Files\Lib</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Source\TestScene.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\Source\main.h">
@@ -184,6 +196,15 @@
     </ClInclude>
     <ClInclude Include="..\Source\Materials\CookTorrMaterial.h">
       <Filter>Source Files\Materials</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Source\Scene.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Lib\stb_image.h">
+      <Filter>Source Files\Lib</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Source\TestScene.h">
+      <Filter>Source Files</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

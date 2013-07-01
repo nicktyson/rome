@@ -14,6 +14,7 @@ Lib/
 intermediate/
 *.msh
 *.tga
+*.png
 *.blend
 
 [Tt]est[Rr]esult

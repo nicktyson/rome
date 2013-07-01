@@ -5,6 +5,8 @@
 #include <cmath>
 #include "MatrixStack.h"
 #include "Renderer.h"
+#include "../Lib/glm/glm.hpp"
+#include "../Lib/glm/gtc/matrix_inverse.hpp"
 
 const float FPCamera::MAX_VELOCITY = 8.0; // meters/second
 const float FPCamera::MOUSE_SENSITIVITY = 6.0; // degrees/second per mouse coordinate
@@ -142,4 +144,24 @@ void FPCamera::rotateCW() {
 
 void FPCamera::rotateCCW() {
 
+}
+
+glm::mat4 FPCamera::getInverseNormalMatrix() {
+	extern MatrixStack* sceneGraphMatrixStack;
+
+	sceneGraphMatrixStack->pushMatrix();
+
+	sceneGraphMatrixStack->rotated(rotation[0], 1, 0, 0);
+	sceneGraphMatrixStack->rotated(rotation[1], 0, 1, 0);
+	sceneGraphMatrixStack->rotated(rotation[2], 0, 0, 1);
+	sceneGraphMatrixStack->translated(translation[0], translation[1], translation[2]);
+
+	glm::mat4 normalMatrix = glm::mat4(sceneGraphMatrixStack->last());
+	normalMatrix = glm::inverse(normalMatrix);
+	normalMatrix = glm::transpose(normalMatrix);
+	normalMatrix = glm::inverse(normalMatrix);
+
+	sceneGraphMatrixStack->popMatrix();
+
+	return normalMatrix;
 }

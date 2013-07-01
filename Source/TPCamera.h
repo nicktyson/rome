@@ -3,6 +3,7 @@
 
 #include "Camera.h"
 #include <vector>
+#include "../Lib/glm/glm.hpp"
 
 class Renderer;
 
@@ -19,6 +20,7 @@ public:
 	void rotateCW();
 	void rotateCCW();
 	void zoom(int pos);
+	glm::mat4 getInverseNormalMatrix();
 
 private:
 	std::vector<float> velocity;

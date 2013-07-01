@@ -7,9 +7,8 @@
 #include "MeshNode.h"
 #include "VitalEntity.h"
 #include "LightNode.h"
-#include "Camera.h"
-#include "FPCamera.h"
-#include "TPCamera.h"
+#include "Scene.h"
+#include "TestScene.h"
 #include "Materials\MaterialList.h"
 #include "MatrixStack.h"
 #include "Renderer.h"
@@ -36,11 +35,9 @@ void SimState::initialize(StateManager* mngr) {
 
 	renderer = new Renderer();
 
-	root = new scene_node();
-
-	initCameras();
-
+	currentScene = new TestScene();
 	initScene();
+
 	pauseMutex = glfwCreateMutex();
 	simThread = glfwCreateThread(startThread, this);
 	initialized = true;
@@ -108,86 +105,23 @@ void SimState::keyCallback(int key, int state) {
 }
 
 void SimState::mousePosCallback(int x, int y) {
-	camera->mouseView(x, y);
+	currentScene->cameraMouseView(x, y);
 }
 
 void SimState::mouseWheelCallback(int pos) {
-	camera->zoom(pos);
+	currentScene->zoomCamera(pos);
 }
 
 void SimState::initScene() {
-	extern std::string ROME_PATH;
-
-	std::string location = ROME_PATH + "/Assets/Meshes/test_sphere_hires.msh";
-	std::string cubeLocation = ROME_PATH + "/Assets/Meshes/test_cube.msh";
-	std::string quadLocation = ROME_PATH + "/Assets/Meshes/test_quad.msh";
-
-	std::string testTextureLocation = ROME_PATH + "/Assets/Textures/stone.tga";
-	std::string testNormalLocation = ROME_PATH + "/Assets/Textures/stone_normal.tga";
-
-	//make two offset objects
-	MeshNode * childNode = new MeshNode(cubeLocation, MaterialList::COOKTORR);
-	childNode->setMaterialColor(1.0, 1.0, 1.0);
-	childNode->setMaterialProperties(40.0, 0.2, 4.0);
-	childNode->setMaterialTexture(testTextureLocation);
-	childNode->setMaterialNormalMap(testNormalLocation);
-	childNode->setTranslation(0, 0, 0);
-	root->addChild(childNode);
-
-	//float randRot = rand() % 90;
-	VitalEntity * secondChild = new VitalEntity(location, 1, 0, 0);
-	secondChild->setTranslation(2, 2, 0);
-	//secondChild->setRotation(20, randRot, 0);
-	childNode->addChild(secondChild);
-
-	//add a floor
-	MeshNode* floor = new MeshNode(quadLocation, MaterialList::BLINNPHONG);
-	floor->setMaterialColor(1.0, 1.0, 1.0, 1.0, 0.0, 0.0);
-	floor->setMaterialProperties(40.0, 1.0, 1.0);
-	floor->setMaterialTexture(testTextureLocation);
-	floor->setMaterialNormalMap(testNormalLocation);
-	floor->setScaling(5, 5, 1.0);
-	floor->setTranslation(0, 0, -1.1);
-	root->addChild(floor);
-
-	//make a ring of spheres
-	for(double i = 0; i < 6; ++i) {
-		MeshNode * newNode = new MeshNode(location, MaterialList::LAMBERTIAN);
-		newNode->setMaterialColor(1.0, 1.0, 1.0);
-		newNode->setMaterialProperties(40.0, 1.0, 1.0);
-		newNode->setMaterialTexture(testNormalLocation);
-		newNode->setMaterialNormalMap(testNormalLocation);
-		newNode->setTranslation(3*sin(i*6.28/6), 3*cos(i*6.28/6), 0);
-		root->addChild(newNode);
-	}
-
-	//add a light
-	LightNode* light = new LightNode();
-	light->setTranslation(16.0, 16.0, 6.0);
-	root->addChild(light);
-}
-
-void SimState::initCameras() {
-	cameraType = THIRDPERSON;
-
-	camera = new TPCamera();
-	camera->addChild(root);
-	cameras.push_back(camera);
-
-	camera = new FPCamera();
-	camera->addChild(root);
-	cameras.push_back(camera);
-
-	camera = cameras.front();
-	cameras.pop_front();
+	currentScene->init();
 }
 
 void SimState::display() {
-	renderer->render(camera);	
+	renderer->render(currentScene);	
 }
 
 void SimState::updateSim(double deltaT) {
-	camera->update(deltaT);
+	currentScene->update(deltaT);
 }
 
 void SimState::startThread(void * state) {
@@ -262,55 +196,27 @@ void SimState::keyOps() {
 
 void SimState::stateKeyOps() {
 	if (keyState['W']) {
-		camera->forward();
+		currentScene->cameraForward();
 	}
 	if (keyState['A']) {
-		camera->left();
+		currentScene->cameraLeft();
 	}
 	if (keyState['S']) {
-		camera->back();
+		currentScene->cameraBack();
 	}
 	if (keyState['D']) {
-		camera->right();
+		currentScene->cameraRight();
 	}
 
 	if (keyState['Q']) {
-		switch (cameraType) {
-		case FIRSTPERSON:
-			break;
-		case THIRDPERSON:
-			camera->rotateCCW();
-			break;
-		}
-
+		currentScene->rotateCameraCCW();
 	}
 	if (keyState['E']) {
-		switch (cameraType) {
-		case FIRSTPERSON:
-			break;
-		case THIRDPERSON:
-			camera->rotateCW();
-			break;
-		}
+		currentScene->rotateCameraCW();
 	}
 
 	if (keyState['V']) {
-		switchCameras();
+		currentScene->switchCameras();
 		keyState['V'] = false;
-	}
-}
-
-void SimState::switchCameras() {
-	cameras.push_back(camera);
-	camera = cameras.front();
-	cameras.pop_front();
-
-	switch(cameraType) {
-	case FIRSTPERSON:
-		cameraType = THIRDPERSON;
-		break;
-	case THIRDPERSON:
-		cameraType = FIRSTPERSON;
-		break;
 	}
 }

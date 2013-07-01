@@ -9,10 +9,14 @@ uniform sampler2DRect specularBuffer;
 uniform sampler2DRect positionBuffer;
 uniform sampler2DRect normalBuffer;
 
+uniform samplerCube environmentCubeMap;
+
 layout(location=0)uniform int numLights;
 layout(location=1)uniform vec3 LightEyespacePositions[20];
 layout(location=21)uniform vec3 LightColors[20];
 layout(location=41)uniform float LightIntensities[20];
+
+uniform mat4 eyeToWorldNormalMatrix;
 
 in vec2 texcoord;
 
@@ -34,6 +38,8 @@ void main()
 
 	vec3 finalColor = vec3(0.0);
 
+	vec3 worldNormal = (eyeToWorldNormalMatrix * vec4(normal, 0.0)).xyz;
+
 	//normal shader
 	if(materialID == 0) {
 		finalColor = (normal * 0.5) + vec3(0.5);
@@ -48,9 +54,11 @@ void main()
 			float ndotl = dot(lightDirection, normal);
 			ndotl = max(ndotl, 0);
 			finalColor += diffuseColor * LightIntensities[i] * ndotl * LightColors[i];
-			//hacky ambient
-			finalColor += diffuseColor * LightIntensities[i] * LightColors[i] * 0.1;
+			//hacky per-light ambient
+			//finalColor += diffuseColor * LightIntensities[i] * LightColors[i] * 0.1;
 		}
+		// environment lighting for ambient
+		finalColor += diffuseColor * texture(environmentCubeMap, worldNormal).xyz * 0.1;
 	//blinn-phong
 	} else if(materialID == 3) {
 		float exponent = positionData.w;
@@ -72,12 +80,14 @@ void main()
 				finalColor += diffuseColor * LightIntensities[i] * ndotl * LightColors[i];
 			}
 			
-			//hacky ambient
-			finalColor += diffuseColor * LightIntensities[i] * LightColors[i] * 0.1;
+			//hacky per-light ambient
+			//finalColor += diffuseColor * LightIntensities[i] * LightColors[i] * 0.1;
 			
 			//show normals instead
 			//finalColor = (0.5 * normal) + vec3(0.5);	
 		}
+		// environment lighting for ambient
+		finalColor += diffuseColor * texture(environmentCubeMap, worldNormal).xyz * 0.1;
 	//Cook-Torr
 	} else if(materialID == 4) {
 		float ctM = positionData.w;
@@ -109,9 +119,11 @@ void main()
 				finalColor += diffuseColor * LightIntensities[i] * NdotL * LightColors[i];
 			}
 
-			//hacky ambient
-			finalColor += diffuseColor * LightIntensities[i] * LightColors[i] * 0.1;
+			//hacky per-light ambient
+			//finalColor += diffuseColor * LightIntensities[i] * LightColors[i] * 0.1;
 		}
+		// environment lighting for ambient
+		finalColor += diffuseColor * texture(environmentCubeMap, worldNormal).xyz * 0.1;
 	}
 
 	fragColor = vec4(finalColor, 1.0);

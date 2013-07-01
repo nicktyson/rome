@@ -5,21 +5,21 @@
 #include <vector>
 #include "ScreenQuad.h"
 
-class scene_node;
 class ShaderProgram;
 class LightNode;
+class Scene;
 
 class Renderer {
 public:
 	Renderer();
-	void render(scene_node* root);
+	void render(Scene* scene);
 	void addLight(LightNode * light);
 
 protected:
 	void init();
 	void initPostShaders();
-	void firstPass(scene_node* root);
-	void deferredPass();
+	void firstPass(Scene* scene);
+	void deferredPass(Scene* scene);
 	void postProcess();
 
 	GLuint fbo;

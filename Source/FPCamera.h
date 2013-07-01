@@ -3,6 +3,7 @@
 
 #include "Camera.h"
 #include <vector>
+#include "../Lib/glm/glm.hpp"
 
 class Renderer;
 
@@ -18,6 +19,7 @@ public:
 	void mouseView(int x, int y);
 	void rotateCW();
 	void rotateCCW();
+	glm::mat4 getInverseNormalMatrix();
 
 private:
 	std::vector<float> velocity;

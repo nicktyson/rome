@@ -5,6 +5,8 @@
 #include "TPCamera.h"
 #include "MatrixStack.h"
 #include "Renderer.h"
+#include "../Lib/glm/glm.hpp"
+#include "../Lib/glm/gtc/matrix_inverse.hpp"
 
 const float TPCamera::MAX_VELOCITY = 7.0; // meters/second
 const float TPCamera::DRAG = 5.0;
@@ -136,4 +138,19 @@ void TPCamera::zoom(int pos) {
 	int zoomAmount = pos - zoomLevel;
 	zoomLevel = pos;
 	velocity[2] += ZOOM_VELOCITY * zoomAmount;
+}
+
+glm::mat4 TPCamera::getInverseNormalMatrix() {
+	extern MatrixStack* sceneGraphMatrixStack;
+
+	applyTransformation();
+
+	glm::mat4 normalMatrix = glm::mat4(sceneGraphMatrixStack->last());
+	normalMatrix = glm::inverse(normalMatrix);
+	normalMatrix = glm::transpose(normalMatrix);
+	normalMatrix = glm::inverse(normalMatrix);
+
+	sceneGraphMatrixStack->popMatrix();
+
+	return normalMatrix;
 }

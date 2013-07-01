@@ -11,6 +11,7 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="..\Lib\stb_image.c" />
     <ClCompile Include="..\Source\Camera.cpp" />
     <ClCompile Include="..\Source\FPCamera.cpp" />
     <ClCompile Include="..\Source\IntroState.cpp" />
@@ -29,17 +30,20 @@
     <ClCompile Include="..\Source\MeshNode.cpp" />
     <ClCompile Include="..\Source\PauseState.cpp" />
     <ClCompile Include="..\Source\Renderer.cpp" />
+    <ClCompile Include="..\Source\Scene.cpp" />
     <ClCompile Include="..\Source\scene_node.cpp" />
     <ClCompile Include="..\Source\ScreenQuad.cpp" />
     <ClCompile Include="..\Source\ShaderProgram.cpp" />
     <ClCompile Include="..\Source\SimState.cpp" />
     <ClCompile Include="..\Source\State.cpp" />
     <ClCompile Include="..\Source\StateManager.cpp" />
+    <ClCompile Include="..\Source\TestScene.cpp" />
     <ClCompile Include="..\Source\TextureManager.cpp" />
     <ClCompile Include="..\Source\TPCamera.cpp" />
     <ClCompile Include="..\Source\VitalEntity.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="..\Lib\stb_image.h" />
     <ClInclude Include="..\Source\Camera.h" />
     <ClInclude Include="..\Source\FPCamera.h" />
     <ClInclude Include="..\Source\IntroState.h" />
@@ -58,12 +62,14 @@
     <ClInclude Include="..\Source\MeshNode.h" />
     <ClInclude Include="..\Source\PauseState.h" />
     <ClInclude Include="..\Source\Renderer.h" />
+    <ClInclude Include="..\Source\Scene.h" />
     <ClInclude Include="..\Source\scene_node.h" />
     <ClInclude Include="..\Source\ScreenQuad.h" />
     <ClInclude Include="..\Source\ShaderProgram.h" />
     <ClInclude Include="..\Source\SimState.h" />
     <ClInclude Include="..\Source\State.h" />
     <ClInclude Include="..\Source\StateManager.h" />
+    <ClInclude Include="..\Source\TestScene.h" />
     <ClInclude Include="..\Source\TextureManager.h" />
     <ClInclude Include="..\Source\TPCamera.h" />
     <ClInclude Include="..\Source\VitalEntity.h" />

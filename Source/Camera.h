@@ -2,6 +2,7 @@
 #define CAMERA_H
 
 #include "scene_node.h"
+#include "../Lib/glm/glm.hpp"
 
 class Camera : public scene_node {
 public:
@@ -14,6 +15,7 @@ public:
 	virtual void rotateCW() = 0;
 	virtual void rotateCCW() = 0;
 	virtual void zoom(int pos);
+	virtual glm::mat4 getInverseNormalMatrix() = 0;
 };
 
 #endif

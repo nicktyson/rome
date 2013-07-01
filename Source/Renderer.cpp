@@ -1,11 +1,13 @@
 #include <iostream>
 #include <algorithm>
 #include "Renderer.h"
-#include "scene_node.h"
+#include "Scene.h"
 #include "MatrixStack.h"
 #include "ScreenQuad.h"
 #include "ShaderProgram.h"
 #include "LightNode.h"
+#include "../Lib/glm/glm.hpp"
+#include "../Lib/glm/gtc/type_ptr.hpp"
 
 const int Renderer::MAX_LIGHTS = 20;
 
@@ -58,15 +60,15 @@ void Renderer::initPostShaders() {
 	postprocessShader = new ShaderProgram("plain_post");
 }
 
-void Renderer::render(scene_node* root) {
+void Renderer::render(Scene* scene) {
 	lights.clear();
 
-	firstPass(root);
-	deferredPass();
+	firstPass(scene);
+	deferredPass(scene);
 	postProcess();
 }
 
-void Renderer::firstPass(scene_node* root) {
+void Renderer::firstPass(Scene* scene) {
 	extern MatrixStack* sceneGraphMatrixStack;
 
 	//bind the fbo
@@ -99,7 +101,7 @@ void Renderer::firstPass(scene_node* root) {
 	
 	//draw the scene
 	//nodes bind their own shaders, uniforms, and vao
-	root->draw(this);
+	scene->draw(this);
 
 	//detach textures from fbo
 	glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_RECTANGLE, 0, 0);
@@ -112,7 +114,7 @@ void Renderer::firstPass(scene_node* root) {
 	glBindFramebuffer(GL_FRAMEBUFFER, 0);
 }
 
-void Renderer::deferredPass() {
+void Renderer::deferredPass(Scene* scene) {
 	//bind fbo
 	glBindFramebuffer(GL_FRAMEBUFFER, fbo);
 
@@ -143,6 +145,14 @@ void Renderer::deferredPass() {
 		glUniform3f(21+i, lights[i]->color[0], lights[i]->color[1], lights[i]->color[2]);
 		glUniform1f(41+i, lights[i]->intensity);
 	}
+
+	glm::mat4 eyeToWorldNormalMatrix = scene->getEyeToWorldNormalMatrix();
+	glUniformMatrix4fv(uberShader->getUniformLocation("eyeToWorldNormalMatrix"), 1, GL_FALSE, glm::value_ptr(eyeToWorldNormalMatrix));
+
+	//set environment map
+	glActiveTexture(GL_TEXTURE4);
+	glBindTexture(GL_TEXTURE_CUBE_MAP, scene->getCubeMap());
+	glUniform1i(uberShader->getUniformLocation("environmentCubeMap"), 4);
 
 	//give access to the diffuse, specular, position, and normal textures as uniform samplers
 	glActiveTexture(GL_TEXTURE0);

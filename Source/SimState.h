@@ -8,17 +8,13 @@
 
 class State;
 class StateManager;
-class scene_node;
+class Scene;
 class Camera;
 class Renderer;
 
 class SimState : public State {
 public:
 	SimState();
-	enum Cameras {
-		FIRSTPERSON,
-		THIRDPERSON
-	};
 	void initialize(StateManager* mngr);
 	void run();
 	void resume();
@@ -29,21 +25,16 @@ public:
 	void mouseWheelCallback(int pos);
 	void keyOps();
 	void initScene();
-	void initCameras();
 	static void GLFWCALL startThread(void * state);
 	void simThreadFunc();
 	void stateKeyOps();
-	void switchCameras();
 	
 protected:
 	void display();
 	void updateSim(double deltaT);
 
 	Renderer* renderer;
-	Cameras cameraType;
-	Camera* camera;
-	std::deque<Camera*> cameras;
-	scene_node* root;	
+	Scene* currentScene;
 	bool shouldStopStateLoop;
 	bool pauseSimThread;
 	bool endSimThread;
