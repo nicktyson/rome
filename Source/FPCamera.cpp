@@ -31,7 +31,7 @@ FPCamera::FPCamera() {
 	translation[1] = 6;
 }
 
-void FPCamera::draw(Renderer* r) {
+void FPCamera::draw(Renderer* r, bool isTransparentPass) {
 	extern MatrixStack* sceneGraphMatrixStack;
 
 	sceneGraphMatrixStack->pushMatrix();
@@ -42,7 +42,7 @@ void FPCamera::draw(Renderer* r) {
 	sceneGraphMatrixStack->translated(translation[0], translation[1], translation[2]);
 
 	for(std::vector<scene_node*>::iterator it = children.begin(); it != children.end(); ++it) {
-		(*it)->draw(r);
+		(*it)->draw(r, isTransparentPass);
 	}
 
 	sceneGraphMatrixStack->popMatrix();

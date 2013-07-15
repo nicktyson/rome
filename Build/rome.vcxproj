@@ -25,6 +25,7 @@
     <ClCompile Include="..\Source\Materials\Material.cpp" />
     <ClCompile Include="..\Source\Materials\MaterialList.cpp" />
     <ClCompile Include="..\Source\Materials\NormalMaterial.cpp" />
+    <ClCompile Include="..\Source\Materials\SolidTransparentMaterial.cpp" />
     <ClCompile Include="..\Source\MatrixStack.cpp" />
     <ClCompile Include="..\Source\mesh.cpp" />
     <ClCompile Include="..\Source\MeshNode.cpp" />
@@ -57,6 +58,7 @@
     <ClInclude Include="..\Source\Materials\Material.h" />
     <ClInclude Include="..\Source\Materials\MaterialList.h" />
     <ClInclude Include="..\Source\Materials\NormalMaterial.h" />
+    <ClInclude Include="..\Source\Materials\SolidTransparentMaterial.h" />
     <ClInclude Include="..\Source\MatrixStack.h" />
     <ClInclude Include="..\Source\mesh.h" />
     <ClInclude Include="..\Source\MeshNode.h" />
@@ -79,6 +81,8 @@
     <None Include="..\Source\Shaders\blinn_phong.vp" />
     <None Include="..\Source\Shaders\bloom.fp" />
     <None Include="..\Source\Shaders\bloom.vp" />
+    <None Include="..\Source\Shaders\composite_transparency.fp" />
+    <None Include="..\Source\Shaders\composite_transparency.vp" />
     <None Include="..\Source\Shaders\cook_torr.fp" />
     <None Include="..\Source\Shaders\cook_torr.vp" />
     <None Include="..\Source\Shaders\green_test.fp" />
@@ -89,6 +93,8 @@
     <None Include="..\Source\Shaders\normal.vp" />
     <None Include="..\Source\Shaders\plain_post.fp" />
     <None Include="..\Source\Shaders\plain_post.vp" />
+    <None Include="..\Source\Shaders\solid_transparent.fp" />
+    <None Include="..\Source\Shaders\solid_transparent.vp" />
     <None Include="..\Source\Shaders\ubershader.fp" />
     <None Include="..\Source\Shaders\ubershader.vp" />
   </ItemGroup>

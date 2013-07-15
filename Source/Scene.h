@@ -34,7 +34,7 @@ public:
 	glm::mat4 getEyeToWorldNormalMatrix();
 	GLuint getCubeMap();
 	void update(double deltaT);
-	void draw(Renderer* r);
+	void draw(Renderer* r, bool isTransparentPass);
 
 protected:
 	void initCameras();

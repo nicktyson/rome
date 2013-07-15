@@ -15,7 +15,7 @@ LightNode::LightNode(float r, float g, float b, float i) {
 	setIntensity(i);
 }
 
-void LightNode::draw(Renderer* r) {
+void LightNode::draw(Renderer* r, bool isTransparentPass) {
 	extern MatrixStack* sceneGraphMatrixStack;
 
 	applyTransformation();
@@ -26,7 +26,7 @@ void LightNode::draw(Renderer* r) {
 	r->addLight(this);
 
 	for(std::vector<scene_node*>::iterator it = children.begin(); it != children.end(); ++it) {
-		(*it)->draw(r);
+		(*it)->draw(r, isTransparentPass);
 	}
 
 	sceneGraphMatrixStack->popMatrix();

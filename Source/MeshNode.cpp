@@ -65,6 +65,10 @@ void MeshNode::setMaterialProperties(float bpExp, float ctM, float ctN) {
 	properties->cookTorrN = ctN;
 }
 
+void MeshNode::setMaterialAlpha(float a) {
+	properties->alpha = a;
+}
+
 void MeshNode::setMaterialTexture(std::string diffuseTextureName) {
 	properties->setTexture(diffuseTextureName);
 }
@@ -73,37 +77,40 @@ void MeshNode::setMaterialNormalMap(std::string normalMapName) {
 	properties->setNormalMap(normalMapName);
 }
 
-void MeshNode::draw(Renderer* r) {
+void MeshNode::draw(Renderer* r, bool isTransparentPass) {
 	extern MatrixStack* sceneGraphMatrixStack;
 	extern MatrixStack* projectionMatrixStack;
+	bool isMaterialTransparent = material->getHasTransparency();
 
 	applyTransformation();
 
-	material->use();
-	
-	//construct normal matrix
-	glm::mat4 normalMatrix = glm::mat4(sceneGraphMatrixStack->last());
-	normalMatrix = glm::inverse(normalMatrix);
-	normalMatrix = glm::transpose(normalMatrix);
+	if (isMaterialTransparent == isTransparentPass) {
+		material->use();
 
-	//apply geometry/mesh uniforms
-	glUniformMatrix4fv(0, 1, GL_FALSE, glm::value_ptr(sceneGraphMatrixStack->last()));
-	glUniformMatrix4fv(1, 1, GL_FALSE, glm::value_ptr(projectionMatrixStack->last()));
-	glUniformMatrix4fv(2, 1, GL_FALSE, glm::value_ptr(normalMatrix));
+		//construct normal matrix
+		glm::mat4 normalMatrix = glm::mat4(sceneGraphMatrixStack->last());
+		normalMatrix = glm::inverse(normalMatrix);
+		normalMatrix = glm::transpose(normalMatrix);
 
-	//apply material uniforms
-	material->setUniforms(properties);
+		//apply geometry/mesh uniforms
+		glUniformMatrix4fv(0, 1, GL_FALSE, glm::value_ptr(sceneGraphMatrixStack->last()));
+		glUniformMatrix4fv(1, 1, GL_FALSE, glm::value_ptr(projectionMatrixStack->last()));
+		glUniformMatrix4fv(2, 1, GL_FALSE, glm::value_ptr(normalMatrix));
 
-	//bind, draw, and unbind vertices
-	objectMesh->bindBuffers();
-	glDrawElements(GL_TRIANGLES, 3*objectMesh->getTriCount(), GL_UNSIGNED_INT, NULL);
-	objectMesh->unbindBuffers();
+		//apply material uniforms
+		material->setUniforms(properties);
 
-	material->unuse();
+		//bind, draw, and unbind vertices
+		objectMesh->bindBuffers();
+		glDrawElements(GL_TRIANGLES, 3*objectMesh->getTriCount(), GL_UNSIGNED_INT, NULL);
+		objectMesh->unbindBuffers();
+
+		material->unuse();
+	}
 
 	//draw children
 	for(std::vector<scene_node*>::iterator it = children.begin(); it != children.end(); ++it) {
-		(*it)->draw(r);
+		(*it)->draw(r, isTransparentPass);
 	}
 
 	//undo changes to matrix

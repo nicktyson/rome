@@ -108,8 +108,8 @@ glm::mat4 Scene::getEyeToWorldNormalMatrix() {
 	return camera->getInverseNormalMatrix();
 }
 
-void Scene::draw(Renderer* r) {
-	camera->draw(r);
+void Scene::draw(Renderer* r, bool isTransparentPass) {
+	camera->draw(r, isTransparentPass);
 }
 
 void Scene::update(double deltaT) {

@@ -27,13 +27,13 @@ TPCamera::TPCamera() {
 	translation[2] = -6;
 }
 
-void TPCamera::draw(Renderer* r) {
+void TPCamera::draw(Renderer* r, bool isTransparentPass) {
 	extern MatrixStack* sceneGraphMatrixStack;
 
 	applyTransformation();
 
 	for(std::vector<scene_node*>::iterator it = children.begin(); it != children.end(); ++it) {
-		(*it)->draw(r);
+		(*it)->draw(r, isTransparentPass);
 	}
 
 	//glPopMatrix();

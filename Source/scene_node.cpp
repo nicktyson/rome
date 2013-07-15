@@ -59,13 +59,13 @@ void scene_node::setScaling(float sx, float sy, float sz) {
 	scaling[2] = sz;
 }
 
-void scene_node::draw(Renderer* r) {
+void scene_node::draw(Renderer* r, bool isTransparentPass) {
 	extern MatrixStack* sceneGraphMatrixStack;
 
 	applyTransformation();
 
 	for(std::vector<scene_node*>::iterator it = children.begin(); it != children.end(); ++it) {
-		(*it)->draw(r);
+		(*it)->draw(r, isTransparentPass);
 	}
 
 	sceneGraphMatrixStack->popMatrix();

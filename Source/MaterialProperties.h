@@ -20,6 +20,7 @@ public:
 	int hasDiffuseTexture;
 	GLuint normalMap;
 	int hasNormalMap;
+	float alpha;
 };
 
 #endif

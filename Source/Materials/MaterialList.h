@@ -14,7 +14,8 @@ public:
 		GREENTEST,
 		LAMBERTIAN,
 		BLINNPHONG,
-		COOKTORR
+		COOKTORR,
+		SOLIDTRANSPARENT
 	};
 	Material* getMaterial(Materials materialName);
 

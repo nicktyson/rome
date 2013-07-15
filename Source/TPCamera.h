@@ -10,7 +10,7 @@ class Renderer;
 class TPCamera : public Camera {
 public:
 	TPCamera();
-	void draw(Renderer* r);
+	void draw(Renderer* r, bool isTransparentPass);
 	void update(double deltaT);
 	void forward();
 	void back();

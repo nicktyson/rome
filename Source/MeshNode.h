@@ -23,10 +23,11 @@ public:
 	void setMaterialColor(float r, float g, float b);
 	void setMaterialColor(float rD, float gD, float bD, float rS, float gS, float bS);
 	void setMaterialProperties(float bpExp, float ctM, float ctN);
+	void setMaterialAlpha(float a);
 	void setMaterialTexture(std::string diffuseTextureName);
 	void setMaterialNormalMap(std::string normalMapName);
 
-	virtual void draw(Renderer* r);
+	virtual void draw(Renderer* r, bool isTransparentPass);
 	virtual void update(double deltaT);
 	
 protected:

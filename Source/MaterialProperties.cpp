@@ -15,6 +15,7 @@ MaterialProperties::MaterialProperties() {
 	cookTorrN = 4.0;
 	hasDiffuseTexture = 0;
 	hasNormalMap = 0;
+	alpha = 1.0;
 }
 
 ///set the diffuse texture

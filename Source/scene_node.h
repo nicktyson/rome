@@ -18,7 +18,7 @@ public:
 	void setTranslation(float tx, float ty, float tz);
 	void setRotation(float rx, float ry, float rz);
 	void setScaling(float sx, float sy, float sz);
-	virtual void draw(Renderer* r);
+	virtual void draw(Renderer* r, bool isTransparentPass);
 	void applyTransformation();
 	virtual void update(double deltaT);
 
