@@ -12,6 +12,8 @@ uniform float alpha;
 uniform int hasDiffuseTexture;
 uniform sampler2D diffuseTexture;
 
+uniform int passNumber;
+
 uniform sampler2DRect opaqueDepthBuffer;
 uniform sampler2DRect peelDepthBuffer;
 
@@ -23,15 +25,20 @@ void main()
 	float opaqueDepth = texture2DRect(opaqueDepthBuffer, gl_FragCoord.xy).x;
 	float previousLayerDepth = texture2DRect(peelDepthBuffer, gl_FragCoord.xy).x;
 
-	if (gl_FragCoord.z >= opaqueDepth || gl_FragCoord.z <= (previousLayerDepth + 0.0001)) {
+	if (gl_FragCoord.z >= opaqueDepth) {
+		discard;
+	}
+
+	if (passNumber != 1 && gl_FragCoord.z <= (previousLayerDepth + 0.0001)) {
 		discard;
 	}
 
 	//calculate the final color (ie read diffuse texture)
 	vec3 diffuse = diffuseColor.xyz;
 	if(hasDiffuseTexture == 1) {
-		diffuse = texture2D(diffuseTexture, texcoord).xyz * diffuseColor.xyz;
+	//	diffuse = texture2D(diffuseTexture, texcoord).xyz * diffuseColor.xyz;
 	}
 
-	fragData[0] = vec4(diffuseColor.x, diffuseColor.y, diffuseColor.z, alpha);
+	fragData[0] = vec4(diffuse.x, diffuse.y, diffuse.z, alpha);
+	//fragData[0] = vec4(previousLayerDepth, previousLayerDepth, previousLayerDepth, 1.0);
 }

@@ -13,7 +13,7 @@ public:
 	virtual void unuse() = 0;
 	virtual void setUniforms(MaterialProperties* properties) = 0;
 	virtual bool getHasTransparency();
-	void setTransparencyUniforms(GLuint opaqueDepthBuffer, GLuint peelDepthBuffer);
+	void setTransparencyUniforms(GLuint opaqueDepthBuffer, GLuint peelDepthBuffer, int passNumber);
 protected:
 	ShaderProgram* shader;
 	bool hasTransparency;

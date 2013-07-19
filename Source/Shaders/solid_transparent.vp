@@ -14,6 +14,8 @@ uniform float alpha;
 uniform int hasDiffuseTexture;
 uniform sampler2D diffuseTexture;
 
+uniform int passNumber;
+
 uniform sampler2DRect opaqueDepthBuffer;
 uniform sampler2DRect peelDepthBuffer;
 

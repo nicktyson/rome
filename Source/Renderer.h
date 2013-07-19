@@ -22,7 +22,7 @@ protected:
 	void firstPass(Scene* scene);
 	void deferredPass(Scene* scene);
 	void transparencyPass(Scene* scene);
-	void depthPeel(Scene* scene, GLuint opaqueDepthBuffer, GLuint previousPeelDepthBuffer, GLuint currentPeelDepthBuffer, GLuint colorBuffer);
+	void depthPeel(Scene* scene, GLuint opaqueDepthBuffer, GLuint previousPeelDepthBuffer, GLuint currentPeelDepthBuffer, GLuint colorBuffer, int passNumber);
 	void postProcess();
 
 	GLuint fbo;

@@ -9,8 +9,10 @@ bool Material::getHasTransparency() {
 	return hasTransparency;
 }
 
-void Material::setTransparencyUniforms(GLuint opaqueDepthBuffer, GLuint peelDepthBuffer) {
+void Material::setTransparencyUniforms(GLuint opaqueDepthBuffer, GLuint peelDepthBuffer, int passNumber) {
 	shader->use();
+
+	glUniform1i(shader->getUniformLocation("passNumber"), passNumber);
 
 	glActiveTexture(GL_TEXTURE0);
 	glBindTexture(GL_TEXTURE_RECTANGLE, opaqueDepthBuffer);

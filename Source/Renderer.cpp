@@ -121,7 +121,7 @@ void Renderer::firstPass(Scene* scene) {
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 	
 	glEnable(GL_DEPTH_TEST);
-	glEnable(GL_BLEND);
+	//glEnable(GL_BLEND);
 
 	sceneGraphMatrixStack->loadIdentity();
 	
@@ -158,7 +158,7 @@ void Renderer::deferredPass(Scene* scene) {
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
 	glDisable(GL_DEPTH_TEST);
-	glDisable(GL_BLEND);
+	//glDisable(GL_BLEND);
 
 	//bind ubershader
 	uberShader->use();
@@ -226,15 +226,15 @@ void Renderer::transparencyPass(Scene* scene) {
 
 	//set first depth buffer
 	//replace with an in-shader solution!
-	std::vector<GLubyte> nearData(800*600, 0.0);
-	glBindTexture(GL_TEXTURE_RECTANGLE, transparencyDepthBuffer1);
-	glTexImage2D(GL_TEXTURE_RECTANGLE, 0, GL_DEPTH_COMPONENT32,  800, 600, 0, GL_DEPTH_COMPONENT, GL_UNSIGNED_BYTE, &nearData[0]);
+	//std::vector<GLubyte> nearData(800*600, 0.0);
+	//glBindTexture(GL_TEXTURE_RECTANGLE, transparencyDepthBuffer1);
+	//glTexImage2D(GL_TEXTURE_RECTANGLE, 0, GL_DEPTH_COMPONENT32,  800, 600, 0, GL_DEPTH_COMPONENT, GL_UNSIGNED_BYTE, &nearData[0]);
 
 	//four layers
-	depthPeel(scene, depthBuffer, transparencyDepthBuffer1, transparencyDepthBuffer2, transparencyColorBuffer1);
-	depthPeel(scene, depthBuffer, transparencyDepthBuffer2, transparencyDepthBuffer1, transparencyColorBuffer2);
-	depthPeel(scene, depthBuffer, transparencyDepthBuffer1, transparencyDepthBuffer2, transparencyColorBuffer3);
-	depthPeel(scene, depthBuffer, transparencyDepthBuffer2, transparencyDepthBuffer1, transparencyColorBuffer4);
+	depthPeel(scene, depthBuffer, transparencyDepthBuffer1, transparencyDepthBuffer2, transparencyColorBuffer1, 1);
+	depthPeel(scene, depthBuffer, transparencyDepthBuffer2, transparencyDepthBuffer1, transparencyColorBuffer2, 2);
+	depthPeel(scene, depthBuffer, transparencyDepthBuffer1, transparencyDepthBuffer2, transparencyColorBuffer3, 3);
+	depthPeel(scene, depthBuffer, transparencyDepthBuffer2, transparencyDepthBuffer1, transparencyColorBuffer4, 4);
 
 	//composite layers
 	glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_RECTANGLE, diffuseBuffer, 0);
@@ -244,7 +244,7 @@ void Renderer::transparencyPass(Scene* scene) {
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
 	glDisable(GL_DEPTH_TEST);
-	glDisable(GL_BLEND);
+	//glDisable(GL_BLEND);
 
 	compositeTransparencyShader->use();
 
@@ -264,9 +264,9 @@ void Renderer::transparencyPass(Scene* scene) {
 	glBindTexture(GL_TEXTURE_RECTANGLE, transparencyColorBuffer3);
 	glUniform1i(compositeTransparencyShader->getUniformLocation("colorBuffer3"), 3);
 
-	glActiveTexture(GL_TEXTURE3);
+	glActiveTexture(GL_TEXTURE4);
 	glBindTexture(GL_TEXTURE_RECTANGLE, transparencyColorBuffer4);
-	glUniform1i(compositeTransparencyShader->getUniformLocation("colorBuffer4"), 3);
+	glUniform1i(compositeTransparencyShader->getUniformLocation("colorBuffer4"), 4);
 
 	glActiveTexture(GL_TEXTURE0);
 
@@ -283,7 +283,7 @@ void Renderer::transparencyPass(Scene* scene) {
 	glBindFramebuffer(GL_FRAMEBUFFER, 0);
 }
 
-void Renderer::depthPeel(Scene* scene, GLuint opaqueDepthBuffer, GLuint previousPeelDepthBuffer, GLuint currentPeelDepthBuffer, GLuint colorBuffer) {
+void Renderer::depthPeel(Scene* scene, GLuint opaqueDepthBuffer, GLuint previousPeelDepthBuffer, GLuint currentPeelDepthBuffer, GLuint colorBuffer, int passNumber) {
 	extern MaterialList* materialList;
 	extern MatrixStack* sceneGraphMatrixStack;
 
@@ -297,12 +297,12 @@ void Renderer::depthPeel(Scene* scene, GLuint opaqueDepthBuffer, GLuint previous
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 	
 	glEnable(GL_DEPTH_TEST);
-	glEnable(GL_BLEND);
+	//glEnable(GL_BLEND);
 	//glDisable(GL_CULL_FACE);
 
 	sceneGraphMatrixStack->loadIdentity();
 	
-	materialList->getMaterial(materialList->SOLIDTRANSPARENT)->setTransparencyUniforms(opaqueDepthBuffer, previousPeelDepthBuffer);
+	materialList->getMaterial(materialList->SOLIDTRANSPARENT)->setTransparencyUniforms(opaqueDepthBuffer, previousPeelDepthBuffer, passNumber);
 
 	//draw the scene
 	//nodes bind their own shaders, uniforms, and vao
@@ -322,7 +322,7 @@ void Renderer::postProcess() {
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
 	glDisable(GL_DEPTH_TEST);
-	glDisable(GL_BLEND);
+	//glDisable(GL_BLEND);
 
 	//bind post-process shader
 	postprocessShader->use();

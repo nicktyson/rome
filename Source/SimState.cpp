@@ -53,6 +53,7 @@ void SimState::run() {
 
 		keyOps();
 		display();
+		currentScene->update(1.0 / 60.0);
 		glfwSwapBuffers();
 
 		//clamp display frame rate
@@ -153,7 +154,7 @@ void SimState::simThreadFunc() {
 		simStartTime = glfwGetTime();
 		deltaT = simStartTime - previousFrameStart;
 
-		updateSim(deltaT);
+		//updateSim(deltaT);
 
 		//clamp rate
 		simCurrentTime = glfwGetTime();
