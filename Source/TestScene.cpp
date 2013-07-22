@@ -22,15 +22,16 @@ void TestScene::initScene() {
 
 	std::string testTextureLocation = ROME_PATH + "/Assets/Textures/stone.png";
 	std::string testNormalLocation = ROME_PATH + "/Assets/Textures/stone_normal.png";
+	std::string transTextureLocation = ROME_PATH + "/Assets/Textures/stone_transparent.png";
 
 	std::string cubeMapLocation = ROME_PATH + "/Assets/Textures/grace";
 
 	//make two offset objects
 	MeshNode* childNode = new MeshNode(cubeLocation, MaterialList::SOLIDTRANSPARENT);
 	childNode->setMaterialColor(1.0, 1.0, 1.0);
-	childNode->setMaterialAlpha(0.1);
+	childNode->setMaterialAlpha(0.4);
 	childNode->setMaterialProperties(40.0, 0.2, 4.0);
-	//childNode->setMaterialTexture(testTextureLocation);
+	childNode->setMaterialTexture(transTextureLocation);
 	//childNode->setMaterialNormalMap(testNormalLocation);
 	childNode->setTranslation(0, 0, 0);
 	sceneRoot->addChild(childNode);
@@ -57,7 +58,7 @@ void TestScene::initScene() {
 		newNode->setMaterialColor(0.0, 1.0, 1.0);
 		newNode->setMaterialAlpha(0.4);
 	//	newNode->setMaterialProperties(40.0, 1.0, 1.0);
-	//	newNode->setMaterialTexture(testTextureLocation);
+		newNode->setMaterialTexture(testTextureLocation);
 	//	newNode->setMaterialNormalMap(testNormalLocation);
 		newNode->setTranslation(3*sin(i*6.28/6), 3*cos(i*6.28/6), 0);
 		sceneRoot->addChild(newNode);

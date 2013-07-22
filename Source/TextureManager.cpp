@@ -16,6 +16,8 @@ GLuint TextureManager::getTexture(std::string fileName) {
 	//generate and return a new texture
 	if(i == textures.end()) {
 		GLuint location;
+
+		glActiveTexture(GL_TEXTURE0);
 		glGenTextures(1, &location);
 		glBindTexture(GL_TEXTURE_2D, location);
 
@@ -24,8 +26,8 @@ GLuint TextureManager::getTexture(std::string fileName) {
 		
 		//new way
 		int x, y, n;
-		unsigned char* pixelData = stbi_load(fileName.c_str(), &x, &y, &n, 3);
-		glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB16F, x, y, 0, GL_RGB, GL_UNSIGNED_BYTE, (GLvoid*) pixelData);
+		unsigned char* pixelData = stbi_load(fileName.c_str(), &x, &y, &n, 4);
+		glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA8, x, y, 0, GL_RGBA, GL_UNSIGNED_BYTE, (GLvoid*) pixelData);
 		glGenerateMipmap(GL_TEXTURE_2D);
 		stbi_image_free(pixelData);
 		

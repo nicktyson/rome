@@ -23,6 +23,8 @@ void Renderer::init() {
 	glGenFramebuffers(1, &fbo);
 	glBindFramebuffer(GL_FRAMEBUFFER, fbo);
 
+	glActiveTexture(GL_TEXTURE0);
+
 	// diffuse buffer: rgb = diffuse color, a = material id
 	glGenTextures(1, &diffuseBuffer);
 	glBindTexture(GL_TEXTURE_RECTANGLE, diffuseBuffer);
@@ -298,7 +300,7 @@ void Renderer::depthPeel(Scene* scene, GLuint opaqueDepthBuffer, GLuint previous
 	
 	glEnable(GL_DEPTH_TEST);
 	//glEnable(GL_BLEND);
-	//glDisable(GL_CULL_FACE);
+	glDisable(GL_CULL_FACE);
 
 	sceneGraphMatrixStack->loadIdentity();
 	
@@ -312,7 +314,7 @@ void Renderer::depthPeel(Scene* scene, GLuint opaqueDepthBuffer, GLuint previous
 	glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_RECTANGLE, 0, 0);
 	glFramebufferTexture2D(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_TEXTURE_RECTANGLE, 0, 0);
 
-	//glEnable(GL_CULL_FACE);
+	glEnable(GL_CULL_FACE);
 }
 
 void Renderer::postProcess() {

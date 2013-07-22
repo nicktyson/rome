@@ -34,11 +34,15 @@ void main()
 	}
 
 	//calculate the final color (ie read diffuse texture)
-	vec3 diffuse = diffuseColor.xyz;
+	vec4 outputData = vec4(diffuseColor.xyz, alpha);
 	if(hasDiffuseTexture == 1) {
-	//	diffuse = texture2D(diffuseTexture, texcoord).xyz * diffuseColor.xyz;
+		outputData.xyzw = texture2D(diffuseTexture, texcoord).xyzw * outputData.xyzw;
 	}
 
-	fragData[0] = vec4(diffuse.x, diffuse.y, diffuse.z, alpha);
-	//fragData[0] = vec4(previousLayerDepth, previousLayerDepth, previousLayerDepth, 1.0);
+	if (outputData.w == 0.0) {
+		discard;
+	}
+
+	fragData[0] = vec4(outputData.x, outputData.y, outputData.z, outputData.w);
+	//fragData[0] = vec4(opaqueDepth, opaqueDepth, opaqueDepth, 1.0);
 }

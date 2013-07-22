@@ -14,9 +14,9 @@ void Material::setTransparencyUniforms(GLuint opaqueDepthBuffer, GLuint peelDept
 
 	glUniform1i(shader->getUniformLocation("passNumber"), passNumber);
 
-	glActiveTexture(GL_TEXTURE0);
+	glActiveTexture(GL_TEXTURE2);
 	glBindTexture(GL_TEXTURE_RECTANGLE, opaqueDepthBuffer);
-	glUniform1i(shader->getUniformLocation("opaqueDepthBuffer"), 0);
+	glUniform1i(shader->getUniformLocation("opaqueDepthBuffer"), 2);
 
 	glActiveTexture(GL_TEXTURE1);
 	glBindTexture(GL_TEXTURE_RECTANGLE, peelDepthBuffer);

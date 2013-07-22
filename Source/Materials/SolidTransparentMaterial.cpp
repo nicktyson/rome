@@ -22,8 +22,8 @@ void SolidTransparentMaterial::setUniforms(MaterialProperties* properties) {
 	glUniform1i(shader->getUniformLocation("hasDiffuseTexture"), properties->hasDiffuseTexture);
 
 	if(properties->hasDiffuseTexture == 1) {
-		glActiveTexture(GL_TEXTURE2);
+		glActiveTexture(GL_TEXTURE0);
 		glBindTexture(GL_TEXTURE_2D, properties->diffuseTexture);
-		glUniform1i(shader->getUniformLocation("diffuseTexture"), 2);
+		glUniform1i(shader->getUniformLocation("diffuseTexture"), 0);
 	}
 }
