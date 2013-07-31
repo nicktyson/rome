@@ -37,10 +37,10 @@ void TestScene::initScene() {
 	sceneRoot->addChild(childNode);
 
 	////float randRot = rand() % 90;
-	//VitalEntity * secondChild = new VitalEntity(location, 1, 0, 0);
-	//secondChild->setTranslation(2, 2, 0);
-	////secondChild->setRotation(20, randRot, 0);
-	//childNode->addChild(secondChild);
+	VitalEntity * secondChild = new VitalEntity(location, 1, 0, 0);
+	secondChild->setTranslation(2, 2, 0);
+	//secondChild->setRotation(20, randRot, 0);
+	childNode->addChild(secondChild);
 
 	//add a floor
 	MeshNode* floor = new MeshNode(quadLocation, MaterialList::BLINNPHONG);

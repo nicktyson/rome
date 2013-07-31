@@ -8,6 +8,7 @@
 #include "ScreenQuad.h"
 #include "ShaderProgram.h"
 #include "LightNode.h"
+#include "SimState.h"
 #include "../Lib/glm/glm.hpp"
 #include "../Lib/glm/gtc/type_ptr.hpp"
 
@@ -169,9 +170,10 @@ void Renderer::deferredPass(Scene* scene) {
 	int numLights = std::min((int)lights.size(), MAX_LIGHTS);
 	glUniform1i(0, numLights);
 	for (int i = 0; i < numLights; i++) {
+		LightNode::ln_State* cln = &(lights[i]->ln_states[SimState::currentRenderState]);
 		glUniform3f(1+i, lights[i]->eyespacePosition.x, lights[i]->eyespacePosition.y, lights[i]->eyespacePosition.z);
-		glUniform3f(21+i, lights[i]->color[0], lights[i]->color[1], lights[i]->color[2]);
-		glUniform1f(41+i, lights[i]->intensity);
+		glUniform3f(21+i, cln->color[0], cln->color[1], cln->color[2]);
+		glUniform1f(41+i, cln->intensity);
 	}
 
 	glm::mat4 eyeToWorldNormalMatrix = scene->getEyeToWorldNormalMatrix();

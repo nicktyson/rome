@@ -5,6 +5,7 @@
 #include <cmath>
 #include "MatrixStack.h"
 #include "Renderer.h"
+#include "SimState.h"
 #include "../Lib/glm/glm.hpp"
 #include "../Lib/glm/gtc/matrix_inverse.hpp"
 
@@ -26,22 +27,26 @@ FPCamera::FPCamera() {
 	angVelocity.resize(3);
 
 	//face forward
-	rotation[0] = -90;
 	//back away from the default objects
-	translation[1] = 6;
+	sn_State* currentState = &sn_states[SimState::currentUpdateState];
+
+	currentState->rotation[0] = -90;
+	currentState->translation[1] = 6;
 }
 
 void FPCamera::draw(Renderer* r, bool isTransparentPass) {
 	extern MatrixStack* sceneGraphMatrixStack;
 
+	sn_State* currentState = &sn_states[SimState::currentRenderState];
+
 	sceneGraphMatrixStack->pushMatrix();
 
-	sceneGraphMatrixStack->rotated(rotation[0], 1, 0, 0);
-	sceneGraphMatrixStack->rotated(rotation[1], 0, 1, 0);
-	sceneGraphMatrixStack->rotated(rotation[2], 0, 0, 1);
-	sceneGraphMatrixStack->translated(translation[0], translation[1], translation[2]);
+	sceneGraphMatrixStack->rotated(currentState->rotation[0], 1, 0, 0);
+	sceneGraphMatrixStack->rotated(currentState->rotation[1], 0, 1, 0);
+	sceneGraphMatrixStack->rotated(currentState->rotation[2], 0, 0, 1);
+	sceneGraphMatrixStack->translated(currentState->translation[0], currentState->translation[1], currentState->translation[2]);
 
-	for(std::vector<scene_node*>::iterator it = children.begin(); it != children.end(); ++it) {
+	for(std::vector<scene_node*>::iterator it = currentState->children.begin(); it != currentState->children.end(); ++it) {
 		(*it)->draw(r, isTransparentPass);
 	}
 
@@ -49,6 +54,11 @@ void FPCamera::draw(Renderer* r, bool isTransparentPass) {
 }
 
 void FPCamera::update(double deltaT) {
+	sn_State* currentState = &sn_states[SimState::currentUpdateState];
+	sn_State* previousState = &sn_states[SimState::newestState];
+
+	scene_node::stateUpdate(deltaT);
+
 	//moving two directions at once shouldn't be faster
 	float inputVelocity = std::abs(velocity[0]) + std::abs(velocity[1]) + std::abs(velocity[2]);
 	if (inputVelocity > MAX_VELOCITY) {
@@ -58,13 +68,13 @@ void FPCamera::update(double deltaT) {
 	}
 
 	//update position and camera angle
-	translation[0] += deltaT * velocity[0];
-	translation[1] += deltaT * velocity[1];
-	translation[2] += deltaT * velocity[2];
+	currentState->translation[0] = previousState->translation[0] + deltaT * velocity[0];
+	currentState->translation[1] = previousState->translation[1] + deltaT * velocity[1];
+	currentState->translation[2] = previousState->translation[2] + deltaT * velocity[2];
 
-	rotation[0] += deltaT  * angVelocity[0];
-	rotation[1] += deltaT  * angVelocity[1];
-	rotation[2] += deltaT  * angVelocity[2];
+	currentState->rotation[0] = previousState->rotation[0] + deltaT  * angVelocity[0];
+	currentState->rotation[1] = previousState->rotation[1] + deltaT  * angVelocity[1];
+	currentState->rotation[2] = previousState->rotation[2] + deltaT  * angVelocity[2];
 
 	//smoothly decrease movement velocity
 	if(abs(velocity[0]) < 0.1 && abs(velocity[1]) < 0.1) {
@@ -89,37 +99,44 @@ void FPCamera::update(double deltaT) {
 	}
 
 	// looking up and down is constrained (straight ahead is -90, straight down is 0)
-	if(rotation[0] >= 0.0) {
-		rotation[0] = 0.0;
-	} else if (rotation[0] <= - 170.0) {
-		rotation[0] = -170.0;
+	if(currentState->rotation[0] >= 0.0) {
+		currentState->rotation[0] = 0.0;
+	} else if (currentState->rotation[0] <= - 170.0) {
+		currentState->rotation[0] = -170.0;
 	}
 
 	//update children
-	for(std::vector<scene_node*>::iterator it = children.begin(); it != children.end(); ++it) {
+	for(std::vector<scene_node*>::iterator it = currentState->children.begin(); it != currentState->children.end(); ++it) {
 		(*it)->update(deltaT);
 	}
 }
 
 void FPCamera::forward() {
-	velocity[1] += std::cos(3.14 * rotation[2] / 180.0) * -MAX_VELOCITY;
-	velocity[0] += std::sin(3.14 * rotation[2] / 180.0) * -MAX_VELOCITY;
+	sn_State* newestState = &sn_states[SimState::newestState];
+
+	velocity[1] += std::cos(3.14 * newestState->rotation[2] / 180.0) * -MAX_VELOCITY;
+	velocity[0] += std::sin(3.14 * newestState->rotation[2] / 180.0) * -MAX_VELOCITY;
 }
 
 void FPCamera::back() {
-	velocity[1] += std::cos(3.14 * rotation[2] / 180.0) * MAX_VELOCITY;
-	velocity[0] += std::sin(3.14 * rotation[2] / 180.0) * MAX_VELOCITY;
-	
+	sn_State* newestState = &sn_states[SimState::newestState];
+
+	velocity[1] += std::cos(3.14 * newestState->rotation[2] / 180.0) * MAX_VELOCITY;
+	velocity[0] += std::sin(3.14 * newestState->rotation[2] / 180.0) * MAX_VELOCITY;
 }
 
 void FPCamera::left() {
-	velocity[0] += std::cos(3.14 * rotation[2] / 180.0) * MAX_VELOCITY;
-	velocity[1] += std::sin(3.14 * rotation[2] / 180.0) * -MAX_VELOCITY;
+	sn_State* newestState = &sn_states[SimState::newestState];
+
+	velocity[0] += std::cos(3.14 * newestState->rotation[2] / 180.0) * MAX_VELOCITY;
+	velocity[1] += std::sin(3.14 * newestState->rotation[2] / 180.0) * -MAX_VELOCITY;
 }
 
 void FPCamera::right() {
-	velocity[0] += std::cos(3.14 * rotation[2] / 180.0) * -MAX_VELOCITY;
-	velocity[1] += std::sin(3.14 * rotation[2] / 180.0) * MAX_VELOCITY;
+	sn_State* newestState = &sn_states[SimState::newestState];
+
+	velocity[0] += std::cos(3.14 * newestState->rotation[2] / 180.0) * -MAX_VELOCITY;
+	velocity[1] += std::sin(3.14 * newestState->rotation[2] / 180.0) * MAX_VELOCITY;
 }
 
 void FPCamera::mouseView(int x, int y) {
@@ -149,12 +166,14 @@ void FPCamera::rotateCCW() {
 glm::mat4 FPCamera::getInverseNormalMatrix() {
 	extern MatrixStack* sceneGraphMatrixStack;
 
+	sn_State* currentState = &sn_states[SimState::currentRenderState];
+
 	sceneGraphMatrixStack->pushMatrix();
 
-	sceneGraphMatrixStack->rotated(rotation[0], 1, 0, 0);
-	sceneGraphMatrixStack->rotated(rotation[1], 0, 1, 0);
-	sceneGraphMatrixStack->rotated(rotation[2], 0, 0, 1);
-	sceneGraphMatrixStack->translated(translation[0], translation[1], translation[2]);
+	sceneGraphMatrixStack->rotated(currentState->rotation[0], 1, 0, 0);
+	sceneGraphMatrixStack->rotated(currentState->rotation[1], 0, 1, 0);
+	sceneGraphMatrixStack->rotated(currentState->rotation[2], 0, 0, 1);
+	sceneGraphMatrixStack->translated(currentState->translation[0], currentState->translation[1], currentState->translation[2]);
 
 	glm::mat4 normalMatrix = glm::mat4(sceneGraphMatrixStack->last());
 	normalMatrix = glm::inverse(normalMatrix);

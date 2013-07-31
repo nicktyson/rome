@@ -29,11 +29,16 @@ public:
 
 	virtual void draw(Renderer* r, bool isTransparentPass);
 	virtual void update(double deltaT);
+	virtual void stateUpdate(double deltaT);
 	
 protected:
-	mesh* objectMesh;
-	Material* material;
-	MaterialProperties* properties;
+	struct mn_State {
+		mesh* objectMesh;
+		Material* material;
+		MaterialProperties* properties;
+	};
+
+	std::vector<mn_State> mn_states;
 };
 
 #endif

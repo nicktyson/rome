@@ -14,6 +14,9 @@
 #include "Renderer.h"
 
 std::vector<bool> State::keyState;
+int SimState::currentRenderState = 0;
+int SimState::currentUpdateState = 0;
+int SimState::newestState = 0;
 
 //desired fps (display and sim)
 //keypresses are detected at the display rate
@@ -35,10 +38,18 @@ void SimState::initialize(StateManager* mngr) {
 
 	renderer = new Renderer();
 
+	currentRenderState = 0;
+	currentUpdateState = 0;
+	newestState = 0;
+
 	currentScene = new TestScene();
 	initScene();
 
+	currentUpdateState = 1;
+
 	pauseMutex = glfwCreateMutex();
+	tripleBufferMutex = glfwCreateMutex();
+
 	simThread = glfwCreateThread(startThread, this);
 	initialized = true;
 }
@@ -51,9 +62,8 @@ void SimState::run() {
 	while (!shouldStopStateLoop) {
 		double loopStartTime = glfwGetTime();
 
-		keyOps();
 		display();
-		currentScene->update(1.0 / 60.0);
+		
 		glfwSwapBuffers();
 
 		//clamp display frame rate
@@ -71,6 +81,8 @@ void SimState::run() {
 			frameCount = 0;
 			fpsTimeSum = 0;
 		}
+
+		updateRenderThreadState();
 	}
 }
 
@@ -149,12 +161,13 @@ void SimState::simThreadFunc() {
 			return;
 		}
 
+		keyOps();
 		stateKeyOps();
 
 		simStartTime = glfwGetTime();
 		deltaT = simStartTime - previousFrameStart;
 
-		//updateSim(deltaT);
+		updateSim(deltaT);
 
 		//clamp rate
 		simCurrentTime = glfwGetTime();
@@ -164,7 +177,33 @@ void SimState::simThreadFunc() {
 		}
 
 		previousFrameStart = simStartTime;
+
+		updateUpdateThreadState();
 	}
+}
+
+void SimState::updateRenderThreadState() {
+	glfwLockMutex(tripleBufferMutex);
+
+	currentRenderState = newestState;
+
+	glfwUnlockMutex(tripleBufferMutex);
+}
+
+void SimState::updateUpdateThreadState() {
+	glfwLockMutex(tripleBufferMutex);
+
+	newestState = currentUpdateState;
+
+	if (newestState != 0 && currentRenderState != 0) {
+		currentUpdateState = 0;
+	} else if (newestState != 1 && currentRenderState != 1) {
+		currentUpdateState = 1;
+	} else if (newestState != 2 && currentRenderState != 2) {
+		currentUpdateState = 2;
+	}
+
+	glfwUnlockMutex(tripleBufferMutex);
 }
 
 void SimState::keyOps() {

@@ -12,11 +12,22 @@ public:
 	LightNode();
 	LightNode(float r, float g, float b, float i);
 	virtual void draw(Renderer* r, bool isTransparentPass);
+	virtual void update(double deltaT);
+	virtual void stateUpdate(double deltaT);
 	void setColor(float r, float g, float b);
 	void setIntensity(float i);
+
 	glm::vec4 eyespacePosition;
-	std::vector<float> color;
-	float intensity;
+
+	struct ln_State {
+		std::vector<float> color;
+		float intensity;
+
+		ln_State() : color(3) {
+		}
+	};
+
+	std::vector<ln_State> ln_states;
 };
 
 #endif

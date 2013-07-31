@@ -28,10 +28,17 @@ public:
 	static void GLFWCALL startThread(void * state);
 	void simThreadFunc();
 	void stateKeyOps();
+
+	static int currentRenderState;
+	static int currentUpdateState;
+	static int newestState;
 	
 protected:
 	void display();
 	void updateSim(double deltaT);
+
+	void updateRenderThreadState();
+	void updateUpdateThreadState();
 
 	Renderer* renderer;
 	Scene* currentScene;
@@ -40,6 +47,7 @@ protected:
 	bool endSimThread;
 	GLFWmutex pauseMutex;
 	GLFWthread simThread;
+	GLFWmutex tripleBufferMutex;
 
 	static const int DISPLAY_FRAME_RATE;
 	static const double DISPLAY_FRAME_TIME;

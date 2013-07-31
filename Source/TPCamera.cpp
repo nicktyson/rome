@@ -5,6 +5,7 @@
 #include "TPCamera.h"
 #include "MatrixStack.h"
 #include "Renderer.h"
+#include "SimState.h"
 #include "../Lib/glm/glm.hpp"
 #include "../Lib/glm/gtc/matrix_inverse.hpp"
 
@@ -24,23 +25,31 @@ TPCamera::TPCamera() {
 	zoomLevel = 0;
 
 	//start zoomed out
-	translation[2] = -6;
+	for (int i = 0; i < 3; i++) {
+		sn_states[i].translation[2] = -6;
+	}
 }
 
 void TPCamera::draw(Renderer* r, bool isTransparentPass) {
 	extern MatrixStack* sceneGraphMatrixStack;
 
+	sn_State* currentState = &sn_states[SimState::currentRenderState];
+
 	applyTransformation();
 
-	for(std::vector<scene_node*>::iterator it = children.begin(); it != children.end(); ++it) {
+	for(std::vector<scene_node*>::iterator it = currentState->children.begin(); it != currentState->children.end(); ++it) {
 		(*it)->draw(r, isTransparentPass);
 	}
 
-	//glPopMatrix();
 	sceneGraphMatrixStack->popMatrix();
 }
 
 void TPCamera::update(double deltaT) {
+	sn_State* currentState = &sn_states[SimState::currentUpdateState];
+	sn_State* previousState = &sn_states[SimState::newestState];
+
+	scene_node::stateUpdate(deltaT);
+
 	//see if mouse is against the side of the screen
 	if (mousePos[0] < 10) {
 		velocity[0] += MAX_VELOCITY;
@@ -62,14 +71,14 @@ void TPCamera::update(double deltaT) {
 	}
 
 	//update position
-	translation[0] += deltaT * velocity[0];
-	translation[1] += deltaT * velocity[1];
-	translation[2] += deltaT * velocity[2];
+	currentState->translation[0] = previousState->translation[0] + deltaT * velocity[0];
+	currentState->translation[1] = previousState->translation[1] + deltaT * velocity[1];
+	currentState->translation[2] = previousState->translation[2] + deltaT * velocity[2];
 
 	//update rotation
-	rotation[0] += deltaT  * angVelocity[0];
-	rotation[1] += deltaT  * angVelocity[1];
-	rotation[2] += deltaT  * angVelocity[2];
+	currentState->rotation[0] = previousState->rotation[0] + deltaT  * angVelocity[0];
+	currentState->rotation[1] = previousState->rotation[1] + deltaT  * angVelocity[1];
+	currentState->rotation[2] = previousState->rotation[2] + deltaT  * angVelocity[2];
 
 	//smoothly decrease velocity
 	if(abs(velocity[0]) < 0.1 && abs(velocity[1]) < 0.1) {
@@ -99,7 +108,7 @@ void TPCamera::update(double deltaT) {
 	}
 
 	//update children
-	for(std::vector<scene_node*>::iterator it = children.begin(); it != children.end(); ++it) {
+	for(std::vector<scene_node*>::iterator it = currentState->children.begin(); it != currentState->children.end(); ++it) {
 		(*it)->update(deltaT);
 	}
 

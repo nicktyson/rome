@@ -21,13 +21,21 @@ public:
 	virtual void draw(Renderer* r, bool isTransparentPass);
 	void applyTransformation();
 	virtual void update(double deltaT);
+	virtual void stateUpdate(double deltaT);
 
 protected:
-	scene_node * parent;
-	std::vector<scene_node *> children;
-	std::vector<float> translation;
-	std::vector<float> rotation;
-	std::vector<float> scaling;
+	struct sn_State {
+		scene_node* parent;
+		std::vector<scene_node*> children;
+		std::vector<float> translation;
+		std::vector<float> rotation;
+		std::vector<float> scaling;
+
+		sn_State() : translation(3), rotation(3), scaling(3)
+		{	}
+	};
+
+	std::vector<sn_State> sn_states;
 };
 
 #endif
