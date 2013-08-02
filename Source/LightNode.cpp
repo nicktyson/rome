@@ -37,12 +37,13 @@ void LightNode::draw(Renderer* r, bool isTransparentPass) {
 
 void LightNode::update(double deltaT) {
 	stateUpdate(deltaT);
-	scene_node::stateUpdate(deltaT);
 }
 
 void LightNode::stateUpdate(double deltaT) {
 	ln_State* currentState = &ln_states[SimState::currentUpdateState];
 	ln_State* newestState = &ln_states[SimState::newestState];
+
+	scene_node::stateUpdate(deltaT);
 
 	currentState->color = newestState->color;
 	currentState->intensity = newestState->intensity;

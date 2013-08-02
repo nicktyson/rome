@@ -16,6 +16,7 @@ public:
 	virtual void rotateCCW() = 0;
 	virtual void zoom(int pos);
 	virtual glm::mat4 getInverseNormalMatrix() = 0;
+	void addSceneRoot(scene_node* root);
 };
 
 #endif

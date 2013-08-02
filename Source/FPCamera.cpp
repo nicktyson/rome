@@ -28,10 +28,10 @@ FPCamera::FPCamera() {
 
 	//face forward
 	//back away from the default objects
-	sn_State* currentState = &sn_states[SimState::currentUpdateState];
-
-	currentState->rotation[0] = -90;
-	currentState->translation[1] = 6;
+	for (int i = 0; i < 3; i++) {
+		sn_states[i].rotation[0] = -90;
+		sn_states[i].translation[1] = 6;
+	}
 }
 
 void FPCamera::draw(Renderer* r, bool isTransparentPass) {

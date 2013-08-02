@@ -23,11 +23,11 @@ void Scene::initCameras() {
 	cameraType = THIRDPERSON;
 
 	camera = new TPCamera();
-	camera->addChild(sceneRoot);
+	camera->addSceneRoot(sceneRoot);
 	cameras.push_back(camera);
 
 	camera = new FPCamera();
-	camera->addChild(sceneRoot);
+	camera->addSceneRoot(sceneRoot);
 	cameras.push_back(camera);
 
 	camera = cameras.front();
