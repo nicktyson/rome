@@ -1,22 +1,31 @@
-* ssao
-* consider making some things static
+* ssao / hbao
+* render settings
+	* bloom
+* better bloom
+* depth of field
+* volumetric lighting / area lights
+* consider making material methods static
 * further improve scene creation
-	* terrain?
-	* data-driven approach
-	* XML parsing
+	* data-driven via XML parsing
+* lua integration
+	* create scenes by running script that places nodes
+	* object behavior - link node to lua script
+	* add things dynamically, preferably with a console
 * make more node/entity classes
 	* more-capable player object
-* make camera movements affect all cameras?
+* cameras
+	* make camera movements affect all cameras?
 	* fix top-down camera rotation
+	* swoop-down camera
 * centralize constants
-* move dll's?
 * make file structure of source files less horrible
-* update sim in a thread-safe way
+	* move dll's
+* multithreading fixes
 	* fix meshnode materialproperties methods
-	* finish updateState
-	* deal with cameras
-* add additional states
-* physics for objects
+* add / improve states
+* ui
+	* font rendering
+	* buttons
 * better error/exception handling
 	* openGL
 	* file reading
