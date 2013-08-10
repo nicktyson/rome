@@ -8,6 +8,7 @@
 #include "BlinnPhongMaterial.h"
 #include "CookTorrMaterial.h"
 #include "SolidTransparentMaterial.h"
+#include "SolidDiffuseMaterial.h"
 
 MaterialList::MaterialList() {
 	numMaterials = 0;
@@ -21,7 +22,8 @@ void MaterialList::initMaterials() {
 	list.insert(std::make_pair(BLINNPHONG, new BlinnPhongMaterial()));
 	list.insert(std::make_pair(COOKTORR, new CookTorrMaterial()));
 	list.insert(std::make_pair(SOLIDTRANSPARENT, new SolidTransparentMaterial()));
-	numMaterials = 6;
+	list.insert(std::make_pair(SOLIDDIFFUSE, new SolidDiffuseMaterial()));
+	numMaterials = 7;
 }
 
 Material* MaterialList::getMaterial(Materials materialName) {

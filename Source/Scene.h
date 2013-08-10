@@ -8,6 +8,7 @@
 #include "Renderer.h"
 
 class Camera;
+class Skybox;
 
 class Scene {
 public:
@@ -27,9 +28,11 @@ public:
 	void cameraLeft();
 	void zoomCamera(int pos);
 	void cameraMouseView(int x, int y);
+	Camera* getCurrentCamera();
 
 	void setCubeMap(std::string cubeMapName);
 	void setRoot(scene_node* rootNode);
+	void setSkybox(Skybox* skybx);
 
 	glm::mat4 getEyeToWorldNormalMatrix();
 	GLuint getCubeMap();
@@ -45,6 +48,9 @@ protected:
 	std::deque<Camera*> cameras;
 	scene_node* sceneRoot;
 	GLuint cubeMap;
+
+	bool hasSkybox;
+	Skybox* skybox;
 };
 
 #endif

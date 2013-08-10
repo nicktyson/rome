@@ -25,6 +25,7 @@
     <ClCompile Include="..\Source\Materials\Material.cpp" />
     <ClCompile Include="..\Source\Materials\MaterialList.cpp" />
     <ClCompile Include="..\Source\Materials\NormalMaterial.cpp" />
+    <ClCompile Include="..\Source\Materials\SolidDiffuseMaterial.cpp" />
     <ClCompile Include="..\Source\Materials\SolidTransparentMaterial.cpp" />
     <ClCompile Include="..\Source\MatrixStack.cpp" />
     <ClCompile Include="..\Source\mesh.cpp" />
@@ -36,6 +37,7 @@
     <ClCompile Include="..\Source\ScreenQuad.cpp" />
     <ClCompile Include="..\Source\ShaderProgram.cpp" />
     <ClCompile Include="..\Source\SimState.cpp" />
+    <ClCompile Include="..\Source\Skybox.cpp" />
     <ClCompile Include="..\Source\State.cpp" />
     <ClCompile Include="..\Source\StateManager.cpp" />
     <ClCompile Include="..\Source\TestScene.cpp" />
@@ -58,6 +60,7 @@
     <ClInclude Include="..\Source\Materials\Material.h" />
     <ClInclude Include="..\Source\Materials\MaterialList.h" />
     <ClInclude Include="..\Source\Materials\NormalMaterial.h" />
+    <ClInclude Include="..\Source\Materials\SolidDiffuseMaterial.h" />
     <ClInclude Include="..\Source\Materials\SolidTransparentMaterial.h" />
     <ClInclude Include="..\Source\MatrixStack.h" />
     <ClInclude Include="..\Source\mesh.h" />
@@ -69,6 +72,7 @@
     <ClInclude Include="..\Source\ScreenQuad.h" />
     <ClInclude Include="..\Source\ShaderProgram.h" />
     <ClInclude Include="..\Source\SimState.h" />
+    <ClInclude Include="..\Source\Skybox.h" />
     <ClInclude Include="..\Source\State.h" />
     <ClInclude Include="..\Source\StateManager.h" />
     <ClInclude Include="..\Source\TestScene.h" />
@@ -93,6 +97,8 @@
     <None Include="..\Source\Shaders\normal.vp" />
     <None Include="..\Source\Shaders\plain_post.fp" />
     <None Include="..\Source\Shaders\plain_post.vp" />
+    <None Include="..\Source\Shaders\solid_diffuse.fp" />
+    <None Include="..\Source\Shaders\solid_diffuse.vp" />
     <None Include="..\Source\Shaders\solid_transparent.fp" />
     <None Include="..\Source\Shaders\solid_transparent.vp" />
     <None Include="..\Source\Shaders\ubershader.fp" />

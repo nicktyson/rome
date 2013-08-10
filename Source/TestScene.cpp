@@ -3,6 +3,7 @@
 #include "MeshNode.h"
 #include "VitalEntity.h"
 #include "LightNode.h"
+#include "Skybox.h"
 
 TestScene::TestScene() {
 	
@@ -24,10 +25,12 @@ void TestScene::initScene() {
 	std::string testNormalLocation = ROME_PATH + "/Assets/Textures/stone_normal.png";
 	std::string transTextureLocation = ROME_PATH + "/Assets/Textures/stone_transparent.png";
 
-	std::string cubeMapLocation = ROME_PATH + "/Assets/Textures/grace";
+	std::string skyboxLocation = ROME_PATH + "/Assets/Meshes/test_cube_skybox.msh";
+	std::string skyboxTexLocation = ROME_PATH + "/Assets/Textures/skybox.png";
+	std::string cubeMapLocation = ROME_PATH + "/Assets/Textures/debug";
 
 	//make two offset objects
-	MeshNode* childNode = new MeshNode(cubeLocation, MaterialList::SOLIDTRANSPARENT);
+	MeshNode* childNode = new MeshNode(cubeLocation, MaterialList::BLINNPHONG);
 	childNode->setMaterialColor(1.0, 1.0, 1.0);
 	childNode->setMaterialAlpha(0.4);
 	childNode->setMaterialProperties(40.0, 0.2, 4.0);
@@ -63,6 +66,12 @@ void TestScene::initScene() {
 		newNode->setTranslation(3*sin(i*6.28/6), 3*cos(i*6.28/6), 0);
 		sceneRoot->addChild(newNode);
 	}
+
+	Skybox* sky = new Skybox(this, skyboxLocation);
+	sky->setMaterialColor(1.0, 1.0, 1.0, 0.0, 0.0, 0.0);
+	sky->setMaterialTexture(skyboxTexLocation);
+	sky->setScaling(100.0, 100.0, 100.0);
+	setSkybox(sky);
 
 	//add a light
 	LightNode* light = new LightNode();

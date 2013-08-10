@@ -15,7 +15,8 @@ public:
 		LAMBERTIAN,
 		BLINNPHONG,
 		COOKTORR,
-		SOLIDTRANSPARENT
+		SOLIDTRANSPARENT,
+		SOLIDDIFFUSE
 	};
 	Material* getMaterial(Materials materialName);
 

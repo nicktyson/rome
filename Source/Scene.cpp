@@ -4,6 +4,7 @@
 #include "FPCamera.h"
 #include "TPCamera.h"
 #include "scene_node.h"
+#include "Skybox.h"
 #include "MatrixStack.h"
 #include "../Lib/stb_image.h"
 #include "../Lib/glm/glm.hpp"
@@ -12,6 +13,7 @@
 Scene::Scene() {
 	//cubeMap = 0;
 	sceneRoot = new scene_node();
+	hasSkybox = false;
 }
 
 void Scene::init() {
@@ -100,6 +102,11 @@ void Scene::setRoot(scene_node* rootNode) {
 	sceneRoot = rootNode;
 }
 
+void Scene::setSkybox(Skybox* skybx) {
+	hasSkybox = true;
+	skybox = skybx;
+}
+
 GLuint Scene::getCubeMap() {
 	return cubeMap;
 }
@@ -110,10 +117,18 @@ glm::mat4 Scene::getEyeToWorldNormalMatrix() {
 
 void Scene::draw(Renderer* r, bool isTransparentPass) {
 	camera->draw(r, isTransparentPass);
+
+	if (hasSkybox) {
+		skybox->draw(r, isTransparentPass);
+	}
 }
 
 void Scene::update(double deltaT) {
 	camera->update(deltaT);
+
+	if (hasSkybox) {
+		skybox->update(deltaT);
+	}
 }
 
 void Scene::switchCameras() {
@@ -165,4 +180,8 @@ void Scene::zoomCamera(int pos) {
 
 void Scene::cameraMouseView(int x, int y) {
 	camera->mouseView(x, y);
+}
+
+Camera* Scene::getCurrentCamera() {
+	return camera;
 }

@@ -117,6 +117,12 @@
     <ClCompile Include="..\Source\Materials\SolidTransparentMaterial.cpp">
       <Filter>Source Files\Materials</Filter>
     </ClCompile>
+    <ClCompile Include="..\Source\Skybox.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Source\Materials\SolidDiffuseMaterial.cpp">
+      <Filter>Source Files\Materials</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\Source\main.h">
@@ -212,6 +218,12 @@
     <ClInclude Include="..\Source\Materials\SolidTransparentMaterial.h">
       <Filter>Source Files\Materials</Filter>
     </ClInclude>
+    <ClInclude Include="..\Source\Skybox.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Source\Materials\SolidDiffuseMaterial.h">
+      <Filter>Source Files\Materials</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="..\Source\Shaders\green_test.fp">
@@ -272,6 +284,12 @@
       <Filter>Source Files\Shaders</Filter>
     </None>
     <None Include="..\Source\Shaders\composite_transparency.vp">
+      <Filter>Source Files\Shaders</Filter>
+    </None>
+    <None Include="..\Source\Shaders\solid_diffuse.vp">
+      <Filter>Source Files\Shaders</Filter>
+    </None>
+    <None Include="..\Source\Shaders\solid_diffuse.fp">
       <Filter>Source Files\Shaders</Filter>
     </None>
   </ItemGroup>

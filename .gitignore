@@ -16,6 +16,7 @@ intermediate/
 *.tga
 *.png
 *.blend
+*.blend1
 
 [Tt]est[Rr]esult
 [Bb]uild[Ll]og.*

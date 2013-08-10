@@ -4,6 +4,7 @@
 * better bloom
 * depth of field
 * volumetric lighting / area lights
+* basic terrain
 * consider making material methods static
 * further improve scene creation
 	* data-driven via XML parsing
@@ -15,13 +16,16 @@
 	* more-capable player object
 * cameras
 	* make camera movements affect all cameras?
-	* fix top-down camera rotation
 	* swoop-down camera
 * centralize constants
 * make file structure of source files less horrible
 	* move dll's
 * multithreading fixes
 	* fix meshnode materialproperties methods
+	* removeable nodes
+	* switching cameras
+* resource management
+	* textures and meshes
 * add / improve states
 * ui
 	* font rendering
