@@ -35,7 +35,12 @@ void TPCamera::draw(Renderer* r, bool isTransparentPass) {
 
 	sn_State* currentState = &sn_states[SimState::currentRenderState];
 
-	applyTransformation();
+	sceneGraphMatrixStack->pushMatrix();
+
+	sceneGraphMatrixStack->rotated(currentState->rotation[0], 1, 0, 0);
+	sceneGraphMatrixStack->rotated(currentState->rotation[1], 0, 1, 0);
+	sceneGraphMatrixStack->rotated(currentState->rotation[2], 0, 0, 1);
+	sceneGraphMatrixStack->translated(currentState->translation[0], currentState->translation[1], currentState->translation[2]);
 
 	for(std::vector<scene_node*>::iterator it = currentState->children.begin(); it != currentState->children.end(); ++it) {
 		(*it)->draw(r, isTransparentPass);
@@ -115,19 +120,31 @@ void TPCamera::update(double deltaT) {
 }
 
 void TPCamera::forward() {
-	velocity[1] += -MAX_VELOCITY;
+	sn_State* newestState = &sn_states[SimState::newestState];
+
+	velocity[1] += std::cos(3.14 * newestState->rotation[2] / 180.0) * -MAX_VELOCITY;
+	velocity[0] += std::sin(3.14 * newestState->rotation[2] / 180.0) * -MAX_VELOCITY;
 }
 
 void TPCamera::back() {
-	velocity[1] += MAX_VELOCITY;
+	sn_State* newestState = &sn_states[SimState::newestState];
+
+	velocity[1] += std::cos(3.14 * newestState->rotation[2] / 180.0) * MAX_VELOCITY;
+	velocity[0] += std::sin(3.14 * newestState->rotation[2] / 180.0) * MAX_VELOCITY;
 }
 
 void TPCamera::left() {
-	velocity[0] += MAX_VELOCITY;
+	sn_State* newestState = &sn_states[SimState::newestState];
+
+	velocity[0] += std::cos(3.14 * newestState->rotation[2] / 180.0) * MAX_VELOCITY;
+	velocity[1] += std::sin(3.14 * newestState->rotation[2] / 180.0) * -MAX_VELOCITY;
 }
 
 void TPCamera::right() {
-	velocity[0] += -MAX_VELOCITY;
+	sn_State* newestState = &sn_states[SimState::newestState];
+
+	velocity[0] += std::cos(3.14 * newestState->rotation[2] / 180.0) * -MAX_VELOCITY;
+	velocity[1] += std::sin(3.14 * newestState->rotation[2] / 180.0) * MAX_VELOCITY;
 }
 
 void TPCamera::mouseView(int x, int y) {

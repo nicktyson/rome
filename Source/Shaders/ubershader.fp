@@ -43,8 +43,8 @@ void main()
 	//normal shader
 	if(materialID == 0) {
 		finalColor = (normal * 0.5) + vec3(0.5);
-	//green test shader
-	} else if(materialID == 1) {
+	//green test shader or solid diffuse
+	} else if(materialID == 1 || materialID == 5) {
 		finalColor = diffuseColor;
 	//lambertian
 	} else if(materialID == 2) {
