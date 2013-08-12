@@ -6,6 +6,7 @@
 #include "scene_node.h"
 #include "Skybox.h"
 #include "MatrixStack.h"
+#include "TextureManager.h"
 #include "../Lib/stb_image.h"
 #include "../Lib/glm/glm.hpp"
 #include "../Lib/glm/gtc/matrix_inverse.hpp"
@@ -69,27 +70,27 @@ void Scene::setCubeMap(std::string cubeMapName) {
 	glBindTexture(GL_TEXTURE_CUBE_MAP, location);
 
 	int x, y, n;
-	unsigned char* pixelData = stbi_load(px.c_str(), &x, &y, &n, 3);
+	unsigned char* pixelData = TextureManager::loadImage(px, &x, &y, &n, 3);
 	glTexImage2D(GL_TEXTURE_CUBE_MAP_POSITIVE_X, 0, GL_RGB16F, x, y, 0, GL_RGB, GL_UNSIGNED_BYTE, (GLvoid*) pixelData);
 	stbi_image_free(pixelData);
 
-	pixelData = stbi_load(nx.c_str(), &x, &y, &n, 3);
+	pixelData = TextureManager::loadImage(nx, &x, &y, &n, 3);
 	glTexImage2D(GL_TEXTURE_CUBE_MAP_NEGATIVE_X, 0, GL_RGB16F, x, y, 0, GL_RGB, GL_UNSIGNED_BYTE, (GLvoid*) pixelData);
 	stbi_image_free(pixelData);
 
-	pixelData = stbi_load(py.c_str(), &x, &y, &n, 3);
+	pixelData = TextureManager::loadImage(py, &x, &y, &n, 3);
 	glTexImage2D(GL_TEXTURE_CUBE_MAP_POSITIVE_Y, 0, GL_RGB16F, x, y, 0, GL_RGB, GL_UNSIGNED_BYTE, (GLvoid*) pixelData);
 	stbi_image_free(pixelData);
 
-	pixelData = stbi_load(ny.c_str(), &x, &y, &n, 3);
+	pixelData = TextureManager::loadImage(ny, &x, &y, &n, 3);
 	glTexImage2D(GL_TEXTURE_CUBE_MAP_NEGATIVE_Y, 0, GL_RGB16F, x, y, 0, GL_RGB, GL_UNSIGNED_BYTE, (GLvoid*) pixelData);
 	stbi_image_free(pixelData);
 
-	pixelData = stbi_load(pz.c_str(), &x, &y, &n, 3);
+	pixelData = TextureManager::loadImage(pz, &x, &y, &n, 3);
 	glTexImage2D(GL_TEXTURE_CUBE_MAP_POSITIVE_Z, 0, GL_RGB16F, x, y, 0, GL_RGB, GL_UNSIGNED_BYTE, (GLvoid*) pixelData);
 	stbi_image_free(pixelData);
 
-	pixelData = stbi_load(nz.c_str(), &x, &y, &n, 3);
+	pixelData = TextureManager::loadImage(nz, &x, &y, &n, 3);
 	glTexImage2D(GL_TEXTURE_CUBE_MAP_NEGATIVE_Z, 0, GL_RGB16F, x, y, 0, GL_RGB, GL_UNSIGNED_BYTE, (GLvoid*) pixelData);
 	stbi_image_free(pixelData);
 

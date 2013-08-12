@@ -26,7 +26,7 @@ GLuint TextureManager::getTexture(std::string fileName) {
 		
 		//new way
 		int x, y, n;
-		unsigned char* pixelData = stbi_load(fileName.c_str(), &x, &y, &n, 4);
+		unsigned char* pixelData = loadImage(fileName, &x, &y, &n, 4); //stbi_load(fileName.c_str(), &x, &y, &n, 4);
 		glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA8, x, y, 0, GL_RGBA, GL_UNSIGNED_BYTE, (GLvoid*) pixelData);
 		glGenerateMipmap(GL_TEXTURE_2D);
 		stbi_image_free(pixelData);
@@ -41,4 +41,25 @@ GLuint TextureManager::getTexture(std::string fileName) {
 
 void TextureManager::init() {
 	textures.clear();
+}
+
+//loads an image and reverses the rows to be bottom-to-top instead of top-to-bottom
+unsigned char* TextureManager::loadImage(std::string fileName, int* x, int* y, int* n, int nWanted) {
+
+	unsigned char* pixelData = stbi_load(fileName.c_str(), x, y, n, nWanted);
+
+	int width = *x * nWanted;
+	int height = *y;
+
+	//for each row
+	for (int i = 0; i < height / 2; i++) {
+		//for each byte in the row
+		for (int j = 0; j < width; j++) {
+			unsigned char temp = pixelData[width*i + j];
+			pixelData[width*i + j] = pixelData[width*(height-i-1) + j];
+			pixelData[width*(height-i-1) + j] = temp;
+		}
+	}
+
+	return pixelData;
 }

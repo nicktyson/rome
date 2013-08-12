@@ -30,11 +30,11 @@ void TestScene::initScene() {
 	std::string cubeMapLocation = ROME_PATH + "/Assets/Textures/debug";
 
 	//make two offset objects
-	MeshNode* childNode = new MeshNode(cubeLocation, MaterialList::BLINNPHONG);
+	MeshNode* childNode = new MeshNode(location, MaterialList::BLINNPHONG);
 	childNode->setMaterialColor(1.0, 1.0, 1.0);
 	childNode->setMaterialAlpha(0.4);
 	childNode->setMaterialProperties(40.0, 0.2, 4.0);
-	childNode->setMaterialTexture(transTextureLocation);
+	//childNode->setMaterialTexture(transTextureLocation);
 	//childNode->setMaterialNormalMap(testNormalLocation);
 	childNode->setTranslation(0, 0, 0);
 	sceneRoot->addChild(childNode);

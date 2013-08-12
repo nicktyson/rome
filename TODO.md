@@ -1,3 +1,5 @@
+Features
+
 * ssao / hbao
 * render settings
 	* bloom
@@ -5,7 +7,6 @@
 * depth of field
 * volumetric lighting / area lights
 * basic terrain
-* consider making material methods static
 * further improve scene creation
 	* data-driven via XML parsing
 * lua integration
@@ -17,19 +18,22 @@
 * cameras
 	* make camera movements affect all cameras?
 	* swoop-down camera
-* centralize constants
-* make file structure of source files less horrible
-	* move dll's
-* multithreading fixes
-	* fix meshnode materialproperties methods
-	* removeable nodes
-	* switching cameras
 * resource management
 	* textures and meshes
 * add / improve states
 * ui
 	* font rendering
 	* buttons
+
+Fixes
+
+* consider making material methods static
+* multithreading fixes
+	* fix meshnode materialproperties methods
+	* removeable nodes
 * better error/exception handling
 	* openGL
 	* file reading
+* centralize constants
+* make file structure of source files less horrible
+	* move dll's

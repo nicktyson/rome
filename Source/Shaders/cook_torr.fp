@@ -58,7 +58,7 @@ void main()
 
 	vec3 diffuseColor = diffuse.xyz;
 	if(hasDiffuseTexture == 1) {
-		diffuseColor = texture2D(diffuseTexture, vec2(texcoord.x, -texcoord.y)).xyz * diffuse.xyz;
+		diffuseColor = texture2D(diffuseTexture, vec2(texcoord.x, texcoord.y)).xyz * diffuse.xyz;
 	}
 
 	//materialID = 4.0

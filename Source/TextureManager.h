@@ -10,6 +10,7 @@ public:
 	static GLuint getTexture(std::string fileName);
 	static std::map<std::string, GLuint> textures;
 	static void init();
+	static unsigned char* loadImage(std::string fileName, int* x, int* y, int* n, int nWanted);
 
 private:
 	TextureManager();
