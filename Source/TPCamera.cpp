@@ -27,6 +27,7 @@ TPCamera::TPCamera() {
 	//start zoomed out
 	for (int i = 0; i < 3; i++) {
 		sn_states[i].translation[2] = -6;
+		//sn_states[i].rotation[0] = 90.0;
 	}
 }
 
@@ -166,15 +167,30 @@ void TPCamera::zoom(int pos) {
 	velocity[2] += ZOOM_VELOCITY * zoomAmount;
 }
 
+//
 glm::mat4 TPCamera::getInverseNormalMatrix() {
 	extern MatrixStack* sceneGraphMatrixStack;
 
-	applyTransformation();
+	sn_State* currentState = &sn_states[SimState::currentRenderState];
+
+	sceneGraphMatrixStack->pushMatrix();
+
+	sceneGraphMatrixStack->loadIdentity();
+	
+	sceneGraphMatrixStack->rotated(90.0, 1, 0, 0);
+
+	sceneGraphMatrixStack->rotated(-currentState->rotation[2], 0, 0, 1);
+	sceneGraphMatrixStack->rotated(-currentState->rotation[1], 0, 1, 0);
+	sceneGraphMatrixStack->rotated(-currentState->rotation[0], 1, 0, 0);
+
+	//sceneGraphMatrixStack->translated(-currentState->translation[0], -currentState->translation[1], -currentState->translation[2]);
+
+	//sceneGraphMatrixStack->rotated(90.0, 1, 0, 0);
 
 	glm::mat4 normalMatrix = glm::mat4(sceneGraphMatrixStack->last());
 	normalMatrix = glm::inverse(normalMatrix);
 	normalMatrix = glm::transpose(normalMatrix);
-	normalMatrix = glm::inverse(normalMatrix);
+	//normalMatrix = glm::inverse(normalMatrix);
 
 	sceneGraphMatrixStack->popMatrix();
 
