@@ -26,6 +26,12 @@ std::vector<scene_node *> scene_node::getChildren() {
 	return currentState->children;
 }
 
+void scene_node::clearChildren() {
+	sn_State* currentState = &sn_states[SimState::currentUpdateState];
+
+	currentState->children.clear();
+}
+
 void scene_node::setParent(scene_node * newParent) {
 	sn_State* currentState = &sn_states[SimState::currentUpdateState];
 

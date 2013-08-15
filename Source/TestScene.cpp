@@ -4,6 +4,7 @@
 #include "VitalEntity.h"
 #include "LightNode.h"
 #include "Skybox.h"
+#include "SimState.h"
 
 TestScene::TestScene() {
 	
@@ -15,6 +16,8 @@ void TestScene::init() {
 }
 
 void TestScene::initScene() {
+	scene_State* currentState = &scene_states[SimState::currentUpdateState];
+
 	extern std::string ROME_PATH;
 
 	std::string location = ROME_PATH + "/Assets/Meshes/test_sphere_hires.msh";
@@ -37,7 +40,7 @@ void TestScene::initScene() {
 	//childNode->setMaterialTexture(transTextureLocation);
 	//childNode->setMaterialNormalMap(testNormalLocation);
 	childNode->setTranslation(0, 0, 0);
-	sceneRoot->addChild(childNode);
+	currentState->sceneRoot->addChild(childNode);
 
 	////float randRot = rand() % 90;
 	VitalEntity * secondChild = new VitalEntity(location, 1, 0, 0);
@@ -53,7 +56,7 @@ void TestScene::initScene() {
 	floor->setMaterialNormalMap(testNormalLocation);
 	floor->setScaling(5, 5, 1.0);
 	floor->setTranslation(0, 0, -1.1);
-	sceneRoot->addChild(floor);
+	currentState->sceneRoot->addChild(floor);
 
 	//make a ring of spheres
 	for(double i = 0; i < 6; ++i) {
@@ -64,7 +67,7 @@ void TestScene::initScene() {
 		newNode->setMaterialTexture(testTextureLocation);
 	//	newNode->setMaterialNormalMap(testNormalLocation);
 		newNode->setTranslation(3*sin(i*6.28/6), 3*cos(i*6.28/6), 0);
-		sceneRoot->addChild(newNode);
+		currentState->sceneRoot->addChild(newNode);
 	}
 
 	Skybox* sky = new Skybox(this, skyboxLocation);
@@ -76,7 +79,7 @@ void TestScene::initScene() {
 	//add a light
 	LightNode* light = new LightNode();
 	light->setTranslation(16.0, 16.0, 6.0);
-	sceneRoot->addChild(light);
+	currentState->sceneRoot->addChild(light);
 
 	//cube mapping
 	setCubeMap(cubeMapLocation);

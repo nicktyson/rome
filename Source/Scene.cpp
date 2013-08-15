@@ -6,15 +6,19 @@
 #include "scene_node.h"
 #include "Skybox.h"
 #include "MatrixStack.h"
+#include "SimState.h"
 #include "TextureManager.h"
 #include "../Lib/stb_image.h"
 #include "../Lib/glm/glm.hpp"
 #include "../Lib/glm/gtc/matrix_inverse.hpp"
 
-Scene::Scene() {
-	//cubeMap = 0;
-	sceneRoot = new scene_node();
-	hasSkybox = false;
+Scene::Scene() : scene_states(3) {
+	for (int i = 0; i < 3; i++) {
+		scene_State* state = &scene_states[i];
+		//cubeMap = 0;
+		state->sceneRoot = new scene_node();
+		state->hasSkybox = false;
+	}
 }
 
 void Scene::init() {
@@ -23,17 +27,23 @@ void Scene::init() {
 }
 
 void Scene::initCameras() {
-	cameraType = THIRDPERSON;
+	scene_State* currentState = &scene_states[SimState::currentUpdateState];
 
-	camera = new TPCamera();
-	camera->addSceneRoot(sceneRoot);
-	cameras.push_back(camera);
+	Camera* tmpCam = new TPCamera();
 
-	camera = new FPCamera();
-	camera->addSceneRoot(sceneRoot);
-	cameras.push_back(camera);
+	tmpCam->addSceneRoot(currentState->sceneRoot);
+	cameras.push_back(tmpCam);
 
-	camera = cameras.front();
+	tmpCam = new FPCamera();
+	tmpCam->addSceneRoot(currentState->sceneRoot);
+	cameras.push_back(tmpCam);
+
+	for (int i = 0; i < 3; i++) {
+		scene_State* state = &scene_states[i];
+		state->camera = cameras.front();
+		state->cameraType = THIRDPERSON;
+	}
+	
 	cameras.pop_front();
 }
 
@@ -96,93 +106,139 @@ void Scene::setCubeMap(std::string cubeMapName) {
 
 	glGenerateMipmap(GL_TEXTURE_CUBE_MAP);
 
-	cubeMap = location;
+	scene_State* currentState = &scene_states[SimState::currentUpdateState];
+	currentState->cubeMap = location;
 }
 
 void Scene::setRoot(scene_node* rootNode) {
-	sceneRoot = rootNode;
+	scene_State* currentState = &scene_states[SimState::currentUpdateState];
+	currentState->sceneRoot = rootNode;
 }
 
 void Scene::setSkybox(Skybox* skybx) {
-	hasSkybox = true;
-	skybox = skybx;
+	scene_State* currentState = &scene_states[SimState::currentUpdateState];
+
+	currentState->hasSkybox = true;
+	currentState->skybox = skybx;
 }
 
 GLuint Scene::getCubeMap() {
-	return cubeMap;
+	scene_State* currentState = &scene_states[SimState::currentRenderState];
+
+	return currentState->cubeMap;
 }
 
 glm::mat4 Scene::getEyeToWorldNormalMatrix() {
-	return camera->getInverseNormalMatrix();
+	scene_State* currentState = &scene_states[SimState::currentRenderState];
+
+	return currentState->camera->getInverseNormalMatrix();
 }
 
 void Scene::draw(Renderer* r, bool isTransparentPass) {
-	camera->draw(r, isTransparentPass);
+	scene_State* currentState = &scene_states[SimState::currentRenderState];
+	
+	currentState->camera->draw(r, isTransparentPass);
 
-	if (hasSkybox) {
-		skybox->draw(r, isTransparentPass);
+	if (currentState->hasSkybox) {
+		currentState->skybox->draw(r, isTransparentPass);
 	}
 }
 
 void Scene::update(double deltaT) {
-	camera->update(deltaT);
+	scene_State* currentState = &scene_states[SimState::currentUpdateState];
+	
+	stateUpdate(deltaT);
 
-	if (hasSkybox) {
-		skybox->update(deltaT);
+	currentState->camera->update(deltaT);
+
+	if (currentState->hasSkybox) {
+		currentState->skybox->update(deltaT);
 	}
 }
 
+void Scene::stateUpdate(double deltaT) {
+	scene_State* currentState = &scene_states[SimState::currentUpdateState];
+	scene_State* newestState = &scene_states[SimState::newestState];
+
+	currentState->camera = newestState->camera;
+	currentState->cameraType = newestState->cameraType;
+	currentState->cubeMap = newestState->cubeMap;
+	currentState->hasSkybox = newestState->hasSkybox;
+	currentState->sceneRoot = newestState->sceneRoot;
+	currentState->skybox = newestState->skybox;
+}
+
 void Scene::switchCameras() {
-	cameras.push_back(camera);
-	camera = cameras.front();
+	scene_State* currentState = &scene_states[SimState::currentUpdateState];
+	
+	cameras.push_back(currentState->camera);
+	currentState->camera = cameras.front();
 	cameras.pop_front();
 
-	switch(cameraType) {
+	switch(currentState->cameraType) {
 	case FIRSTPERSON:
-		cameraType = THIRDPERSON;
+		currentState->cameraType = THIRDPERSON;
 		break;
 	case THIRDPERSON:
-		cameraType = FIRSTPERSON;
+		currentState->cameraType = FIRSTPERSON;
 		break;
 	}
 }
 
 void Scene::rotateCameraCW() {
-	if (cameraType == THIRDPERSON) {
-		camera->rotateCW();
+	scene_State* currentState = &scene_states[SimState::currentUpdateState];
+
+	if (currentState->cameraType == THIRDPERSON) {
+		currentState->camera->rotateCW();
 	}
 }
 
 void Scene::rotateCameraCCW() {
-	if (cameraType == THIRDPERSON) {
-		camera->rotateCCW();
+	scene_State* currentState = &scene_states[SimState::currentUpdateState];
+
+	if (currentState->cameraType == THIRDPERSON) {
+		currentState->camera->rotateCCW();
 	}
 }
 
 void Scene::cameraForward() {
-	camera->forward();
+	scene_State* currentState = &scene_states[SimState::currentUpdateState];
+
+	currentState->camera->forward();
 }
 
 void Scene::cameraBack() {
-	camera->back();
+	scene_State* currentState = &scene_states[SimState::currentUpdateState];
+
+	currentState->camera->back();
 }
 
 void Scene::cameraRight() {
-	camera->right();
+	scene_State* currentState = &scene_states[SimState::currentUpdateState];
+
+	currentState->camera->right();
 }
 
 void Scene::cameraLeft() {
-	camera->left();
+	scene_State* currentState = &scene_states[SimState::currentUpdateState];
+
+	currentState->camera->left();
 }
 
 void Scene::zoomCamera(int pos) {
-	camera->zoom(pos);
+	scene_State* currentState = &scene_states[SimState::currentUpdateState];
+
+	currentState->camera->zoom(pos);
 }
 
 void Scene::cameraMouseView(int x, int y) {
-	camera->mouseView(x, y);
+	scene_State* currentState = &scene_states[SimState::currentUpdateState];
+
+	currentState->camera->mouseView(x, y);
 }
 
 Camera* Scene::getCurrentCamera() {
-	return camera;
+	scene_State* currentState = &scene_states[SimState::currentUpdateState];
+
+	return currentState->camera;
 }

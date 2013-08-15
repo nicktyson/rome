@@ -161,13 +161,13 @@ void SimState::simThreadFunc() {
 			return;
 		}
 
-		keyOps();
-		stateKeyOps();
-
 		simStartTime = glfwGetTime();
 		deltaT = simStartTime - previousFrameStart;
 
 		updateSim(deltaT);
+
+		keyOps();
+		stateKeyOps();
 
 		//clamp rate
 		simCurrentTime = glfwGetTime();

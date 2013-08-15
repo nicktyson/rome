@@ -10,6 +10,7 @@ public:
 	scene_node();
 	scene_node * getParent();
 	std::vector<scene_node *> getChildren();
+	void clearChildren();
 	void setParent(scene_node * newParent);
 	void addChild(scene_node * newChild);
 	std::vector<float> getTranslation();

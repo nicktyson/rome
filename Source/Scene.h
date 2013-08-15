@@ -37,20 +37,27 @@ public:
 	glm::mat4 getEyeToWorldNormalMatrix();
 	GLuint getCubeMap();
 	void update(double deltaT);
+	virtual void stateUpdate(double deltaT);
 	void draw(Renderer* r, bool isTransparentPass);
 
 protected:
 	void initCameras();
 	virtual void initScene();
 	
-	Cameras cameraType;
-	Camera* camera;
-	std::deque<Camera*> cameras;
-	scene_node* sceneRoot;
-	GLuint cubeMap;
+	struct scene_State {
+		Cameras cameraType;
+		Camera* camera;
+	
+		scene_node* sceneRoot;
+		GLuint cubeMap;
 
-	bool hasSkybox;
-	Skybox* skybox;
+		bool hasSkybox;
+		Skybox* skybox;
+	};
+
+	std::vector<scene_State> scene_states;
+
+	std::deque<Camera*> cameras;
 };
 
 #endif
