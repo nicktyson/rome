@@ -1,8 +1,11 @@
 #include <gl/glew.h>
-#include <GL/glfw.h>
+#include <GLFW/glfw3.h>
 #include "SimState.h"
 #include <iostream>
 #include <vector>
+#include <thread>
+#include <mutex>
+#include <chrono>
 #include "StateManager.h"
 #include "MeshNode.h"
 #include "VitalEntity.h"
@@ -47,10 +50,10 @@ void SimState::initialize(StateManager* mngr) {
 
 	currentUpdateState = 1;
 
-	pauseMutex = glfwCreateMutex();
-	tripleBufferMutex = glfwCreateMutex();
+	std::mutex pauseMutex();
+	std::mutex tripleBufferMutex();
 
-	simThread = glfwCreateThread(startThread, this);
+	std::thread simThread(&SimState::simThreadFunc, this);
 	initialized = true;
 }
 
@@ -70,7 +73,8 @@ void SimState::run() {
 		double loopCurrentTime = glfwGetTime();
 		double timeDif = loopCurrentTime - loopStartTime;
 		if (DISPLAY_FRAME_TIME > timeDif) {
-			glfwSleep(DISPLAY_FRAME_TIME - timeDif);
+			std::chrono::milliseconds duration((int) ((DISPLAY_FRAME_TIME - timeDif) * 1000));
+			std::this_thread::sleep_for(duration);
 		}
 
 		//calculate and display FPS once per second
@@ -89,11 +93,11 @@ void SimState::run() {
 void SimState::resume() {
 	shouldStopStateLoop = false;
 	pauseSimThread = false;
-	glfwUnlockMutex(pauseMutex);
+	pauseMutex.unlock();
 }
 
 void SimState::pause() {
-	glfwLockMutex(pauseMutex);
+	pauseMutex.unlock();
 	pauseSimThread = true;
 	for(int i = 0; i < 300; i++) {
 		keyState[i] = 0;
@@ -103,8 +107,8 @@ void SimState::pause() {
 void SimState::end() {
 	endSimThread = true;
 	pauseSimThread = false;
-	glfwUnlockMutex(pauseMutex);
-	glfwWaitThread(simThread, GLFW_WAIT);
+	pauseMutex.unlock();
+	simThread.join();
 }
 
 void SimState::keyCallback(int key, int state) {
@@ -137,11 +141,6 @@ void SimState::updateSim(double deltaT) {
 	currentScene->update(deltaT);
 }
 
-void SimState::startThread(void * state) {
-	SimState * stptr = static_cast<SimState*>(state);
-	stptr->simThreadFunc();
-}
-
 void SimState::simThreadFunc() {
 
 	double simStartTime;
@@ -152,8 +151,8 @@ void SimState::simThreadFunc() {
 
 	while (true) {
 		if(pauseSimThread) {
-			glfwLockMutex(pauseMutex);
-			glfwUnlockMutex(pauseMutex);
+			pauseMutex.lock();
+			pauseMutex.unlock();
 			previousFrameStart = glfwGetTime();
 		}
 
@@ -173,7 +172,8 @@ void SimState::simThreadFunc() {
 		simCurrentTime = glfwGetTime();
 		timeDif = simCurrentTime - simStartTime;
 		if (SIM_TIME > timeDif) {
-			glfwSleep(SIM_TIME - timeDif);
+			std::chrono::milliseconds duration((int) ((SIM_TIME - timeDif) * 1000));
+			std::this_thread::sleep_for(duration);
 		}
 
 		previousFrameStart = simStartTime;
@@ -183,15 +183,15 @@ void SimState::simThreadFunc() {
 }
 
 void SimState::updateRenderThreadState() {
-	glfwLockMutex(tripleBufferMutex);
+	tripleBufferMutex.lock();
 
 	currentRenderState = newestState;
 
-	glfwUnlockMutex(tripleBufferMutex);
+	tripleBufferMutex.unlock();
 }
 
 void SimState::updateUpdateThreadState() {
-	glfwLockMutex(tripleBufferMutex);
+	tripleBufferMutex.lock();
 
 	newestState = currentUpdateState;
 
@@ -203,7 +203,7 @@ void SimState::updateUpdateThreadState() {
 		currentUpdateState = 2;
 	}
 
-	glfwUnlockMutex(tripleBufferMutex);
+	tripleBufferMutex.unlock();
 }
 
 void SimState::keyOps() {
@@ -227,10 +227,10 @@ void SimState::keyOps() {
 		keyState['P'] = false;
 	}
 
-	if (keyState[GLFW_KEY_ESC]) {
+	if (keyState[GLFW_KEY_ESCAPE]) {
 		manager->changeState(StateManager::END);
 		shouldStopStateLoop = true;
-		keyState[GLFW_KEY_ESC] = false;
+		keyState[GLFW_KEY_ESCAPE] = false;
 	}
 }
 

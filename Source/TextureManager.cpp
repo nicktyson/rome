@@ -1,5 +1,5 @@
 #include "TextureManager.h"
-#include <gl/glfw.h>
+#include <glfw/glfw3.h>
 #include <string>
 #include <iostream>
 #include <map>

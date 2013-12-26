@@ -2,8 +2,10 @@
 #define SIMSTATE_H
 
 #include <gl/glew.h>
-#include <gl/glfw.h>
+#include <glfw/glfw3.h>
 #include <deque>
+#include <thread>
+#include <mutex>
 #include "State.h"
 
 class State;
@@ -25,7 +27,6 @@ public:
 	void mouseWheelCallback(int pos);
 	void keyOps();
 	void initScene();
-	static void GLFWCALL startThread(void * state);
 	void simThreadFunc();
 	void stateKeyOps();
 
@@ -45,9 +46,9 @@ protected:
 	bool shouldStopStateLoop;
 	bool pauseSimThread;
 	bool endSimThread;
-	GLFWmutex pauseMutex;
-	GLFWthread simThread;
-	GLFWmutex tripleBufferMutex;
+	std::mutex pauseMutex;
+	std::thread simThread;
+	std::mutex tripleBufferMutex;
 
 	static const int DISPLAY_FRAME_RATE;
 	static const double DISPLAY_FRAME_TIME;

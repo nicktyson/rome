@@ -1,7 +1,7 @@
 #ifndef INTROSTATE_H
 #define INTROSTATE_H
 
-#include <gl/glfw.h>
+#include <glfw/glfw3.h>
 #include "State.h"
 
 class State;
