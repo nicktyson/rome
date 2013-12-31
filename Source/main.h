@@ -1,13 +1,16 @@
 #ifndef MAIN_H
 #define MAIN_H
 
-#include <gl/glfw.h>
+class GLFWwindow;
 
-void GLFWCALL reshape(int width, int height);
-void GLFWCALL keyCallback(int key, int state);
-void GLFWCALL mousePosCallback(int x, int y);
-void GLFWCALL mouseWheelCallback(int pos);
+GLFWwindow* mainWindow;
+
+void reshape(GLFWwindow* w, int width, int height);
+void keyCallback(GLFWwindow* w, int key, int scancode, int state, int mods);
+void mousePosCallback(GLFWwindow* w, double x, double y);
+void mouseWheelCallback(GLFWwindow* w, double xOffset, double yOffset);
 void setupPath();
 void initShaders();
+void swapBufs();
 
 #endif

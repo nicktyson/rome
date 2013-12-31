@@ -14,7 +14,7 @@ public:
 	virtual void mouseView(int x, int y) = 0;
 	virtual void rotateCW() = 0;
 	virtual void rotateCCW() = 0;
-	virtual void zoom(int pos);
+	virtual void zoom(double dy);
 	virtual glm::mat4 getInverseNormalMatrix() = 0;
 	void addSceneRoot(scene_node* root);
 };

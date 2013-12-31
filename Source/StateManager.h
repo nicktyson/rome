@@ -2,6 +2,7 @@
 #define STATEMANAGER_H
 
 #include <vector>
+
 class State;
 
 class StateManager {

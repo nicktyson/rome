@@ -1,6 +1,6 @@
 #include <GL/glew.h> //order glew -> windows -> glfw
 #include <Windows.h> //get exe path
-#include <GL/glfw.h>
+#include <glfw/glfw3.h>
 #include <string>
 #include <iostream>
 #include "main.h"
@@ -23,13 +23,21 @@ MatrixStack* projectionMatrixStack;
 int main(int argc, char **argv) {
 	//create window
 	glfwInit();
-	//glfwOpenWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
-	glfwOpenWindow(800, 600, 8, 8, 8, 8, 0, 8, GLFW_WINDOW);
-	glfwSetWindowTitle("Rome graphics");
-	
-	std::cout << glfwGetWindowParam(GLFW_OPENGL_VERSION_MAJOR) << "." << glfwGetWindowParam(GLFW_OPENGL_VERSION_MINOR) << std::endl;
 
-	glewInit();
+	//glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
+	//glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
+	//glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
+
+	mainWindow = glfwCreateWindow(800, 600, "Rome graphics", NULL, NULL);
+	
+	glfwMakeContextCurrent(mainWindow);
+
+	std::cout << glfwGetWindowAttrib(mainWindow, GLFW_CONTEXT_VERSION_MAJOR) << "." << glfwGetWindowAttrib(mainWindow, GLFW_CONTEXT_VERSION_MINOR) << std::endl;
+
+	GLenum err = glewInit();
+	if (err != GLEW_OK) {
+		std::cout << "GLEW failed to initialize" << std::endl;
+	}
 
 	//gets perspective correct
 	//reshape(800, 600);
@@ -51,42 +59,45 @@ int main(int argc, char **argv) {
 
 	manager = new StateManager();
 
-	glfwEnable(GLFW_KEY_REPEAT);
 	//GLFW doesn't accept object member functions, so use local ones that redirect
-	glfwSetWindowSizeCallback(reshape);
-	glfwSetKeyCallback(keyCallback);
-	glfwSetMousePosCallback(mousePosCallback);
-	glfwSetMouseWheelCallback(mouseWheelCallback);
+	glfwSetWindowSizeCallback(mainWindow, reshape);
+	glfwSetKeyCallback(mainWindow, keyCallback);
+	glfwSetCursorPosCallback(mainWindow, mousePosCallback);
+	glfwSetScrollCallback(mainWindow, mouseWheelCallback);
 
 	//state management loop
 	manager->run();
 
-	//calls KeyCallback apparently
-	glfwCloseWindow();
+	glfwDestroyWindow(mainWindow);
 	glfwTerminate();
 }
 
+void swapBufs() {
+	glfwPollEvents();
+	glfwSwapBuffers(mainWindow);
+}
+
 //reshape the window
-void GLFWCALL reshape (int width, int height) {  
+void reshape (GLFWwindow* w, int width, int height) {  
 	glViewport(0, 0, (GLint)width, (GLint)height);
 	projectionMatrixStack->loadIdentity();
 	//field of view, aspect ratio of window, and the new and far planes
 	projectionMatrixStack->perspective(60.0, (float)width / (float)height, 1.0, 300.0);
 }
 
-void GLFWCALL keyCallback(int key, int state) {
+void keyCallback(GLFWwindow* w, int key, int scancode, int state, int mods) {
 	State* currentState = manager->getCurrentState();
 	currentState->keyCallback(key, state);
 }
 
-void GLFWCALL mousePosCallback(int x, int y) {
+void mousePosCallback(GLFWwindow* w, double x, double y) {
 	State* currentState = manager->getCurrentState();
 	currentState->mousePosCallback(x, y);
 }
 
-void GLFWCALL mouseWheelCallback(int pos) {
+void mouseWheelCallback(GLFWwindow* w, double xOffset, double yOffset) {
 	State* currentState = manager->getCurrentState();
-	currentState->mouseWheelCallback(pos);
+	currentState->mouseWheelCallback(xOffset, yOffset);
 }
 
 void setupPath() {
@@ -110,6 +121,7 @@ void setupPath() {
 	}
 
 	ROME_PATH = exePath;
+	std::cout << ROME_PATH << std::endl;
 }
 
 void initShaders() {

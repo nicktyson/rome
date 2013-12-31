@@ -67,7 +67,7 @@ void SimState::run() {
 
 		display();
 		
-		glfwSwapBuffers();
+		swapBufs();
 
 		//clamp display frame rate
 		double loopCurrentTime = glfwGetTime();
@@ -121,12 +121,12 @@ void SimState::keyCallback(int key, int state) {
 	}
 }
 
-void SimState::mousePosCallback(int x, int y) {
+void SimState::mousePosCallback(double x, double y) {
 	currentScene->cameraMouseView(x, y);
 }
 
-void SimState::mouseWheelCallback(int pos) {
-	currentScene->zoomCamera(pos);
+void SimState::mouseWheelCallback(double dx, double dy) {
+	currentScene->zoomCamera(dy);
 }
 
 void SimState::initScene() {

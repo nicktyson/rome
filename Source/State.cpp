@@ -13,10 +13,10 @@ void State::initialize(StateManager* mngr) {
 
 }
 
-void State::mousePosCallback(int x, int y) {
+void State::mousePosCallback(double x, double y) {
 
 }
 
-void State::mouseWheelCallback(int pos) {
+void State::mouseWheelCallback(double dx, double dy) {
 
 }

@@ -7,6 +7,8 @@
 class State;
 class StateManager;
 
+void swapBufs();
+
 class IntroState : public State {
 public:
 	IntroState();

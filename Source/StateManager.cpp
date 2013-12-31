@@ -5,10 +5,14 @@
 #include "IntroState.h"
 #include "PauseState.h"
 
+
 StateManager::StateManager() {
+	//w = window;
+
 	intro = new IntroState();
 	ps = new PauseState();
 	sim = new SimState();
+	
 
 	currentState = intro;
 	nextState = currentState;

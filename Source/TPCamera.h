@@ -19,7 +19,7 @@ public:
 	void mouseView(int x, int y);
 	void rotateCW();
 	void rotateCCW();
-	void zoom(int pos);
+	void zoom(double dy);
 	glm::mat4 getInverseNormalMatrix();
 
 private:

@@ -14,8 +14,8 @@ public:
 	virtual void pause() = 0;
 	virtual void end() = 0;
 	virtual void keyCallback(int key, int state) = 0;
-	virtual void mousePosCallback(int x, int y);
-	virtual void mouseWheelCallback(int pos);
+	virtual void mousePosCallback(double x, double y);
+	virtual void mouseWheelCallback(double dx, double dy);
 	bool isInitialized();
 
 protected:

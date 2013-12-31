@@ -161,10 +161,9 @@ void TPCamera::rotateCCW() {
 	angVelocity[2] += -MAX_ROTATE_VELOCITY;
 }
 
-void TPCamera::zoom(int pos) {
-	int zoomAmount = pos - zoomLevel;
-	zoomLevel = pos;
-	velocity[2] += ZOOM_VELOCITY * zoomAmount;
+void TPCamera::zoom(double dy) {
+	zoomLevel += dy;
+	velocity[2] += ZOOM_VELOCITY * dy;
 }
 
 //

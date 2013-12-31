@@ -14,6 +14,8 @@ class Scene;
 class Camera;
 class Renderer;
 
+void swapBufs();
+
 class SimState : public State {
 public:
 	SimState();
@@ -23,8 +25,8 @@ public:
 	void pause();
 	void end();
 	void keyCallback(int key, int state);
-	void mousePosCallback(int x, int y);
-	void mouseWheelCallback(int pos);
+	void mousePosCallback(double x, double y);
+	void mouseWheelCallback(double dx, double dy);
 	void keyOps();
 	void initScene();
 	void simThreadFunc();

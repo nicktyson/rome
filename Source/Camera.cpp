@@ -4,7 +4,7 @@ Camera::Camera() {
 
 }
 
-void Camera::zoom(int pos) {
+void Camera::zoom(double dy) {
 
 }
 

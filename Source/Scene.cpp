@@ -225,10 +225,10 @@ void Scene::cameraLeft() {
 	currentState->camera->left();
 }
 
-void Scene::zoomCamera(int pos) {
+void Scene::zoomCamera(double dy) {
 	scene_State* currentState = &scene_states[SimState::currentUpdateState];
 
-	currentState->camera->zoom(pos);
+	currentState->camera->zoom(dy);
 }
 
 void Scene::cameraMouseView(int x, int y) {

@@ -1,6 +1,8 @@
 #include "IntroState.h"
 #include <GLFW/glfw3.h>
+#include <chrono>
 #include <iostream>
+#include <thread>
 #include "StateManager.h"
 
 IntroState::IntroState() {
@@ -22,13 +24,14 @@ void IntroState::run() {
 
 		keyOps();
 		display();
-		glfwSwapBuffers();
+		swapBufs();
 
 		//clamp display frame rate
 		double loopCurrentTime = glfwGetTime();
 		double timeDif = loopCurrentTime - loopStartTime;
 		if (DISPLAY_FRAME_TIME > timeDif) {
-			glfwSleep(DISPLAY_FRAME_TIME - timeDif);
+			std::chrono::milliseconds duration((int)((DISPLAY_FRAME_TIME - timeDif) * 1000));
+			std::this_thread::sleep_for(duration);
 		}
 	}
 }

@@ -26,7 +26,7 @@ public:
 	void cameraBack();
 	void cameraRight();
 	void cameraLeft();
-	void zoomCamera(int pos);
+	void zoomCamera(double dy);
 	void cameraMouseView(int x, int y);
 	Camera* getCurrentCamera();
 

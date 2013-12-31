@@ -136,8 +136,8 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <LinkIncremental>true</LinkIncremental>
     <IntDir>.\intermediate\</IntDir>
-    <IncludePath>C:\dev\glfw-3.0.3.bin.WIN32\include;C:\dev\glew-1.10.0\include;$(IncludePath)</IncludePath>
-    <LibraryPath>C:\dev\glfw-3.0.3.bin.WIN32\lib-msvc110;C:\dev\glew-1.10.0\lib;$(LibraryPath)</LibraryPath>
+    <IncludePath>C:\Users\Nick\Documents\Visual Studio 2013\Projects\rome\Lib\glew-1.10.0\include;C:\Users\Nick\Documents\Visual Studio 2013\Projects\rome\Lib\glfw-3.0.3.bin.WIN32\include;$(IncludePath)</IncludePath>
+    <LibraryPath>C:\Users\Nick\Documents\Visual Studio 2013\Projects\rome\Lib\glew-1.10.0\lib\Release\Win32;C:\Users\Nick\Documents\Visual Studio 2013\Projects\rome\Lib\glfw-3.0.3.bin.WIN32\lib-msvc120;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <LinkIncremental>false</LinkIncremental>
@@ -149,15 +149,17 @@
       </PrecompiledHeader>
       <WarningLevel>Level4</WarningLevel>
       <Optimization>Disabled</Optimization>
-      <PreprocessorDefinitions>WIN32;_DEBUG;_CONSOLE;%(PreprocessorDefinitions);_CRT_SECURE_NO_WARNINGS</PreprocessorDefinitions>
+      <PreprocessorDefinitions>WIN32;_DEBUG;_CONSOLE;%(PreprocessorDefinitions);_CRT_SECURE_NO_WARNINGS;GLEW_STATIC;GLFW_DLL</PreprocessorDefinitions>
       <CompileAs>CompileAsCpp</CompileAs>
       <AdditionalOptions>-DGLFW_DLL %(AdditionalOptions)</AdditionalOptions>
       <CompileAsManaged>false</CompileAsManaged>
+      <AdditionalIncludeDirectories>C:\Users\Nick\Documents\Visual Studio 2013\Projects\rome\Lib\glew-1.10.0\include;C:\Users\Nick\Documents\Visual Studio 2013\Projects\rome\Lib\glfw-3.0.3.bin.WIN32\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalDependencies>glew32.lib;opengl32.lib;glu32.lib;glfwdll.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>glew32s.lib;opengl32.lib;glu32.lib;glfw3dll.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>C:\Users\Nick\Documents\Visual Studio 2013\Projects\rome\Lib\glew-1.10.0\lib\Release\Win32;C:\Users\Nick\Documents\Visual Studio 2013\Projects\rome\Lib\glfw-3.0.3.bin.WIN32\lib-msvc120;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
