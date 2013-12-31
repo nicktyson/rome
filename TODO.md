@@ -1,3 +1,29 @@
+Goals / Milestones
+
+* actual game engine capability
+	* object lifecycle
+		* multithreading fixes below
+		* remove objects from graph
+		* RAII
+	* Lua
+		* finish/design above first
+		* scripts to create scenes / place nodes
+		* scripts to control scene graph node
+		* console / dynamic manipulation of graph
+		* overall game logic
+* example game
+	* ui
+		* font rendering
+		* buttons
+	* add/improve states
+	* add/improve node/entity classes
+		* player object
+		* camera management - switching camera tye at one location
+		* look into entity/component architectures
+	* the actual lua scripts
+* miscellaneous graphics features
+
+
 Features
 
 * ssao / hbao
@@ -7,26 +33,15 @@ Features
 * depth of field
 * volumetric lighting / area lights
 * basic terrain
-* further improve scene creation
+* improve scene creation
 	* data-driven via XML parsing
-* lua integration
-	* create scenes by running script that places nodes
-	* object behavior - link node to lua script
-	* add things dynamically, preferably with a console
-* make more node/entity classes
-	* more-capable player object
-* cameras
-	* make camera movements affect all cameras?
-	* swoop-down camera
 * resource management
 	* textures and meshes
-* add / improve states
-* ui
-	* font rendering
-	* buttons
+
 
 Fixes
 
+* look into changing key handling
 * consider making material methods static
 * multithreading fixes
 	* fix meshnode materialproperties methods
@@ -35,5 +50,5 @@ Fixes
 	* openGL
 	* file reading
 * centralize constants
-* make file structure of source files less horrible
-	* move dll's
+* make file structure of source files better
+	* move dll's?
