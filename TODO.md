@@ -1,5 +1,8 @@
 Goals / Milestones
 
+- [ ] whatever
+- 	[ ] hi
+
 * GLFW3 / C++ threads update
 	* clean up threads to work C++-style
 	* possibly change key handling
