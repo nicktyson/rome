@@ -1,13 +1,10 @@
 #ifndef INTROSTATE_H
 #define INTROSTATE_H
 
-#include <glfw/glfw3.h>
 #include "State.h"
 
 class State;
 class StateManager;
-
-void swapBufs();
 
 class IntroState : public State {
 public:

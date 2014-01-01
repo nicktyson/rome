@@ -21,10 +21,10 @@ void IntroState::run() {
 	
 	while(!shouldStopStateLoop) {
 		double loopStartTime = glfwGetTime();
-
+		glfwPollEvents();
 		keyOps();
 		display();
-		swapBufs();
+		swapBuffers();
 
 		//clamp display frame rate
 		double loopCurrentTime = glfwGetTime();

@@ -14,8 +14,6 @@ class Scene;
 class Camera;
 class Renderer;
 
-void swapBufs();
-
 class SimState : public State {
 public:
 	SimState();

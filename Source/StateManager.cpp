@@ -1,3 +1,5 @@
+#include "GL\glew.h"
+#include "GLFW\glfw3.h"
 #include "StateManager.h"
 #include <iostream>
 #include "State.h"
@@ -7,12 +9,26 @@
 
 
 StateManager::StateManager() {
-	//w = window;
-
 	intro = new IntroState();
 	ps = new PauseState();
 	sim = new SimState();
 	
+
+	currentState = intro;
+	nextState = currentState;
+	lastState = NULL;
+
+	shouldEnd = false;
+}
+
+StateManager::StateManager(GLFWwindow* w) {
+	intro = new IntroState();
+	ps = new PauseState();
+	sim = new SimState();
+
+	intro->setWindow(w);
+	ps->setWindow(w);
+	sim->setWindow(w);
 
 	currentState = intro;
 	nextState = currentState;

@@ -54,6 +54,7 @@ void SimState::initialize(StateManager* mngr) {
 	std::mutex tripleBufferMutex();
 
 	std::thread simThread(&SimState::simThreadFunc, this);
+	simThread.detach();
 	initialized = true;
 }
 
@@ -67,7 +68,7 @@ void SimState::run() {
 
 		display();
 		
-		swapBufs();
+		swapBuffers();
 
 		//clamp display frame rate
 		double loopCurrentTime = glfwGetTime();
@@ -87,6 +88,7 @@ void SimState::run() {
 		}
 
 		updateRenderThreadState();
+		std::cout << "SimState" << std::endl;
 	}
 }
 
@@ -162,7 +164,7 @@ void SimState::simThreadFunc() {
 
 		simStartTime = glfwGetTime();
 		deltaT = simStartTime - previousFrameStart;
-
+		glfwPollEvents();
 		updateSim(deltaT);
 
 		keyOps();

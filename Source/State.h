@@ -4,6 +4,7 @@
 #include <vector>
 
 class StateManager;
+class GLFWwindow;
 
 class State {
 public:
@@ -17,6 +18,7 @@ public:
 	virtual void mousePosCallback(double x, double y);
 	virtual void mouseWheelCallback(double dx, double dy);
 	bool isInitialized();
+	void setWindow(GLFWwindow* w);
 
 protected:
 	virtual void display() = 0;
@@ -25,6 +27,8 @@ protected:
 	bool initialized;
 	bool shouldStopStateLoop;
 	StateManager* manager;
+	GLFWwindow* window;
+	void swapBuffers();
 };
 
 

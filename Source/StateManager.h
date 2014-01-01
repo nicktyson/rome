@@ -4,10 +4,12 @@
 #include <vector>
 
 class State;
+class GLFWwindow;
 
 class StateManager {
 public:
 	StateManager();
+	StateManager(GLFWwindow* w);
 	enum States {
 		SIM,
 		INTRO,

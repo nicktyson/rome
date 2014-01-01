@@ -1,7 +1,6 @@
 #ifndef PAUSESTATE_H
 #define PAUSESTATE_H
 
-#include <GLFW/glfw3.h>
 #include "State.h"
 
 class State;
