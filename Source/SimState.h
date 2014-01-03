@@ -22,13 +22,11 @@ public:
 	void resume();
 	void pause();
 	void end();
-	void keyCallback(int key, int state);
 	void mousePosCallback(double x, double y);
 	void mouseWheelCallback(double dx, double dy);
 	void keyOps();
 	void initScene();
 	void simThreadFunc();
-	void stateKeyOps();
 
 	static int currentRenderState;
 	static int currentUpdateState;

@@ -16,7 +16,6 @@
 #include "MatrixStack.h"
 #include "Renderer.h"
 
-std::vector<bool> State::keyState;
 int SimState::currentRenderState = 0;
 int SimState::currentUpdateState = 0;
 int SimState::newestState = 0;
@@ -105,9 +104,7 @@ void SimState::resume() {
 void SimState::pause() {
 	pauseMutex.unlock();
 	pauseSimThread = true;
-	for(int i = 0; i < 300; i++) {
-		keyState[i] = 0;
-	}
+	nonifyKeys();
 }
 
 void SimState::end() {
@@ -115,16 +112,6 @@ void SimState::end() {
 	pauseSimThread = false;
 	pauseMutex.unlock();
 	simThread.join();
-}
-
-void SimState::keyCallback(int key, int state) {
-	if(key >= 0 && key < 300) {
-		if(state == GLFW_PRESS) {
-			keyState[key] = true;
-		} else {
-			keyState[key] = false;
-		}
-	}
 }
 
 void SimState::mousePosCallback(double x, double y) {
@@ -172,7 +159,6 @@ void SimState::simThreadFunc() {
 		updateSim(deltaT);
 
 		keyOps();
-		stateKeyOps();
 
 		//clamp rate
 		simCurrentTime = glfwGetTime();
@@ -215,56 +201,44 @@ void SimState::updateUpdateThreadState() {
 }
 
 void SimState::keyOps() {
-	//keyState['X'] = false should be used for toggle keys, like camera modes
-	//it should also be used for keys that should pause briefly before repeating
-	//remove it to for keys that should repeat smoothly, every frame, like movement
-	//Modifier keys should NOT have the line
-	if (keyState['N'] && keyState['B']) {
-		std::cout << "N + B" << std::endl;
-		keyState['N'] = false;
-	} else if (keyState['N']) {
-		std::cout << "N" << std::endl;
-		keyState['N'] = false;
-	} else if (keyState['B']) {
-		//do nothing; modifier key
-	}
+	// keyState['X'] = NONE should be used for keys that should pause briefly before repeating 
+	// (ie only act on the frames when the key press is reported) or keys that should "toggle"
+	// "smooth" keys like movement don't need it
 
-	if (keyState['P']) {
+	if (keyState[GLFW_KEY_P] == PRESS) {
 		manager->changeState(StateManager::PAUSE);
 		shouldStopStateLoop = true;
-		keyState['P'] = false;
 	}
 
-	if (keyState[GLFW_KEY_ESCAPE]) {
+	if (keyState[GLFW_KEY_ESCAPE] == PRESS) {
 		manager->changeState(StateManager::END);
 		shouldStopStateLoop = true;
-		keyState[GLFW_KEY_ESCAPE] = false;
 	}
-}
 
-void SimState::stateKeyOps() {
-	if (keyState['W']) {
+	if (keyState[GLFW_KEY_W] == PRESS || keyState[GLFW_KEY_W] == REPEAT) {
 		currentScene->cameraForward();
 	}
-	if (keyState['A']) {
+	if (keyState[GLFW_KEY_A] == PRESS || keyState[GLFW_KEY_A] == REPEAT) {
 		currentScene->cameraLeft();
 	}
-	if (keyState['S']) {
+	if (keyState[GLFW_KEY_S] == PRESS || keyState[GLFW_KEY_S] == REPEAT) {
 		currentScene->cameraBack();
 	}
-	if (keyState['D']) {
+	if (keyState[GLFW_KEY_D] == PRESS || keyState[GLFW_KEY_D] == REPEAT) {
 		currentScene->cameraRight();
 	}
 
-	if (keyState['Q']) {
+	if (keyState[GLFW_KEY_Q] == PRESS || keyState[GLFW_KEY_Q] == REPEAT) {
 		currentScene->rotateCameraCCW();
 	}
-	if (keyState['E']) {
+	if (keyState[GLFW_KEY_E] == PRESS || keyState[GLFW_KEY_E] == REPEAT) {
 		currentScene->rotateCameraCW();
 	}
 
-	if (keyState['V']) {
+	if (keyState[GLFW_KEY_V] == PRESS) {
 		currentScene->switchCameras();
-		keyState['V'] = false;
+		keyState[GLFW_KEY_V] = NONE;
 	}
+
+	nonifyReleasedKeys();
 }

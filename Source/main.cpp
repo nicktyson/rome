@@ -87,9 +87,9 @@ void reshape (GLFWwindow* w, int width, int height) {
 	projectionMatrixStack->perspective(60.0, (float)width / (float)height, 1.0, 300.0);
 }
 
-void keyCallback(GLFWwindow* w, int key, int scancode, int state, int mods) {
+void keyCallback(GLFWwindow* w, int key, int scancode, int action, int mods) {
 	State* currentState = manager->getCurrentState();
-	currentState->keyCallback(key, state);
+	currentState->keyCallback(key, action);
 }
 
 void mousePosCallback(GLFWwindow* w, double x, double y) {

@@ -41,30 +41,17 @@ void IntroState::resume() {
 }
 
 void IntroState::pause() {
-	for(int i = 0; i < 300; i++) {
-		keyState[i] = 0;
-	}
+	nonifyKeys();
 }
 
 void IntroState::end() {
 	
 }
 
-void IntroState::keyCallback(int key, int state) {
-	if(key >= 0 && key < 300) {
-		if(state == GLFW_PRESS) {
-			keyState[key] = true;
-		} else {
-			keyState[key] = false;
-		}
-	}
-}
-
 void IntroState::keyOps() {
-	if (keyState['S']) {
+	if (keyState['S'] == PRESS) {
 		manager->changeState(StateManager::SIM);
 		shouldStopStateLoop = true;
-		keyState['S'] = false;
 	}
 }
 

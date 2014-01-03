@@ -14,7 +14,6 @@ public:
 	void resume();
 	void pause();
 	void end();
-	void keyCallback(int key, int state);
 	void keyOps();
 	
 protected:
