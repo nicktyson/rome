@@ -4,7 +4,6 @@ Goals / Milestones
 	* clean up threads to work C++-style
 	* possibly change key handling
 	* investigate GLFW static linking
-	* relationship between windows and states
 * actual game engine capability
 	* object lifecycle
 		* multithreading fixes below

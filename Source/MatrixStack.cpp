@@ -2,6 +2,7 @@
 #include "MatrixStack.h"
 #include "../Lib/glm/glm.hpp"
 #include "../Lib/glm/gtc/matrix_transform.hpp"
+#include "../Lib/glm/gtx/matrix_query.hpp"
 
 MatrixStack::MatrixStack() {
 	stack.resize(1);

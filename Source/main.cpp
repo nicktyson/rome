@@ -26,7 +26,7 @@ int main(int argc, char **argv) {
 
 	glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
 	glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
-	glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_COMPAT_PROFILE);
+	//glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
 
 	mainWindow = glfwCreateWindow(800, 600, "Rome graphics", NULL, NULL);
 	
@@ -34,29 +34,32 @@ int main(int argc, char **argv) {
 
 	std::cout << glfwGetWindowAttrib(mainWindow, GLFW_CONTEXT_VERSION_MAJOR) << "." << glfwGetWindowAttrib(mainWindow, GLFW_CONTEXT_VERSION_MINOR) << std::endl;
 
+	glewExperimental = GL_TRUE;
 	GLenum err = glewInit();
 	if (err != GLEW_OK) {
 		std::cout << "GLEW failed to initialize" << std::endl;
 	}
 
-	//gets perspective correct
-	//reshape(800, 600);
-
-	//set ROME_PATH to the main project directory
-	setupPath();
 
 	sceneGraphMatrixStack = new MatrixStack();
 	projectionMatrixStack = new MatrixStack();
 
+	//gets perspective correct
+	reshape(mainWindow, 800, 600);
+
+	//set ROME_PATH to the main project directory
+	setupPath();
+
 	//load and compile shaders
 	initShaders();
 
-	//move to SimState?
+	//move to SimState or Renderer?
 	glEnable(GL_DEPTH_TEST);
 	glEnable(GL_CULL_FACE);
     glEnable(GL_LIGHTING);
     glEnable(GL_LIGHT0);
 
+	//creates each state and gives it the main window
 	manager = new StateManager(mainWindow);
 
 	//GLFW doesn't accept object member functions, so use local ones that redirect

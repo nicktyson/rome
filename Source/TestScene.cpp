@@ -1,5 +1,6 @@
 #include "TestScene.h"
 #include <string>
+#include <iostream>
 #include "MeshNode.h"
 #include "VitalEntity.h"
 #include "LightNode.h"
@@ -63,9 +64,9 @@ void TestScene::initScene() {
 		MeshNode* newNode = new MeshNode(location, MaterialList::SOLIDTRANSPARENT);
 		newNode->setMaterialColor(0.0, 1.0, 1.0);
 		newNode->setMaterialAlpha(0.4);
-	//	newNode->setMaterialProperties(40.0, 1.0, 1.0);
-		newNode->setMaterialTexture(testTextureLocation);
-	//	newNode->setMaterialNormalMap(testNormalLocation);
+		//newNode->setMaterialProperties(40.0, 1.0, 1.0);
+		newNode->setMaterialTexture(transTextureLocation);
+		//newNode->setMaterialNormalMap(testNormalLocation);
 		newNode->setTranslation(3*sin(i*6.28/6), 3*cos(i*6.28/6), 0);
 		currentState->sceneRoot->addChild(newNode);
 	}

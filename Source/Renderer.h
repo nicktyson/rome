@@ -24,6 +24,7 @@ protected:
 	void transparencyPass(Scene* scene);
 	void depthPeel(Scene* scene, GLuint opaqueDepthBuffer, GLuint previousPeelDepthBuffer, GLuint currentPeelDepthBuffer, GLuint colorBuffer, int passNumber);
 	void postProcess();
+	void simpleTestPass();
 
 	GLuint fbo;
 	GLuint depthBuffer;

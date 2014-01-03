@@ -68,7 +68,11 @@ void SimState::run() {
 
 		display();
 		
+		//secondary thread possible
 		swapBuffers();
+		
+		//main thread only
+		glfwPollEvents();
 
 		//clamp display frame rate
 		double loopCurrentTime = glfwGetTime();
@@ -88,7 +92,7 @@ void SimState::run() {
 		}
 
 		updateRenderThreadState();
-		std::cout << "SimState" << std::endl;
+		//std::cout << "Render  step" << std::endl;
 	}
 }
 
@@ -164,7 +168,7 @@ void SimState::simThreadFunc() {
 
 		simStartTime = glfwGetTime();
 		deltaT = simStartTime - previousFrameStart;
-		glfwPollEvents();
+
 		updateSim(deltaT);
 
 		keyOps();
@@ -181,6 +185,8 @@ void SimState::simThreadFunc() {
 		previousFrameStart = simStartTime;
 
 		updateUpdateThreadState();
+
+		//std::cout << "sim step" << std::endl;
 	}
 }
 

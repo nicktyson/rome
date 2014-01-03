@@ -95,6 +95,8 @@ void Renderer::render(Scene* scene) {
 	transparencyPass(scene);
 
 	postProcess();
+
+	//simpleTestPass();
 }
 
 void Renderer::firstPass(Scene* scene) {
@@ -124,7 +126,9 @@ void Renderer::firstPass(Scene* scene) {
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 	
 	glEnable(GL_DEPTH_TEST);
+	//glDepthFunc(GL_LESS);
 	//glEnable(GL_BLEND);
+	glEnable(GL_CULL_FACE);
 
 	sceneGraphMatrixStack->loadIdentity();
 	
@@ -342,6 +346,15 @@ void Renderer::postProcess() {
 
 	//unbind shader
 	postprocessShader->unuse();
+}
+
+void Renderer::simpleTestPass() {
+	//reset stuff
+	glViewport(0, 0, 800, 600);
+	glClearColor(0.4f, 0.4f, 0.0f, 1.0f);
+	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+
+	glDisable(GL_DEPTH_TEST);
 }
 
 void Renderer::addLight(LightNode* light) {

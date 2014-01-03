@@ -4,6 +4,7 @@
 #include "../Lib/glm/glm.hpp"
 #include "../Lib/glm/gtc/matrix_inverse.hpp"
 #include "../Lib/glm/gtc/type_ptr.hpp"
+#include "../Lib/glm/gtx/matrix_query.hpp"
 #include "MeshNode.h"
 #include "SimState.h"
 #include "Materials\MaterialList.h"
@@ -120,6 +121,11 @@ void MeshNode::setMaterialNormalMap(std::string normalMapName) {
 void MeshNode::draw(Renderer* r, bool isTransparentPass) {
 	extern MatrixStack* sceneGraphMatrixStack;
 	extern MatrixStack* projectionMatrixStack;
+
+
+	//if (glm::isIdentity(projectionMatrixStack->last(), 0.01f)) {
+	//	std::cout << "projection matrix shouldn't be identity :/" << std::endl;
+	//}
 
 	mn_State* currentState = &mn_states[SimState::currentRenderState];
 	sn_State* currentSNState = &sn_states[SimState::currentRenderState];

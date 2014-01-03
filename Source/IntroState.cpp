@@ -69,7 +69,7 @@ void IntroState::keyOps() {
 }
 
 void IntroState::display() {
-	glClearColor(0.0f, 0.0f, 0.4f, 1.0f);
+	glClearColor(0.0f, 0.0f, 0.9f, 1.0f);
 	glClear(GL_COLOR_BUFFER_BIT);
 }
 
