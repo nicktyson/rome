@@ -26,7 +26,7 @@ public:
 	void mouseWheelCallback(double dx, double dy);
 	void keyOps();
 	void initScene();
-	void simThreadFunc();
+	void secondThreadFunc();
 
 	static int currentRenderState;
 	static int currentUpdateState;
@@ -41,11 +41,18 @@ protected:
 
 	Renderer* renderer;
 	Scene* currentScene;
-	bool shouldStopStateLoop;
+
 	bool pauseSimThread;
 	bool endSimThread;
 	std::mutex pauseMutex;
-	std::thread simThread;
+
+	bool secondThreadRunning;
+	//mutex
+	//condition variable
+	//
+	bool shouldPause;
+
+	std::thread secondThread;
 	std::mutex tripleBufferMutex;
 
 	static const int DISPLAY_FRAME_RATE;

@@ -7,7 +7,7 @@ std::vector<State::KeyStates> State::keyState;
 std::vector<int> State::releasedKeys;
 
 State::State() {
-	keyState.resize(348);
+	keyState.resize(348, NONE);
 }
 
 bool State::isInitialized() {

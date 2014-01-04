@@ -15,10 +15,10 @@ IntroState::IntroState() {
 void IntroState::initialize(StateManager* mngr) {
 	manager = mngr;
 	initialized = true;
+	glfwMakeContextCurrent(window);
 }
 
 void IntroState::run() {
-	
 	while(!shouldStopStateLoop) {
 		double loopStartTime = glfwGetTime();
 		glfwPollEvents();
@@ -38,6 +38,7 @@ void IntroState::run() {
 
 void IntroState::resume() {
 	shouldStopStateLoop = false;
+	glfwMakeContextCurrent(window);
 }
 
 void IntroState::pause() {
@@ -49,7 +50,7 @@ void IntroState::end() {
 }
 
 void IntroState::keyOps() {
-	if (keyState['S'] == PRESS) {
+	if (keyState[GLFW_KEY_S] == PRESS) {
 		manager->changeState(StateManager::SIM);
 		shouldStopStateLoop = true;
 	}

@@ -52,46 +52,44 @@ void SimState::initialize(StateManager* mngr) {
 	std::mutex pauseMutex();
 	std::mutex tripleBufferMutex();
 
-	std::thread simThread(&SimState::simThreadFunc, this);
-	simThread.detach();
+	glfwMakeContextCurrent(NULL);
+
+	std::thread secondThread(&SimState::secondThreadFunc, this);
+	secondThread.detach();
 	initialized = true;
 }
 
 void SimState::run() {
 	
-	int frameCount = 0;
-	double fpsTimeSum = 0;
+	double simStartTime;
+	double simCurrentTime;
+	double timeDif;
+	double previousFrameStart = glfwGetTime();
+	double deltaT;
 
 	while (!shouldStopStateLoop) {
-		double loopStartTime = glfwGetTime();
-
-		display();
-		
-		//secondary thread possible
-		swapBuffers();
+		simStartTime = glfwGetTime();
+		deltaT = simStartTime - previousFrameStart;
 		
 		//main thread only
 		glfwPollEvents();
+		keyOps();
 
-		//clamp display frame rate
-		double loopCurrentTime = glfwGetTime();
-		double timeDif = loopCurrentTime - loopStartTime;
-		if (DISPLAY_FRAME_TIME > timeDif) {
-			std::chrono::milliseconds duration((int) ((DISPLAY_FRAME_TIME - timeDif) * 1000));
+		updateSim(deltaT);
+
+		//clamp rate
+		simCurrentTime = glfwGetTime();
+		timeDif = simCurrentTime - simStartTime;
+		if (SIM_TIME > timeDif) {
+			std::chrono::milliseconds duration((int)((SIM_TIME - timeDif) * 1000));
 			std::this_thread::sleep_for(duration);
 		}
 
-		//calculate and display FPS once per second
-		frameCount++;
-		fpsTimeSum += glfwGetTime() - loopStartTime;
-		if (fpsTimeSum >= 1) {
-			std::cout << (frameCount / (fpsTimeSum)) << "\n";
-			frameCount = 0;
-			fpsTimeSum = 0;
-		}
+		previousFrameStart = simStartTime;
 
-		updateRenderThreadState();
-		//std::cout << "Render  step" << std::endl;
+		updateUpdateThreadState();
+
+		//std::cout << "sim step" << std::endl;
 	}
 }
 
@@ -111,7 +109,7 @@ void SimState::end() {
 	endSimThread = true;
 	pauseSimThread = false;
 	pauseMutex.unlock();
-	simThread.join();
+	secondThread.join();
 }
 
 void SimState::mousePosCallback(double x, double y) {
@@ -134,45 +132,48 @@ void SimState::updateSim(double deltaT) {
 	currentScene->update(deltaT);
 }
 
-void SimState::simThreadFunc() {
+void SimState::secondThreadFunc() {
+	glfwMakeContextCurrent(window);
 
-	double simStartTime;
-	double simCurrentTime;
-	double timeDif;
-	double previousFrameStart = glfwGetTime();
-	double deltaT;
+	int frameCount = 0;
+	double fpsTimeSum = 0;
 
 	while (true) {
+		double loopStartTime = glfwGetTime();
+
 		if(pauseSimThread) {
 			pauseMutex.lock();
 			pauseMutex.unlock();
-			previousFrameStart = glfwGetTime();
+			//previousFrameStart = glfwGetTime();
 		}
 
 		if(endSimThread) {
 			return;
 		}
 
-		simStartTime = glfwGetTime();
-		deltaT = simStartTime - previousFrameStart;
 
-		updateSim(deltaT);
+		display();
+		swapBuffers();
 
-		keyOps();
-
-		//clamp rate
-		simCurrentTime = glfwGetTime();
-		timeDif = simCurrentTime - simStartTime;
-		if (SIM_TIME > timeDif) {
-			std::chrono::milliseconds duration((int) ((SIM_TIME - timeDif) * 1000));
+		//clamp display frame rate
+		double loopCurrentTime = glfwGetTime();
+		double timeDif = loopCurrentTime - loopStartTime;
+		if (DISPLAY_FRAME_TIME > timeDif) {
+			std::chrono::milliseconds duration((int)((DISPLAY_FRAME_TIME - timeDif) * 1000));
 			std::this_thread::sleep_for(duration);
 		}
 
-		previousFrameStart = simStartTime;
+		//calculate and display FPS once per second
+		frameCount++;
+		fpsTimeSum += glfwGetTime() - loopStartTime;
+		if (fpsTimeSum >= 1) {
+			std::cout << (frameCount / (fpsTimeSum)) << "\n";
+			frameCount = 0;
+			fpsTimeSum = 0;
+		}
 
-		updateUpdateThreadState();
-
-		//std::cout << "sim step" << std::endl;
+		updateRenderThreadState();
+		//std::cout << "Render  step" << std::endl;
 	}
 }
 
