@@ -31,8 +31,6 @@ const double SimState::SIM_TIME = 1.0 / SIM_RATE;
 SimState::SimState() {
 	initialized = false;
 	shouldStopStateLoop = false;
-	pauseSimThread = false;
-	endSimThread = false;
 }
 
 void SimState::initialize(StateManager* mngr) {
@@ -49,10 +47,15 @@ void SimState::initialize(StateManager* mngr) {
 
 	currentUpdateState = 1;
 
-	std::mutex pauseMutex();
 	std::mutex tripleBufferMutex();
 
 	glfwMakeContextCurrent(NULL);
+
+	//thread stuff
+	secondThreadDone = false;
+	shouldPause = false;
+	secondShouldPause = false;
+
 
 	std::thread secondThread(&SimState::secondThreadFunc, this);
 	secondThread.detach();
@@ -90,25 +93,39 @@ void SimState::run() {
 		updateUpdateThreadState();
 
 		//std::cout << "sim step" << std::endl;
+
+		//pausing
+		if (shouldPause) {
+			std::unique_lock<std::mutex> l(secondThreadDoneLock);
+			secondShouldPause = true;
+			while (!secondThreadDone) {
+				secondThreadIsDone.wait(l);
+			}
+			std::cout << "pausing done" << std::endl;
+		}
 	}
 }
 
 void SimState::resume() {
+	std::cout << "starting resume" << std::endl;
 	shouldStopStateLoop = false;
-	pauseSimThread = false;
-	pauseMutex.unlock();
+	shouldPause = false;
+
+	std::unique_lock<std::mutex> l(shouldRunLock);
+	secondShouldPause = false;
+	shouldRun.notify_one();
+
+	std::cout << "ending resume" << std::endl;
 }
 
 void SimState::pause() {
-	pauseMutex.unlock();
-	pauseSimThread = true;
+
+	//pauseSimThread = true;
 	nonifyKeys();
 }
 
 void SimState::end() {
-	endSimThread = true;
-	pauseSimThread = false;
-	pauseMutex.unlock();
+
 	secondThread.join();
 }
 
@@ -141,17 +158,6 @@ void SimState::secondThreadFunc() {
 	while (true) {
 		double loopStartTime = glfwGetTime();
 
-		if(pauseSimThread) {
-			pauseMutex.lock();
-			pauseMutex.unlock();
-			//previousFrameStart = glfwGetTime();
-		}
-
-		if(endSimThread) {
-			return;
-		}
-
-
 		display();
 		swapBuffers();
 
@@ -174,6 +180,19 @@ void SimState::secondThreadFunc() {
 
 		updateRenderThreadState();
 		//std::cout << "Render  step" << std::endl;
+
+		std::unique_lock<std::mutex> l(secondThreadDoneLock);
+		if (secondShouldPause) {
+			secondThreadDone = true;
+			secondThreadIsDone.notify_one();
+			l.unlock();
+		}
+
+		std::unique_lock<std::mutex> l2(shouldRunLock);
+		while (secondShouldPause) {
+			shouldRun.wait(l2);
+			//l2.unlock();
+		}
 	}
 }
 
@@ -208,11 +227,13 @@ void SimState::keyOps() {
 
 	if (keyState[GLFW_KEY_P] == PRESS) {
 		manager->changeState(StateManager::PAUSE);
+		shouldPause = true;
 		shouldStopStateLoop = true;
 	}
 
 	if (keyState[GLFW_KEY_ESCAPE] == PRESS) {
 		manager->changeState(StateManager::END);
+		shouldPause = true;
 		shouldStopStateLoop = true;
 	}
 

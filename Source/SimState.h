@@ -6,6 +6,7 @@
 #include <deque>
 #include <thread>
 #include <mutex>
+#include <condition_variable>
 #include "State.h"
 
 class State;
@@ -42,15 +43,16 @@ protected:
 	Renderer* renderer;
 	Scene* currentScene;
 
-	bool pauseSimThread;
-	bool endSimThread;
-	std::mutex pauseMutex;
-
-	bool secondThreadRunning;
-	//mutex
-	//condition variable
-	//
+	//changed by callback; tells main thread to initiate pausing
 	bool shouldPause;
+
+	bool secondShouldPause;
+	std::condition_variable shouldRun;
+	std::mutex shouldRunLock;
+
+	bool secondThreadDone;
+	std::condition_variable secondThreadIsDone;
+	std::mutex secondThreadDoneLock;
 
 	std::thread secondThread;
 	std::mutex tripleBufferMutex;
