@@ -21,7 +21,6 @@ public:
 	void initialize(StateManager* mngr);
 	void run();
 	void resume();
-	void pause();
 	void end();
 	void mousePosCallback(double x, double y);
 	void mouseWheelCallback(double dx, double dy);
@@ -43,7 +42,7 @@ protected:
 	Renderer* renderer;
 	Scene* currentScene;
 
-	//changed by callback; tells main thread to initiate pausing
+	//changed by keyops; tells main thread to initiate pausing
 	bool shouldPause;
 
 	bool secondShouldPause;
@@ -54,8 +53,10 @@ protected:
 	std::condition_variable secondThreadIsDone;
 	std::mutex secondThreadDoneLock;
 
-	std::thread secondThread;
+	std::thread* secondThread;
 	std::mutex tripleBufferMutex;
+
+	bool shouldEnd;
 
 	static const int DISPLAY_FRAME_RATE;
 	static const double DISPLAY_FRAME_TIME;

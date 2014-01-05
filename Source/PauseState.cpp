@@ -15,6 +15,7 @@ PauseState::PauseState() {
 void PauseState::initialize(StateManager* mngr) {
 	manager = mngr;
 	initialized = true;
+	//glfwMakeContextCurrent(window);
 }
 
 void PauseState::run() {
@@ -24,6 +25,7 @@ void PauseState::run() {
 
 		keyOps();
 		display();
+		swapBuffers();
 		glfwPollEvents();
 
 		//clamp display frame rate
@@ -35,14 +37,12 @@ void PauseState::run() {
 		}
 	}
 
+	nonifyKeys();
 }
 
 void PauseState::resume() {
 	shouldStopStateLoop = false;
-}
-
-void PauseState::pause() {
-	nonifyKeys();
+	//glfwMakeContextCurrent(window);
 }
 
 void PauseState::end() {
@@ -59,8 +59,9 @@ void PauseState::keyOps() {
 }
 
 void PauseState::display() {
-	//glClearColor(0.0f, 0.4f, 0.0f, 1.0f);
-	//glClear(GL_COLOR_BUFFER_BIT);
+	glClearColor(0.0f, 0.4f, 0.0f, 1.0f);
+	glClear(GL_COLOR_BUFFER_BIT);
+	//std::cout << "pause state drawing" << std::endl;
 }
 
 void PauseState::updateSim(double deltaT) {

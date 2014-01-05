@@ -1,4 +1,5 @@
 #include "Scene.h"
+#include <iostream>
 #include <string>
 #include "Camera.h"
 #include "FPCamera.h"

@@ -12,7 +12,6 @@ public:
 	virtual void initialize(StateManager* mngr);
 	virtual void run() = 0;
 	virtual void resume() = 0;
-	virtual void pause() = 0;
 	virtual void end() = 0;
 	virtual void keyCallback(int key, int action);
 	virtual void mousePosCallback(double x, double y);

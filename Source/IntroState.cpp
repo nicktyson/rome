@@ -15,7 +15,7 @@ IntroState::IntroState() {
 void IntroState::initialize(StateManager* mngr) {
 	manager = mngr;
 	initialized = true;
-	glfwMakeContextCurrent(window);
+	//glfwMakeContextCurrent(window);
 }
 
 void IntroState::run() {
@@ -34,15 +34,13 @@ void IntroState::run() {
 			std::this_thread::sleep_for(duration);
 		}
 	}
+
+	nonifyKeys();
 }
 
 void IntroState::resume() {
 	shouldStopStateLoop = false;
-	glfwMakeContextCurrent(window);
-}
-
-void IntroState::pause() {
-	nonifyKeys();
+	//glfwMakeContextCurrent(window);
 }
 
 void IntroState::end() {

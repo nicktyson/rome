@@ -12,7 +12,6 @@ public:
 	void initialize(StateManager* mngr);
 	void run();
 	void resume();
-	void pause();
 	void end();
 	void keyOps();
 	

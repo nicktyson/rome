@@ -47,8 +47,6 @@ void StateManager::run() {
 
 		currentState->run();
 
-		currentState->pause();
-
 		lastState = currentState;
 		currentState = nextState;
 	}

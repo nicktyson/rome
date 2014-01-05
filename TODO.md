@@ -1,8 +1,5 @@
 Goals / Milestones
 
-* GLFW3 / C++ threads update
-	* clean up threads to work C++-style
-	* investigate GLFW static linking
 * actual game engine capability
 	* object lifecycle
 		* multithreading fixes below

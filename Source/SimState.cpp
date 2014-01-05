@@ -55,10 +55,10 @@ void SimState::initialize(StateManager* mngr) {
 	secondThreadDone = false;
 	shouldPause = false;
 	secondShouldPause = false;
+	shouldEnd = false;
 
-
-	std::thread secondThread(&SimState::secondThreadFunc, this);
-	secondThread.detach();
+	secondThread = new std::thread(&SimState::secondThreadFunc, this);
+	//secondThread.detach();
 	initialized = true;
 }
 
@@ -74,11 +74,11 @@ void SimState::run() {
 		simStartTime = glfwGetTime();
 		deltaT = simStartTime - previousFrameStart;
 		
+		updateSim(deltaT);
+
 		//main thread only
 		glfwPollEvents();
 		keyOps();
-
-		updateSim(deltaT);
 
 		//clamp rate
 		simCurrentTime = glfwGetTime();
@@ -96,37 +96,47 @@ void SimState::run() {
 
 		//pausing
 		if (shouldPause) {
+			//wait for the second thread to signal that it has completed a step and is pausing
 			std::unique_lock<std::mutex> l(secondThreadDoneLock);
 			secondShouldPause = true;
 			while (!secondThreadDone) {
 				secondThreadIsDone.wait(l);
 			}
-			std::cout << "pausing done" << std::endl;
+
+			glfwMakeContextCurrent(window);
+			nonifyKeys();
+			//std::cout << "pausing done" << std::endl;
 		}
 	}
 }
 
 void SimState::resume() {
-	std::cout << "starting resume" << std::endl;
+	//std::cout << "starting resume" << std::endl;
 	shouldStopStateLoop = false;
 	shouldPause = false;
+	secondThreadDone = false;
 
+	//tell second thread to resume
 	std::unique_lock<std::mutex> l(shouldRunLock);
 	secondShouldPause = false;
+	glfwMakeContextCurrent(NULL);
 	shouldRun.notify_one();
 
-	std::cout << "ending resume" << std::endl;
-}
-
-void SimState::pause() {
-
-	//pauseSimThread = true;
-	nonifyKeys();
+	//std::cout << "ending resume" << std::endl;
 }
 
 void SimState::end() {
+	shouldEnd = true;
 
-	secondThread.join();
+	//tell second thread to end
+	std::unique_lock<std::mutex> l(shouldRunLock);
+	secondShouldPause = false;
+	shouldRun.notify_one();
+	l.unlock();
+
+	//wait for the second thread to finish
+	secondThread->join();
+	delete secondThread;
 }
 
 void SimState::mousePosCallback(double x, double y) {
@@ -181,17 +191,25 @@ void SimState::secondThreadFunc() {
 		updateRenderThreadState();
 		//std::cout << "Render  step" << std::endl;
 
+		//tell main thread that this thread is at the end of the step and is pausing
 		std::unique_lock<std::mutex> l(secondThreadDoneLock);
 		if (secondShouldPause) {
 			secondThreadDone = true;
+			glfwMakeContextCurrent(NULL);
 			secondThreadIsDone.notify_one();
 			l.unlock();
 		}
 
+		//actually pause
 		std::unique_lock<std::mutex> l2(shouldRunLock);
 		while (secondShouldPause) {
 			shouldRun.wait(l2);
-			//l2.unlock();
+			if (shouldEnd) {
+				//exit thread
+				return;
+			} else {
+				glfwMakeContextCurrent(window);
+			}
 		}
 	}
 }
@@ -225,13 +243,12 @@ void SimState::keyOps() {
 	// (ie only act on the frames when the key press is reported) or keys that should "toggle"
 	// "smooth" keys like movement don't need it
 
+
 	if (keyState[GLFW_KEY_P] == PRESS) {
 		manager->changeState(StateManager::PAUSE);
 		shouldPause = true;
 		shouldStopStateLoop = true;
-	}
-
-	if (keyState[GLFW_KEY_ESCAPE] == PRESS) {
+	} else if (keyState[GLFW_KEY_ESCAPE] == PRESS) {
 		manager->changeState(StateManager::END);
 		shouldPause = true;
 		shouldStopStateLoop = true;
